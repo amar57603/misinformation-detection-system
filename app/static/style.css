@@ -418,11 +418,11 @@ body {
     font-size: 1.15rem; font-weight: 700;
     display: flex; align-items: center; gap: 0.6rem;
     margin-bottom: 0.35rem;
-    color: #eef0f8;
+    color: var(--text-primary);
 }
 .panel-header h2 i { color: var(--primary); }
 .panel-header p {
-    color: #a8b0cc;
+    color: var(--text-secondary);
     font-size: 0.9rem; line-height: 1.55;
 }
 
@@ -446,7 +446,7 @@ textarea {
     border: 1px solid var(--border-color);
     border-radius: var(--radius-sm);
     padding: 1rem;
-    color: #eef0f8;
+    color: var(--text-primary);
     font-family: var(--font);
     font-size: 0.97rem;
     line-height: 1.7;
@@ -464,7 +464,7 @@ textarea::placeholder { color: var(--text-muted); }
 .word-counter {
     text-align: right;
     font-size: 0.78rem;
-    color: var(--text-muted);
+    color: var(--text-secondary);
     padding: 0.4rem 0;
     flex-shrink: 0;
 }
@@ -589,7 +589,7 @@ textarea::placeholder { color: var(--text-muted); }
 .preset-btn {
     background: rgba(255,255,255,0.04);
     border: 1px solid var(--border-color);
-    color: #c0c8e0;
+    color: var(--text-secondary);
     font-family: var(--font);
     font-size: 0.85rem;
     padding: 0.6rem 0.9rem;
@@ -760,8 +760,8 @@ textarea::placeholder { color: var(--text-muted); }
     flex-shrink: 0;
 }
 .stat-info { display: flex; flex-direction: column; }
-.stat-label { font-size: 0.75rem; color: #8890aa; font-weight: 600; letter-spacing: 0.3px; }
-.stat-value { font-size: 0.95rem; font-weight: 700; color: #eef0f8; margin-top: 0.15rem; }
+.stat-label { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; letter-spacing: 0.3px; }
+.stat-value { font-size: 0.95rem; font-weight: 700; color: var(--text-primary); margin-top: 0.15rem; }
 
 /* Keywords */
 .keywords-section h3 {
@@ -893,7 +893,8 @@ textarea::placeholder { color: var(--text-muted); }
     border-top: 1px solid var(--border-color);
     padding: 0.75rem 1.75rem;
     text-align: center;
-    font-size: 0.82rem; color: #8890aa;
+    font-size: 0.82rem;
+    color: var(--text-muted);
     background: rgba(10,12,20,0.7);
     flex-shrink: 0;
     position: relative; z-index: 1;
