@@ -29,14 +29,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const keywordsList     = document.getElementById("keywords-list");
 
     // ── State ─────────────────────────────────────────────────
-    let history = JSON.parse(localStorage.getItem("truthlens_history") || "[]");
+    let history = JSON.parse(localStorage.getItem("siasatai_history") || "[]");
     let lastResult = null;
     let historyVisible = false;
 
     // ── Preset Texts ──────────────────────────────────────────
     const presets = {
         "bm-fake": "Awas! Virus baru yang disebarkan melalui udara kini sedang melanda beberapa kawasan perumahan. Sila sebarkan maklumat ini dengan segera sebelum terlambat dan elakkan keluar rumah tanpa tujuan penting!",
-        "bm-real": "Kementerian Kesihatan Malaysia (KKM) menasihatkan orang ramai supaya sentiasa mengambil langkah-langkah pencegahan penyakit berjangkit dengan memakai pelitup muka di kawasan sesak dan mengamalkan basuh tangan menggunakan sabun secara berkala.",
+        "bm-real": "Kerajaan Malaysia telah meluluskan peruntukan sebanyak RM5 bilion dalam belanjawan negara bagi meningkatkan infrastruktur pengangkutan awam di seluruh negara. Projek ini meliputi pembinaan laluan LRT baharu, menaik taraf stesen komuter sedia ada, dan memperluaskan rangkaian bas ekspres antara negeri bagi memudahkan mobiliti rakyat.",
         "en-fake": "Amazing scientific secret! Drinking freshly squeezed lemon juice mixed with warm water every morning completely cures and protects you from all viral infections and flu. Share this post immediately with your friends and family to save lives!",
         "en-real": "Bank Negara Malaysia (BNM) announced that the Monetary Policy Committee has decided to maintain the Overnight Policy Rate (OPR) at 3.00 percent, citing stable domestic demand and moderate inflation levels in the national economy."
     };
@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ── History ───────────────────────────────────────────────
     function saveHistory() {
-        localStorage.setItem("truthlens_history", JSON.stringify(history));
+        localStorage.setItem("siasatai_history", JSON.stringify(history));
     }
 
     function formatTime(iso) {
@@ -184,7 +184,7 @@ document.addEventListener("DOMContentLoaded", () => {
     btnCopyResult.addEventListener("click", () => {
         if (!lastResult) return;
         const isFake = lastResult.prediction === "Fake";
-        const text = `[TruthLens by DSG]\nVerdict: ${isFake ? "⚠ SUSPECTED FAKE" : "✓ CONFIRMED REAL"}\nConfidence: ${(lastResult.confidence * 100).toFixed(1)}%\nLanguage: ${lastResult.language}\n\nText: "${lastResult.text.substring(0, 200)}..."`;
+        const text = `[SiasatAI by DSG]\nVerdict: ${isFake ? "⚠ SUSPECTED FAKE" : "✓ CONFIRMED REAL"}\nConfidence: ${(lastResult.confidence * 100).toFixed(1)}%\nLanguage: ${lastResult.language}\n\nText: "${lastResult.text.substring(0, 200)}..."`;
         navigator.clipboard.writeText(text).then(() => {
             showToast("Result copied!", "fa-copy");
         }).catch(() => {
