@@ -10,6 +10,28 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnToggleHistory = document.getElementById("btn-toggle-history");
     const btnClearHistory  = document.getElementById("btn-clear-history");
     const btnCopyResult    = document.getElementById("btn-copy-result");
+    const btnThemeToggle   = document.getElementById("btn-theme-toggle");
+    const themeIcon        = document.getElementById("theme-icon");
+
+    // ── Theme Toggle ──────────────────────────────────────────
+    const savedTheme = localStorage.getItem("siasatai_theme") || "dark";
+    applyTheme(savedTheme);
+
+    function applyTheme(theme) {
+        if (theme === "light") {
+            document.documentElement.setAttribute("data-theme", "light");
+            themeIcon.className = "fa-solid fa-moon";
+        } else {
+            document.documentElement.removeAttribute("data-theme");
+            themeIcon.className = "fa-solid fa-sun";
+        }
+        localStorage.setItem("siasatai_theme", theme);
+    }
+
+    btnThemeToggle.addEventListener("click", () => {
+        const current = localStorage.getItem("siasatai_theme") || "dark";
+        applyTheme(current === "dark" ? "light" : "dark");
+    });
 
     const idlePlaceholder  = document.getElementById("idle-placeholder");
     const loaderSection    = document.getElementById("loader-section");
