@@ -39,10 +39,12 @@ body {
     background-color: var(--bg-dark);
     color: var(--text-primary);
     font-family: var(--font);
+    min-height: 100dvh;
     height: 100dvh;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 /* ── Background Glows ──────────────────────────────── */
@@ -77,9 +79,8 @@ body {
 }
 
 .header-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0.9rem 1.75rem;
+    width: 100%;
+    padding: 0.9rem 1.25rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -125,15 +126,13 @@ body {
     flex: 1;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0;
-    max-width: 1400px;
+    gap: 1.25rem;
     width: 100%;
-    margin: 0 auto;
-    padding: 1.5rem;
-    gap: 1.5rem;
+    padding: 1.25rem;
     overflow: hidden;
     min-height: 0;
-    position: relative; z-index: 1;
+    position: relative;
+    z-index: 1;
 }
 
 /* ── Panels ────────────────────────────────────────── */
@@ -624,10 +623,11 @@ textarea::placeholder { color: var(--text-muted); }
 
 /* ── Responsive ────────────────────────────────────── */
 @media (max-width: 900px) {
-    body { overflow: auto; }
+    body { height: auto; overflow-y: auto; overflow-x: hidden; }
     .app-layout {
         grid-template-columns: 1fr;
-        overflow: visible; height: auto;
+        overflow: visible;
+        height: auto;
     }
     .panel { min-height: 480px; }
     .result-panel { min-height: 420px; }
