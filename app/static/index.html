@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bilingual Misinformation & Fake News Detector</title>
+    <meta name="description" content="An AI-powered system to detect fake news and misinformation in Bahasa Malaysia and English.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-glow"></div>
+    
+    <header class="app-header">
+        <div class="header-container">
+            <div class="logo">
+                <i class="fa-solid fa-shield-halved logo-icon"></i>
+                <h1>VERIFY<span>.AI</span></h1>
+            </div>
+            <div class="badge">Bilingual: Malay & English</div>
+        </div>
+    </header>
+
+    <main class="app-container">
+        <!-- Input Section -->
+        <section class="card input-card">
+            <div class="card-header">
+                <h2><i class="fa-solid fa-pen-nib"></i> Analyze Article / Message</h2>
+                <p>Paste any news article, social media post, or WhatsApp rumor below to analyze its credibility.</p>
+            </div>
+            
+            <div class="textarea-wrapper">
+                <textarea id="news-text-input" placeholder="Type or paste text here (minimum 3 words)..."></textarea>
+                <div class="word-counter"><span id="char-count">0</span> chars | <span id="word-count">0</span> words</div>
+            </div>
+
+
+            <div class="action-buttons">
+                <button id="btn-predict" class="btn btn-primary"><i class="fa-solid fa-wand-magic-sparkles"></i> Verify Article</button>
+                <button id="btn-clear" class="btn btn-secondary"><i class="fa-solid fa-trash-can"></i> Clear</button>
+            </div>
+
+            <div class="presets-container">
+                <h3><i class="fa-solid fa-list-check"></i> Try Quick Examples:</h3>
+                <div class="preset-groups">
+                    <div class="preset-group">
+                        <span class="group-label">Bahasa Malaysia</span>
+                        <button class="preset-btn" data-preset="bm-fake">Rumor: Penyebaran Virus Baru Melalui Udara</button>
+                        <button class="preset-btn" data-preset="bm-real">Berita Rasmi: Sidang Media KKM COVID-19</button>
+                    </div>
+                    <div class="preset-group">
+                        <span class="group-label">English</span>
+                        <button class="preset-btn" data-preset="en-fake">Rumor: Lemon and warm water cures virus</button>
+                        <button class="preset-btn" data-preset="en-real">Official News: Bank Negara Interest Rate Update</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section class="card result-card inactive" id="result-section">
+            <div class="card-header">
+                <h2><i class="fa-solid fa-square-poll-vertical"></i> Analysis Results</h2>
+                <p>Machine Learning classification metrics from our trained Logistic Regression model.</p>
+            </div>
+
+            <!-- Main Verdict Display -->
+            <div class="verdict-display" id="verdict-display">
+                <div class="verdict-icon-container" id="verdict-icon-box">
+                    <i class="fa-solid fa-triangle-exclamation" id="verdict-icon"></i>
+                </div>
+                <div class="verdict-details">
+                    <span class="verdict-subtitle">VERDICT</span>
+                    <h3 id="verdict-label">SUSPECTED FAKE</h3>
+                </div>
+            </div>
+
+            <!-- Confidence Gauge -->
+            <div class="gauge-section">
+                <div class="gauge-header">
+                    <span>AI Confidence Score</span>
+                    <span id="confidence-percentage">93.6%</span>
+                </div>
+                <div class="gauge-bar-container">
+                    <div class="gauge-bar-fill" id="confidence-fill"></div>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <!-- Language Detected -->
+                <div class="stat-box">
+                    <div class="stat-icon"><i class="fa-solid fa-language"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-label">Language</span>
+                        <span class="stat-value" id="stat-lang">Bahasa Malaysia</span>
+                    </div>
+                </div>
+
+                <!-- Text Length -->
+                <div class="stat-box">
+                    <div class="stat-icon"><i class="fa-solid fa-arrow-left-right-to-line"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-label">Words Counted</span>
+                        <span class="stat-value" id="stat-words">48</span>
+                    </div>
+                </div>
+
+                <!-- Vocabulary Triggered -->
+                <div class="stat-box">
+                    <div class="stat-icon"><i class="fa-solid fa-brain"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-label">Model Champion</span>
+                        <span class="stat-value" id="stat-model">LogReg (93.99%)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Key Words Detected -->
+            <div class="keywords-section">
+                <h3><i class="fa-solid fa-tags"></i> Core Features Triggered (Vocabulary N-Grams):</h3>
+                <div class="keywords-list" id="keywords-list">
+                    <!-- keywords dynamically loaded -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Loading overlay inside result card area -->
+        <div class="card result-card loader-card hidden" id="loader-section">
+            <div class="spinner"></div>
+            <p>Running bilingual tokenization & model inference...</p>
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        <p>&copy; 2026 Verify.AI. Designed for <strong>MBMB Melaka</strong>. Driven by high-performance NLP.</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
