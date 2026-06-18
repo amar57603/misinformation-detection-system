@@ -10,11 +10,22 @@ __pycache__/
 .idea/
 .ipynb_checkpoints/
 
-# Data Files (Ignore large datasets > 50MB to prevent GitHub push errors)
+# Data Files (large datasets)
 data/*
 
-# Local Reports and Outputs
-notebooks/*.html
+# Notebooks (training only, not needed for deployment)
+notebooks/
+
+# Local dev / retraining scripts (not for deployment)
+retrain.bat
+run_retrain.py
+scraper.py
+
+# Orphaned static folder (images used in old reports)
+static/
+
+# Local Reports
+*.html
 
 # OS Files
 .DS_Store
