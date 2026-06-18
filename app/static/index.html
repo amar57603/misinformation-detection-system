@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bilingual Misinformation & Fake News Detector</title>
-    <meta name="description" content="An AI-powered system to detect fake news and misinformation in Bahasa Malaysia and English.">
+    <title>TruthLens – Bilingual Fake News Detector by DSG</title>
+    <meta name="description" content="TruthLens by DSG – AI-powered fake news and misinformation detector for Bahasa Malaysia and English.">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,130 +15,150 @@
 </head>
 <body>
     <div class="background-glow"></div>
-    
+    <div class="background-glow glow-2"></div>
+
+    <!-- Header -->
     <header class="app-header">
         <div class="header-container">
             <div class="logo">
-                <i class="fa-solid fa-shield-halved logo-icon"></i>
-                <h1>VERIFY<span>.AI</span></h1>
+                <i class="fa-solid fa-magnifying-glass logo-icon"></i>
+                <h1>Truth<span>Lens</span></h1>
+                <span class="dsg-tag">by DSG</span>
             </div>
-            <div class="badge">Bilingual: Malay & English</div>
+            <div class="header-right">
+                <div class="badge"><i class="fa-solid fa-globe"></i> Malay &amp; English</div>
+                <button id="btn-toggle-history" class="btn btn-ghost" title="View History">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <span>History</span>
+                    <span class="history-count" id="history-count">0</span>
+                </button>
+            </div>
         </div>
     </header>
 
-    <main class="app-container">
-        <!-- Input Section -->
-        <section class="card input-card">
-            <div class="card-header">
-                <h2><i class="fa-solid fa-pen-nib"></i> Analyze Article / Message</h2>
-                <p>Paste any news article, social media post, or WhatsApp rumor below to analyze its credibility.</p>
-            </div>
-            
-            <div class="textarea-wrapper">
-                <textarea id="news-text-input" placeholder="Type or paste text here (minimum 3 words)..."></textarea>
-                <div class="word-counter"><span id="char-count">0</span> chars | <span id="word-count">0</span> words</div>
+    <!-- Main Layout -->
+    <main class="app-layout">
+
+        <!-- Left: Input Panel -->
+        <section class="panel input-panel">
+            <div class="panel-header">
+                <h2><i class="fa-solid fa-pen-nib"></i> Analyze Article</h2>
+                <p>Paste any news article, social media post, or WhatsApp rumor to check its credibility.</p>
             </div>
 
+            <div class="textarea-wrapper">
+                <textarea id="news-text-input" placeholder="Type or paste your news text here (minimum 3 words)..."></textarea>
+                <div class="word-counter"><span id="char-count">0</span> chars &nbsp;|&nbsp; <span id="word-count">0</span> words</div>
+            </div>
 
             <div class="action-buttons">
-                <button id="btn-predict" class="btn btn-primary"><i class="fa-solid fa-wand-magic-sparkles"></i> Verify Article</button>
+                <button id="btn-predict" class="btn btn-primary"><i class="fa-solid fa-wand-magic-sparkles"></i> Verify</button>
+                <button id="btn-paste" class="btn btn-ghost-neon" title="Paste from clipboard"><i class="fa-solid fa-clipboard"></i> Paste</button>
                 <button id="btn-clear" class="btn btn-secondary"><i class="fa-solid fa-trash-can"></i> Clear</button>
             </div>
 
             <div class="presets-container">
-                <h3><i class="fa-solid fa-list-check"></i> Try Quick Examples:</h3>
+                <h3><i class="fa-solid fa-list-check"></i> Quick Examples</h3>
                 <div class="preset-groups">
                     <div class="preset-group">
                         <span class="group-label">Bahasa Malaysia</span>
-                        <button class="preset-btn" data-preset="bm-fake">Rumor: Penyebaran Virus Baru Melalui Udara</button>
-                        <button class="preset-btn" data-preset="bm-real">Berita Rasmi: Sidang Media KKM COVID-19</button>
+                        <button class="preset-btn" data-preset="bm-fake"><i class="fa-solid fa-circle-xmark text-danger"></i> Rumor: Penyebaran Virus Baru Melalui Udara</button>
+                        <button class="preset-btn" data-preset="bm-real"><i class="fa-solid fa-circle-check text-success"></i> Berita Rasmi: Sidang Media KKM COVID-19</button>
                     </div>
                     <div class="preset-group">
                         <span class="group-label">English</span>
-                        <button class="preset-btn" data-preset="en-fake">Rumor: Lemon and warm water cures virus</button>
-                        <button class="preset-btn" data-preset="en-real">Official News: Bank Negara Interest Rate Update</button>
+                        <button class="preset-btn" data-preset="en-fake"><i class="fa-solid fa-circle-xmark text-danger"></i> Rumor: Lemon and warm water cures virus</button>
+                        <button class="preset-btn" data-preset="en-real"><i class="fa-solid fa-circle-check text-success"></i> Official News: Bank Negara Interest Rate Update</button>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Results Section -->
-        <section class="card result-card inactive" id="result-section">
-            <div class="card-header">
-                <h2><i class="fa-solid fa-square-poll-vertical"></i> Analysis Results</h2>
-                <p>Machine Learning classification metrics from our trained Logistic Regression model.</p>
+        <!-- Right: Result + History Panel -->
+        <section class="panel result-panel">
+
+            <!-- Placeholder (idle state) -->
+            <div class="idle-placeholder" id="idle-placeholder">
+                <div class="idle-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+                <h3>Ready to Analyze</h3>
+                <p>Enter or paste a news article on the left, then click <strong>Verify</strong>.</p>
             </div>
 
-            <!-- Main Verdict Display -->
-            <div class="verdict-display" id="verdict-display">
-                <div class="verdict-icon-container" id="verdict-icon-box">
-                    <i class="fa-solid fa-triangle-exclamation" id="verdict-icon"></i>
-                </div>
-                <div class="verdict-details">
-                    <span class="verdict-subtitle">VERDICT</span>
-                    <h3 id="verdict-label">SUSPECTED FAKE</h3>
-                </div>
+            <!-- Loading -->
+            <div class="loader-box hidden" id="loader-section">
+                <div class="spinner"></div>
+                <p>Analyzing with AI model...</p>
             </div>
 
-            <!-- Confidence Gauge -->
-            <div class="gauge-section">
-                <div class="gauge-header">
-                    <span>AI Confidence Score</span>
-                    <span id="confidence-percentage">93.6%</span>
+            <!-- Result Card -->
+            <div class="result-card hidden" id="result-section">
+                <div class="verdict-display" id="verdict-display">
+                    <div class="verdict-icon-container">
+                        <i class="fa-solid fa-triangle-exclamation" id="verdict-icon"></i>
+                    </div>
+                    <div class="verdict-details">
+                        <span class="verdict-subtitle">VERDICT</span>
+                        <h3 id="verdict-label">SUSPECTED FAKE</h3>
+                    </div>
+                    <button class="btn-icon" id="btn-copy-result" title="Copy result"><i class="fa-solid fa-share-nodes"></i></button>
                 </div>
-                <div class="gauge-bar-container">
-                    <div class="gauge-bar-fill" id="confidence-fill"></div>
-                </div>
-            </div>
 
-            <!-- Stats Grid -->
-            <div class="stats-grid">
-                <!-- Language Detected -->
-                <div class="stat-box">
-                    <div class="stat-icon"><i class="fa-solid fa-language"></i></div>
-                    <div class="stat-info">
-                        <span class="stat-label">Language</span>
-                        <span class="stat-value" id="stat-lang">Bahasa Malaysia</span>
+                <div class="gauge-section">
+                    <div class="gauge-header">
+                        <span>AI Confidence Score</span>
+                        <span id="confidence-percentage">0%</span>
+                    </div>
+                    <div class="gauge-bar-container">
+                        <div class="gauge-bar-fill" id="confidence-fill"></div>
                     </div>
                 </div>
 
-                <!-- Text Length -->
-                <div class="stat-box">
-                    <div class="stat-icon"><i class="fa-solid fa-arrow-left-right-to-line"></i></div>
-                    <div class="stat-info">
-                        <span class="stat-label">Words Counted</span>
-                        <span class="stat-value" id="stat-words">48</span>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-icon"><i class="fa-solid fa-language"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Language</span>
+                            <span class="stat-value" id="stat-lang">–</span>
+                        </div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon"><i class="fa-solid fa-font"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Word Count</span>
+                            <span class="stat-value" id="stat-words">–</span>
+                        </div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon"><i class="fa-solid fa-brain"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Model</span>
+                            <span class="stat-value" id="stat-model">LogReg</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Vocabulary Triggered -->
-                <div class="stat-box">
-                    <div class="stat-icon"><i class="fa-solid fa-brain"></i></div>
-                    <div class="stat-info">
-                        <span class="stat-label">Model Champion</span>
-                        <span class="stat-value" id="stat-model">LogReg (93.99%)</span>
-                    </div>
+                <div class="keywords-section">
+                    <h3><i class="fa-solid fa-tags"></i> Keywords Detected</h3>
+                    <div class="keywords-list" id="keywords-list"></div>
                 </div>
             </div>
 
-            <!-- Key Words Detected -->
-            <div class="keywords-section">
-                <h3><i class="fa-solid fa-tags"></i> Core Features Triggered (Vocabulary N-Grams):</h3>
-                <div class="keywords-list" id="keywords-list">
-                    <!-- keywords dynamically loaded -->
+            <!-- History Panel (inside right panel, toggled) -->
+            <div class="history-panel hidden" id="history-panel">
+                <div class="history-header">
+                    <h3><i class="fa-solid fa-clock-rotate-left"></i> Analysis History</h3>
+                    <button class="btn-icon" id="btn-clear-history" title="Clear history"><i class="fa-solid fa-trash-can"></i></button>
+                </div>
+                <div class="history-list" id="history-list">
+                    <div class="history-empty">No history yet. Verify an article to begin.</div>
                 </div>
             </div>
+
         </section>
-
-        <!-- Loading overlay inside result card area -->
-        <div class="card result-card loader-card hidden" id="loader-section">
-            <div class="spinner"></div>
-            <p>Running bilingual tokenization & model inference...</p>
-        </div>
     </main>
 
     <footer class="app-footer">
-        <p>&copy; 2026 Verify.AI. Designed for <strong>MBMB Melaka</strong>. Driven by high-performance NLP.</p>
+        <p>&copy; 2026 <strong>TruthLens</strong> &mdash; Built by <strong>DSG</strong> &middot; Bilingual AI Misinformation Detector</p>
     </footer>
 
     <script src="app.js"></script>
