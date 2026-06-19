@@ -293,6 +293,75 @@
     box-shadow: 0 8px 32px rgba(0,0,0,0.12);
 }
 
+/* ── Auxiliary Panel – Light Mode ───────────────────── */
+[data-theme="light"] .aux-panel {
+    background: #ffffff;
+    border-color: rgba(0,0,0,0.1);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+}
+[data-theme="light"] .aux-card {
+    background: rgba(0,0,0,0.02);
+    border-color: rgba(0,0,0,0.09);
+}
+[data-theme="light"] .aux-card h3 {
+    color: #111827;
+    border-bottom-color: rgba(0,0,0,0.08);
+}
+
+/* Status Grid */
+[data-theme="light"] .status-item .lbl { color: #6b7280; }
+[data-theme="light"] .status-item .val { color: #111827; }
+
+/* Tone Meter */
+[data-theme="light"] #tone-percentage { color: #111827; }
+[data-theme="light"] .gauge-footer { color: #6b7280; }
+
+/* Word Signals Chart */
+[data-theme="light"] .card-desc { color: #6b7280; }
+[data-theme="light"] .signals-header { color: #111827; }
+[data-theme="light"] .signals-chart {
+    background: rgba(0,0,0,0.03);
+    border-color: rgba(0,0,0,0.09);
+}
+[data-theme="light"] .signals-loading { color: #9ca3af; }
+[data-theme="light"] .signal-word { color: #111827; }
+[data-theme="light"] .signal-bar-wrapper { background: rgba(0,0,0,0.07); }
+[data-theme="light"] .signal-weight-label { color: #6b7280; }
+
+/* Accordion */
+[data-theme="light"] .accordion-item {
+    background: rgba(0,0,0,0.02);
+    border-color: rgba(0,0,0,0.09);
+}
+[data-theme="light"] .accordion-item:hover { border-color: rgba(0,0,0,0.16); }
+[data-theme="light"] .accordion-header {
+    color: #111827;
+}
+[data-theme="light"] .accordion-header i { color: #9ca3af; }
+[data-theme="light"] .accordion-item.active {
+    border-color: rgba(79,70,229,0.25);
+    background: rgba(79,70,229,0.03);
+}
+[data-theme="light"] .accordion-item.active .accordion-header i { color: #4f46e5; }
+[data-theme="light"] .accordion-body p { color: #4b5563; }
+
+/* Feedback Form */
+[data-theme="light"] .form-group label { color: #374151; }
+[data-theme="light"] .form-group select,
+[data-theme="light"] .form-group textarea {
+    background: #f9fafb;
+    border-color: rgba(0,0,0,0.12);
+    color: #111827;
+}
+[data-theme="light"] .form-group select:focus,
+[data-theme="light"] .form-group textarea:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
+}
+[data-theme="light"] .form-group textarea::placeholder { color: #9ca3af; }
+[data-theme="light"] .feedback-success-state h4 { color: #111827; }
+[data-theme="light"] .feedback-success-state p { color: #6b7280; }
+
 
 /* ── Reset ─────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
