@@ -664,6 +664,7 @@ textarea::placeholder { color: var(--text-muted); }
     gap: 0; overflow-y: auto; padding: 1.5rem;
 }
 .result-card.hidden { display: none; }
+.result-card > * { flex-shrink: 0; }
 
 /* Verdict */
 .verdict-display {
