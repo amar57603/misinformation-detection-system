@@ -395,6 +395,10 @@ body {
     min-height: 0;
     position: relative;
     z-index: 1;
+    transition: grid-template-columns var(--speed) ease;
+}
+.app-layout.aux-active {
+    grid-template-columns: 1fr 1fr 340px;
 }
 
 /* ── Panels ────────────────────────────────────────── */
@@ -1012,6 +1016,44 @@ textarea::placeholder { color: var(--text-muted); }
 @keyframes toastIn  { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
 @keyframes toastOut { from { opacity:1; } to { opacity:0; } }
 
+/* ── Auxiliary Panel ────────────────────────────────── */
+.aux-panel {
+    width: 340px;
+    flex-shrink: 0;
+    transition: all var(--speed) ease-in-out;
+}
+.aux-panel.hidden {
+    display: none !important;
+}
+.aux-content {
+    flex: 1;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    overflow-y: auto;
+}
+.placeholder-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 1.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--text-secondary);
+}
+.placeholder-icon {
+    font-size: 2rem;
+    color: var(--primary);
+    margin-bottom: 0.25rem;
+}
+[data-theme="light"] .placeholder-card {
+    background: rgba(0, 0, 0, 0.02);
+}
+
 /* ── Responsive ────────────────────────────────────── */
 @media (max-width: 900px) {
     body { height: auto; overflow-y: auto; overflow-x: hidden; }
@@ -1020,8 +1062,12 @@ textarea::placeholder { color: var(--text-muted); }
         overflow: visible;
         height: auto;
     }
+    .app-layout.aux-active {
+        grid-template-columns: 1fr;
+    }
     .panel { min-height: 480px; }
     .result-panel { min-height: 420px; }
+    .aux-panel { width: 100%; min-height: 400px; }
 }
 
 @media (max-width: 600px) {

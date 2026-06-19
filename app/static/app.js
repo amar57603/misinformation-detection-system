@@ -12,6 +12,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnCopyResult    = document.getElementById("btn-copy-result");
     const btnThemeToggle   = document.getElementById("btn-theme-toggle");
     const themeIcon        = document.getElementById("theme-icon");
+    const btnToggleAux     = document.getElementById("btn-toggle-aux");
+    const auxPanel         = document.getElementById("aux-panel");
+    const appLayout        = document.querySelector(".app-layout");
 
     // ── Theme Toggle ──────────────────────────────────────────
     const savedTheme = localStorage.getItem("siasatai_theme") || "dark";
@@ -54,6 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let history = JSON.parse(localStorage.getItem("siasatai_history") || "[]");
     let lastResult = null;
     let historyVisible = false;
+    let auxVisible = false;
 
     // ── Preset Texts ──────────────────────────────────────────
     const presets = {
@@ -159,6 +163,14 @@ document.addEventListener("DOMContentLoaded", () => {
         icon.className = historyVisible ? "fa-solid fa-xmark" : "fa-solid fa-clock-rotate-left";
     }
 
+    function toggleAux(force) {
+        auxVisible = (force !== undefined) ? force : !auxVisible;
+        auxPanel.classList.toggle("hidden", !auxVisible);
+        appLayout.classList.toggle("aux-active", auxVisible);
+        const icon = btnToggleAux.querySelector("i");
+        icon.className = auxVisible ? "fa-solid fa-xmark" : "fa-solid fa-chart-line";
+    }
+
     // init history display
     renderHistory();
 
@@ -193,6 +205,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // History toggle
     btnToggleHistory.addEventListener("click", () => toggleHistory());
+
+    // Auxiliary toggle
+    btnToggleAux.addEventListener("click", () => toggleAux());
 
     // Clear history
     btnClearHistory.addEventListener("click", () => {
