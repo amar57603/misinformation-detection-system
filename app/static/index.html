@@ -145,10 +145,29 @@
                     <div class="keywords-list" id="keywords-list"></div>
                 </div>
 
+                <!-- Word Cloud -->
+                <div class="wordcloud-section">
+                    <h3><i class="fa-solid fa-cloud"></i> Word Cloud</h3>
+                    <canvas id="wordcloud-canvas" width="400" height="180"></canvas>
+                </div>
+
+                <!-- AI Summary -->
+                <div class="summary-section">
+                    <h3><i class="fa-solid fa-microscope"></i> Why This Verdict?</h3>
+                    <p id="summary-text"></p>
+                </div>
+
+                <!-- Fact-Check Sources (only for Fake) -->
+                <div class="sources-section hidden" id="sources-section">
+                    <h3><i class="fa-solid fa-magnifying-glass-chart"></i> Verify With These Sources</h3>
+                    <div class="sources-list" id="sources-list"></div>
+                </div>
+
                 <div class="ai-disclaimer">
                     <i class="fa-solid fa-circle-info"></i>
                     <p><strong>Note:</strong> AI can still make mistakes. This result is based on pattern recognition and should not be used as the sole source of truth. Always verify news with official sources before sharing.</p>
                 </div>
+
             </div>
 
             <!-- History Panel (inside right panel, toggled) -->

@@ -279,7 +279,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const pct = (data.confidence * 100).toFixed(1);
         confidenceText.textContent = `${pct}%`;
-        // reset then animate
         confidenceFill.style.width = "0%";
         setTimeout(() => { confidenceFill.style.width = `${pct}%`; }, 50);
 
@@ -287,6 +286,7 @@ document.addEventListener("DOMContentLoaded", () => {
         statWords.textContent = data.word_count;
         statModel.textContent = "LogReg (93.99%)";
 
+        // Keywords
         keywordsList.innerHTML = "";
         if (data.keywords_detected && data.keywords_detected.length > 0) {
             data.keywords_detected.forEach(word => {
@@ -301,5 +301,92 @@ document.addEventListener("DOMContentLoaded", () => {
             msg.textContent = "No primary keywords detected.";
             keywordsList.appendChild(msg);
         }
+
+        // Word Cloud
+        drawWordCloud(data.word_frequencies || [], isFake);
+
+        // Summary
+        const summaryEl = document.getElementById("summary-text");
+        summaryEl.textContent = data.summary || "No summary available.";
+
+        // Fact-check Sources
+        const sourcesSection = document.getElementById("sources-section");
+        const sourcesList    = document.getElementById("sources-list");
+        sourcesList.innerHTML = "";
+        if (isFake && data.fact_check_sources && data.fact_check_sources.length > 0) {
+            sourcesSection.classList.remove("hidden");
+            data.fact_check_sources.forEach(src => {
+                const card = document.createElement("a");
+                card.className = "source-card";
+                card.href = src.url;
+                card.target = "_blank";
+                card.rel = "noopener noreferrer";
+                card.innerHTML = `
+                    <span class="source-flag">${src.flag}</span>
+                    <div class="source-info">
+                        <div class="source-name">${src.name} <i class="fa-solid fa-arrow-up-right-from-square"></i></div>
+                        <div class="source-desc">${src.description}</div>
+                    </div>`;
+                sourcesList.appendChild(card);
+            });
+        } else {
+            sourcesSection.classList.add("hidden");
+        }
+    }
+
+    // ── Word Cloud (Canvas) ───────────────────────────────────
+    function drawWordCloud(words, isFake) {
+        const canvas = document.getElementById("wordcloud-canvas");
+        const ctx    = canvas.getContext("2d");
+        const W = canvas.offsetWidth  || 400;
+        const H = canvas.offsetHeight || 160;
+        canvas.width  = W;
+        canvas.height = H;
+        ctx.clearRect(0, 0, W, H);
+
+        if (!words || words.length === 0) return;
+
+        const isLight = document.documentElement.getAttribute("data-theme") === "light";
+        const maxCount = words[0].count || 1;
+
+        // Color palette
+        const fakeColors  = ["#f87171","#fb923c","#fbbf24","#f472b6","#e879f9"];
+        const realColors  = ["#34d399","#60a5fa","#818cf8","#38bdf8","#4ade80"];
+        const lightFake   = ["#dc2626","#ea580c","#ca8a04","#db2777","#9333ea"];
+        const lightReal   = ["#059669","#2563eb","#4f46e5","#0284c7","#16a34a"];
+        const palette = isLight
+            ? (isFake ? lightFake : lightReal)
+            : (isFake ? fakeColors : realColors);
+
+        const placed = [];
+
+        words.slice(0, 30).forEach(({ word, count }) => {
+            const ratio    = count / maxCount;
+            const fontSize = Math.max(11, Math.min(36, Math.round(12 + ratio * 26)));
+            ctx.font       = `${600 + (ratio > 0.5 ? 200 : 0)} ${fontSize}px Outfit, sans-serif`;
+            const textW    = ctx.measureText(word).width;
+            const color    = palette[Math.floor(Math.random() * palette.length)];
+            ctx.fillStyle  = color;
+
+            // Try to place word without overlap
+            let placed_ = false;
+            for (let attempt = 0; attempt < 60; attempt++) {
+                const x = Math.random() * (W - textW - 10) + 5;
+                const y = Math.random() * (H - fontSize - 4) + fontSize;
+                const box = { x, y: y - fontSize, w: textW, h: fontSize + 4 };
+                const overlap = placed.some(p =>
+                    x < p.x + p.w && x + textW > p.x &&
+                    box.y < p.y + p.h && box.y + box.h > p.y
+                );
+                if (!overlap) {
+                    ctx.globalAlpha = 0.6 + ratio * 0.4;
+                    ctx.fillText(word, x, y);
+                    placed.push(box);
+                    placed_ = true;
+                    break;
+                }
+            }
+            ctx.globalAlpha = 1;
+        });
     }
 });
