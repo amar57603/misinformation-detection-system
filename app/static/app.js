@@ -404,4 +404,47 @@ document.addEventListener("DOMContentLoaded", () => {
             ctx.globalAlpha = 1;
         });
     }
+
+    // ── Accordion Toggles ─────────────────────────────────────
+    document.querySelectorAll(".accordion-header").forEach(header => {
+        header.addEventListener("click", () => {
+            const item = header.parentElement;
+            const body = item.querySelector(".accordion-body");
+            const isActive = item.classList.contains("active");
+
+            // Close all items
+            document.querySelectorAll(".accordion-item").forEach(i => {
+                i.classList.remove("active");
+                i.querySelector(".accordion-body").style.maxHeight = null;
+            });
+
+            // Toggle active state
+            if (!isActive) {
+                item.classList.add("active");
+                body.style.maxHeight = body.scrollHeight + "px";
+            }
+        });
+    });
+
+    // ── Feedback Form Handler ──────────────────────────────────
+    const feedbackForm  = document.getElementById("aux-feedback-form");
+    const successState  = document.getElementById("feedback-success-state");
+    const btnResetFeed  = document.getElementById("btn-reset-feedback");
+
+    if (feedbackForm) {
+        feedbackForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            feedbackForm.classList.add("hidden");
+            successState.classList.remove("hidden");
+            showToast("Feedback submitted successfully!", "fa-circle-check");
+        });
+    }
+
+    if (btnResetFeed) {
+        btnResetFeed.addEventListener("click", () => {
+            feedbackForm.reset();
+            successState.classList.add("hidden");
+            feedbackForm.classList.remove("hidden");
+        });
+    }
 });
