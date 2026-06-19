@@ -303,19 +303,22 @@ document.addEventListener("DOMContentLoaded", () => {
         const toneLabelEl = document.getElementById("tone-label");
 
         if (tonePctEl && toneFillEl && toneLabelEl) {
-            const toneVal = (data.sensationalism_score !== undefined ? data.sensationalism_score : 0) * 100;
-            tonePctEl.textContent = `${toneVal.toFixed(1)}%`;
-            toneFillEl.style.width = "0%";
-            setTimeout(() => { toneFillEl.style.width = `${toneVal}%`; }, 50);
+            const toneRaw = (data.sensationalism_score !== undefined ? data.sensationalism_score : 0) * 100;
+            // Use a minimum display width of 3% so the bar is always visible
+            const toneDisplay = Math.max(toneRaw, 3);
 
-            if (toneVal < 30) {
-                toneLabelEl.textContent = "Neutral & Objective (Standard journalism)";
+            tonePctEl.textContent = `${toneRaw.toFixed(1)}%`;
+            toneFillEl.style.width = "0%";
+            setTimeout(() => { toneFillEl.style.width = `${toneDisplay}%`; }, 50);
+
+            if (toneRaw < 30) {
+                toneLabelEl.textContent = `✓ Low Sensationalism — formal, objective writing style`;
                 toneLabelEl.style.color = "var(--success)";
-            } else if (toneVal < 60) {
-                toneLabelEl.textContent = "Moderately Sensational (Urgent phrasing)";
+            } else if (toneRaw < 60) {
+                toneLabelEl.textContent = `⚠ Moderate — contains some urgent or emotional phrasing`;
                 toneLabelEl.style.color = "#fbbf24";
             } else {
-                toneLabelEl.textContent = "Highly Sensational (Clickbait/rumor styling)";
+                toneLabelEl.textContent = `✗ High — strong clickbait or rumor-style language detected`;
                 toneLabelEl.style.color = "var(--danger)";
             }
         }
