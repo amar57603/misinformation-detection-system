@@ -1161,6 +1161,97 @@ textarea::placeholder { color: var(--text-muted); }
     line-height: 1.5; margin-bottom: 0.5rem;
 }
 
+/* Tone Meter */
+.tone-bar-fill {
+    background: linear-gradient(90deg, #34d399 0%, #fbbf24 50%, #f87171 100%);
+    box-shadow: 0 0 8px rgba(251, 191, 36, 0.2);
+}
+.gauge-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.74rem;
+    color: var(--text-muted);
+    margin-top: 0.35rem;
+    font-weight: 500;
+}
+
+/* Global Word Signals Card & Chart */
+.card-desc {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    margin-top: -0.25rem;
+    margin-bottom: 0.5rem;
+}
+.signals-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.signals-header {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+.signals-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    background: rgba(0,0,0,0.15);
+    padding: 0.6rem;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+}
+.signals-loading {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-align: center;
+}
+.signal-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+}
+.signal-word {
+    width: 75px;
+    font-weight: 500;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.signal-bar-wrapper {
+    flex: 1;
+    height: 8px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+}
+.signal-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.8s cubic-bezier(0.1, 0.8, 0.2, 1);
+}
+.signal-bar-fill.fake {
+    background: linear-gradient(90deg, var(--danger) 0%, #ef4444 100%);
+    box-shadow: 0 0 6px rgba(248, 113, 113, 0.3);
+}
+.signal-bar-fill.real {
+    background: linear-gradient(90deg, var(--success) 0%, #10b981 100%);
+    box-shadow: 0 0 6px rgba(52, 211, 153, 0.3);
+}
+.signal-weight-label {
+    width: 32px;
+    text-align: right;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-family: monospace;
+}
+
 /* ── Responsive ────────────────────────────────────── */
 @media (max-width: 900px) {
     body { height: auto; overflow-y: auto; overflow-x: hidden; }

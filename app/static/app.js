@@ -297,6 +297,29 @@ document.addEventListener("DOMContentLoaded", () => {
         confidenceFill.style.width = "0%";
         setTimeout(() => { confidenceFill.style.width = `${pct}%`; }, 50);
 
+        // Sensationalism & Tone Meter
+        const tonePctEl   = document.getElementById("tone-percentage");
+        const toneFillEl  = document.getElementById("tone-fill");
+        const toneLabelEl = document.getElementById("tone-label");
+
+        if (tonePctEl && toneFillEl && toneLabelEl) {
+            const toneVal = (data.sensationalism_score !== undefined ? data.sensationalism_score : 0) * 100;
+            tonePctEl.textContent = `${toneVal.toFixed(1)}%`;
+            toneFillEl.style.width = "0%";
+            setTimeout(() => { toneFillEl.style.width = `${toneVal}%`; }, 50);
+
+            if (toneVal < 30) {
+                toneLabelEl.textContent = "Neutral & Objective (Standard journalism)";
+                toneLabelEl.style.color = "var(--success)";
+            } else if (toneVal < 60) {
+                toneLabelEl.textContent = "Moderately Sensational (Urgent phrasing)";
+                toneLabelEl.style.color = "#fbbf24";
+            } else {
+                toneLabelEl.textContent = "Highly Sensational (Clickbait/rumor styling)";
+                toneLabelEl.style.color = "var(--danger)";
+            }
+        }
+
         statLang.textContent  = data.language;
         statWords.textContent = data.word_count;
         statModel.textContent = "LogReg (93.99%)";
@@ -512,4 +535,72 @@ document.addEventListener("DOMContentLoaded", () => {
             feedbackForm.classList.remove("hidden");
         });
     }
+
+    // ── Load Global Model Diagnostics ───────────────────────
+    async function loadModelDiagnostics() {
+        const fakeChart = document.getElementById("fake-signals-chart");
+        const realChart = document.getElementById("real-signals-chart");
+
+        try {
+            const response = await fetch("/api/model_info");
+            if (!response.ok) throw new Error("Could not load model diagnostics.");
+
+            const data = await response.json();
+
+            // Populate fake signals chart
+            if (fakeChart && data.top_fake_features) {
+                fakeChart.innerHTML = "";
+                const maxWeight = Math.max(...data.top_fake_features.map(f => Math.abs(f.weight)), 0.1);
+
+                data.top_fake_features.forEach(feat => {
+                    const absWeight = Math.abs(feat.weight);
+                    const percent = (absWeight / maxWeight) * 100;
+                    const row = document.createElement("div");
+                    row.className = "signal-bar-row";
+                    row.innerHTML = `
+                        <div class="signal-word" title="${feat.word}">${feat.word}</div>
+                        <div class="signal-bar-wrapper">
+                            <div class="signal-bar-fill fake" style="width: 0%;"></div>
+                        </div>
+                        <div class="signal-weight-label">${feat.weight.toFixed(2)}</div>
+                    `;
+                    fakeChart.appendChild(row);
+                    setTimeout(() => {
+                        row.querySelector(".signal-bar-fill").style.width = `${percent}%`;
+                    }, 100);
+                });
+            }
+
+            // Populate real signals chart
+            if (realChart && data.top_real_features) {
+                realChart.innerHTML = "";
+                const maxWeight = Math.max(...data.top_real_features.map(f => f.weight), 0.1);
+
+                data.top_real_features.forEach(feat => {
+                    const percent = (feat.weight / maxWeight) * 100;
+                    const row = document.createElement("div");
+                    row.className = "signal-bar-row";
+                    row.innerHTML = `
+                        <div class="signal-word" title="${feat.word}">${feat.word}</div>
+                        <div class="signal-bar-wrapper">
+                            <div class="signal-bar-fill real" style="width: 0%;"></div>
+                        </div>
+                        <div class="signal-weight-label">+${feat.weight.toFixed(2)}</div>
+                    `;
+                    realChart.appendChild(row);
+                    setTimeout(() => {
+                        row.querySelector(".signal-bar-fill").style.width = `${percent}%`;
+                    }, 100);
+                });
+            }
+
+        } catch (error) {
+            console.error("Error loading model diagnostics:", error);
+            if (fakeChart) fakeChart.innerHTML = '<div class="signals-loading" style="color: var(--danger);"><i class="fa-solid fa-circle-exclamation"></i> Load failed.</div>';
+            if (realChart) realChart.innerHTML = '<div class="signals-loading" style="color: var(--danger);"><i class="fa-solid fa-circle-exclamation"></i> Load failed.</div>';
+        }
+    }
+
+    // Load on start
+    loadModelDiagnostics();
 });

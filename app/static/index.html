@@ -121,6 +121,19 @@
                     </div>
                 </div>
 
+                <div class="gauge-section">
+                    <div class="gauge-header">
+                        <span>Sensationalism &amp; Tone Meter</span>
+                        <span id="tone-percentage">0%</span>
+                    </div>
+                    <div class="gauge-bar-container">
+                        <div class="gauge-bar-fill tone-bar-fill" id="tone-fill"></div>
+                    </div>
+                    <div class="gauge-footer">
+                        <span id="tone-label">Analyzing tone...</span>
+                    </div>
+                </div>
+
                 <div class="stats-grid">
                     <div class="stat-box">
                         <div class="stat-icon"><i class="fa-solid fa-language"></i></div>
@@ -204,6 +217,26 @@
                         <div class="status-item"><span class="lbl">Regularization</span><span class="val">L2 (C=0.15)</span></div>
                         <div class="status-item"><span class="lbl">Vocabulary Size</span><span class="val">10,000 bi-grams</span></div>
                         <div class="status-item"><span class="lbl">Last Update</span><span class="val">June 19, 2026</span></div>
+                    </div>
+                </div>
+
+                <!-- Global Word Signals Card -->
+                <div class="aux-card signals-card">
+                    <h3><i class="fa-solid fa-chart-bar text-primary"></i> Global Word Signals</h3>
+                    <p class="card-desc">Top word associations trained on our bilingual corpus.</p>
+                    
+                    <div class="signals-group" style="margin-top: 0.25rem;">
+                        <div class="signals-header"><i class="fa-solid fa-circle-xmark text-danger"></i> Top "Fake" Indicators</div>
+                        <div class="signals-chart" id="fake-signals-chart">
+                            <div class="signals-loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading chart...</div>
+                        </div>
+                    </div>
+                    
+                    <div class="signals-group" style="margin-top: 0.75rem;">
+                        <div class="signals-header"><i class="fa-solid fa-circle-check text-success"></i> Top "Real" Indicators</div>
+                        <div class="signals-chart" id="real-signals-chart">
+                            <div class="signals-loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading chart...</div>
+                        </div>
                     </div>
                 </div>
 

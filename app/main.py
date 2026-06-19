@@ -207,6 +207,32 @@ def build_summary(label: str, confidence: float, language: str,
                 f"It exhibits formal language structure and verifiable factual reporting patterns. "
                 f"Supporting keywords: {kw_str}."
             )
+ 
+ 
+def calculate_sensationalism(text: str) -> float:
+    if not text:
+        return 0.0
+    
+    words = text.split()
+    total_words = len(words)
+    if total_words == 0:
+        return 0.0
+        
+    upper_words = sum(1 for w in words if w.isupper() and len(w) > 2)
+    cap_ratio = upper_words / total_words
+    cap_score = min(1.0, cap_ratio / 0.15) * 0.35
+    
+    excl_count = text.count('!')
+    excl_score = min(1.0, excl_count / 3.0) * 0.25
+    
+    cleaned_words = set(re.sub(r'[^a-zA-Z\s]', '', text).lower().split())
+    signals_en = cleaned_words.intersection(FAKE_SIGNALS_EN)
+    signals_bm = cleaned_words.intersection(FAKE_SIGNALS_BM)
+    signal_count = len(signals_en.union(signals_bm))
+    keyword_score = min(1.0, signal_count / 3.0) * 0.40
+    
+    score = cap_score + excl_score + keyword_score
+    return min(1.0, max(0.0, score))
 
 
 class NewsInput(BaseModel):
@@ -263,11 +289,35 @@ async def predict(news_input: NewsInput):
         "language": lang,
         "prediction": label,
         "confidence": confidence,
+        "sensationalism_score": calculate_sensationalism(news_input.text),
         "word_count": len(news_input.text.split()),
         "keywords_detected": keywords,
         "word_frequencies": word_frequencies,
         "summary": summary,
         "fact_check_sources": FACT_CHECK_SOURCES
+    }
+
+
+@app.get("/api/model_info")
+async def model_info():
+    if model is None or vectorizer is None or label_encoder is None:
+        raise HTTPException(status_code=500, detail="Model assets not loaded.")
+    
+    feature_names = vectorizer.get_feature_names_out()
+    coefs = model.coef_[0]
+    word_coefs = list(zip(feature_names, coefs))
+    
+    sorted_by_coef = sorted(word_coefs, key=lambda x: x[1])
+    
+    top_fake = [{"word": word, "weight": float(coef)} for word, coef in sorted_by_coef[:5]]
+    top_real = [{"word": word, "weight": float(coef)} for word, coef in sorted_by_coef[-5:]]
+    top_real.reverse()
+    
+    return {
+        "algorithm": "Logistic Regression",
+        "vocabulary_size": len(feature_names),
+        "top_fake_features": top_fake,
+        "top_real_features": top_real
     }
 
 
