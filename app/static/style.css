@@ -1032,3 +1032,18 @@ textarea::placeholder { color: var(--text-muted); }
     .btn-primary { flex: 1 1 100%; }
     .stats-grid { grid-template-columns: 1fr 1fr; }
 }
+
+/* Height-restricted Desktop & Tablet Landscape screens */
+@media (max-height: 780px) and (min-width: 901px) {
+    body {
+        height: auto;
+        overflow-y: auto;
+    }
+    .app-layout {
+        height: auto;
+        overflow: visible;
+    }
+    .panel {
+        height: 620px;
+    }
+}
