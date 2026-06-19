@@ -432,11 +432,76 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnResetFeed  = document.getElementById("btn-reset-feedback");
 
     if (feedbackForm) {
-        feedbackForm.addEventListener("submit", (e) => {
+        feedbackForm.addEventListener("submit", async (e) => {
             e.preventDefault();
-            feedbackForm.classList.add("hidden");
-            successState.classList.remove("hidden");
-            showToast("Feedback submitted successfully!", "fa-circle-check");
+
+            const categoryEl = document.getElementById("feedback-category");
+            const notesEl = document.getElementById("feedback-notes");
+            const submitBtn = feedbackForm.querySelector(".btn-submit-feedback");
+
+            if (!categoryEl || !notesEl) return;
+
+            const category = categoryEl.value;
+            const notes = notesEl.value;
+
+            // Prepare Web3Forms payload
+            const payload = {
+                access_key: "5e5fae3d-9e5a-41e6-bcfa-b5e9f6378030",
+                subject: `SiasatAI Feedback: [${category.toUpperCase()}]`,
+                from_name: "SiasatAI App",
+                category: category,
+                notes: notes,
+                timestamp: new Date().toISOString()
+            };
+
+            // Include last result details if available to give context
+            if (lastResult) {
+                payload.article_text = lastResult.text || textInput.value;
+                payload.prediction = lastResult.prediction || "N/A";
+                payload.confidence = lastResult.confidence ? `${(lastResult.confidence * 100).toFixed(1)}%` : "N/A";
+                payload.language = lastResult.language || "N/A";
+                payload.word_count = lastResult.word_count || "N/A";
+            } else {
+                payload.article_text = textInput.value || "No article text analyzed";
+                payload.prediction = "N/A (No prediction run)";
+                payload.confidence = "N/A";
+                payload.language = "N/A";
+                payload.word_count = "N/A";
+            }
+
+            // Disable button and show spinner
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+            }
+
+            try {
+                const response = await fetch("https://api.web3forms.com/submit", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    feedbackForm.classList.add("hidden");
+                    successState.classList.remove("hidden");
+                    showToast("Feedback submitted successfully!", "fa-circle-check");
+                } else {
+                    throw new Error(result.message || "Failed to submit feedback.");
+                }
+            } catch (error) {
+                showToast(`Error: ${error.message}`, "fa-circle-xmark");
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send Feedback';
+                }
+            }
         });
     }
 
