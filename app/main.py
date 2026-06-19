@@ -267,7 +267,7 @@ async def predict(news_input: NewsInput):
         "keywords_detected": keywords,
         "word_frequencies": word_frequencies,
         "summary": summary,
-        "fact_check_sources": FACT_CHECK_SOURCES if label == "Fake" else []
+        "fact_check_sources": FACT_CHECK_SOURCES
     }
 
 

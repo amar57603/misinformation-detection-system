@@ -313,7 +313,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const sourcesSection = document.getElementById("sources-section");
         const sourcesList    = document.getElementById("sources-list");
         sourcesList.innerHTML = "";
-        if (isFake && data.fact_check_sources && data.fact_check_sources.length > 0) {
+        if (data.fact_check_sources && data.fact_check_sources.length > 0) {
             sourcesSection.classList.remove("hidden");
             data.fact_check_sources.forEach(src => {
                 const card = document.createElement("a");
