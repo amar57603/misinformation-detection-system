@@ -191,15 +191,83 @@
         <!-- Auxiliary Panel -->
         <section class="panel aux-panel hidden" id="aux-panel">
             <div class="panel-header">
-                <h2><i class="fa-solid fa-circle-info"></i> Auxiliary Insights</h2>
-                <p>Detailed analysis data and metrics (placeholder).</p>
+                <h2><i class="fa-solid fa-chart-line"></i> Insights &amp; Support</h2>
+                <p>Model diagnostics, Q&amp;A guidelines, and feedback submission.</p>
             </div>
             <div class="aux-content">
-                <div class="placeholder-card">
-                    <i class="fa-solid fa-cubes placeholder-icon"></i>
-                    <h4>Insights Placeholder</h4>
-                    <p>This panel will be populated with auxiliary metrics, cross-references, or system parameters in the next design iteration.</p>
+                
+                <!-- Model Status Card -->
+                <div class="aux-card status-card">
+                    <h3><i class="fa-solid fa-server text-success"></i> Model Specifications</h3>
+                    <div class="status-grid-mini">
+                        <div class="status-item"><span class="lbl">Algorithm</span><span class="val">Logistic Regression</span></div>
+                        <div class="status-item"><span class="lbl">Regularization</span><span class="val">L2 (C=0.15)</span></div>
+                        <div class="status-item"><span class="lbl">Vocabulary Size</span><span class="val">10,000 bi-grams</span></div>
+                        <div class="status-item"><span class="lbl">Last Update</span><span class="val">June 19, 2026</span></div>
+                    </div>
                 </div>
+
+                <!-- Q&A Accordion -->
+                <div class="aux-card qa-card">
+                    <h3><i class="fa-solid fa-circle-question text-primary"></i> Frequently Asked Qs</h3>
+                    <div class="accordion">
+                        <div class="accordion-item">
+                            <button class="accordion-header">
+                                <span>How does SiasatAI work?</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+                            <div class="accordion-body">
+                                <p>It uses TF-IDF word vectorization to extract structural language patterns (like exclamation frequencies, urgent keywords, and formal news phrasings) and matches them against a regularized Logistic Regression classifier trained on a 60,000+ article bilingual corpus.</p>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <button class="accordion-header">
+                                <span>What does the score mean?</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+                            <div class="accordion-body">
+                                <p>The AI Confidence Score represents the probability calculated by the model. Higher percentages indicate stronger structural alignment with historically verified real announcements or known misinformation patterns.</p>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <button class="accordion-header">
+                                <span>Can the model make mistakes?</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+                            <div class="accordion-body">
+                                <p>Yes, machine learning models recognize linguistic patterns but do not possess real-time factual lookup. Always double-check critical municipal or national news using the official fact-checking links in the source section.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedback Form -->
+                <div class="aux-card feedback-card">
+                    <h3><i class="fa-solid fa-envelope-open-text text-primary"></i> Submit Feedback</h3>
+                    <form id="aux-feedback-form" class="feedback-form">
+                        <div class="form-group">
+                            <label for="feedback-category">Category</label>
+                            <select id="feedback-category" required>
+                                <option value="" disabled selected>Select category...</option>
+                                <option value="false_alarm">False Alarm (Real news flagged as Fake)</option>
+                                <option value="missed_fake">Missed Rumor (Fake news flagged as Real)</option>
+                                <option value="suggestion">General Suggestion / Feature Request</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="feedback-notes">Detailed Notes</label>
+                            <textarea id="feedback-notes" placeholder="Paste article link or describe the prediction error..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-submit-feedback"><i class="fa-solid fa-paper-plane"></i> Send Feedback</button>
+                    </form>
+                    <div id="feedback-success-state" class="feedback-success-state hidden">
+                        <i class="fa-solid fa-circle-check text-success"></i>
+                        <h4>Feedback Submitted!</h4>
+                        <p>Thank you. Your report has been logged to help calibrate the model.</p>
+                        <button id="btn-reset-feedback" class="btn btn-ghost">Submit Another</button>
+                    </div>
+                </div>
+
             </div>
         </section>
     </main>
