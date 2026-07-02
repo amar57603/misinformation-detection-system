@@ -1,107 +1,222 @@
 # SiasatAI — Bilingual Misinformation Detection System
 
-> An end-to-end Data Science and Machine Learning project for real-time fake news detection in **Bahasa Malaysia** and **English**, developed for **MBMB Melaka** as a final year project.
+> An end-to-end Data Science and Machine Learning project for real-time fake news detection in **Bahasa Malaysia** and **English**, developed with use-case context for **Majlis Bandaraya Melaka Bersejarah (MBMB)** as a Final Year Project.
 
 ---
 
-## 🔍 Overview
-
-SiasatAI is a bilingual misinformation detection platform that combines a rigorously trained machine learning pipeline with a production-ready web application. The system is trained on **64,000+ bilingual articles** sourced from academic datasets and live-scraped portals, and achieves **93.99% accuracy** using a regularized Logistic Regression classifier selected through a multi-model tournament.
-
-The application is optimized for CPU-only serverless hosting — it runs entirely on Vercel without any GPU dependency.
-
----
-
-## ✨ Dashboard Features
-
-### Core Analysis
-| Feature | Description |
-|---|---|
-| **Real-time Prediction** | TF-IDF vectorization + Logistic Regression inference in under 2ms |
-| **Bilingual Support** | Automatic language detection (Bahasa Malaysia / English) |
-| **AI Confidence Score** | Animated gauge showing model prediction probability |
-| **Sensationalism & Tone Meter** | Scores writing style from Neutral to Highly Sensational based on ALLCAPS ratio, exclamation density, and bilingual trigger keywords |
-| **Word Cloud** | Canvas-rendered frequency visualization of the analyzed article |
-| **Keyword Badges** | Top TF-IDF features detected in the submitted text |
-| **AI Summary** | Human-readable bilingual explanation of the model's verdict |
-| **Fact-Check Sources** | Persistent links to Sebenarnya.my, AFP, Reuters, and Bernama |
-
-### Usability
-| Feature | Description |
-|---|---|
-| **Verification History** | Saves last 50 analyses to `localStorage` — persists across page refreshes |
-| **Quick Presets** | One-click sample texts (real and fake) in both languages |
-| **Clipboard Paste** | Direct paste from clipboard with a single button |
-| **Share Result** | Copies a formatted verdict summary to clipboard |
-| **Dark / Light Mode** | Full theme toggle with persistent preference |
-
-### Insights Panel
-| Feature | Description |
-|---|---|
-| **Model Specifications** | Algorithm diagnostics, regularization parameters, vocabulary size, and last update timestamp |
-| **Global Word Signals Chart** | Animated bar charts showing the top 5 words that drive "Fake" vs. "Real" predictions, derived from actual Logistic Regression coefficients |
-| **Q&A Accordion** | Interactive FAQ explaining how the model works, what the confidence score means, and its limitations |
-| **Feedback Form** | Categorized submission form (false alarm, missed rumor, suggestion) that sends reports asynchronously to Web3Forms, including the analyzed article and model verdict as context |
+## 🔍 Table of Contents
+1. [Project Overview & Problem Statement](#-project-overview--problem-statement)
+2. [✨ Core Features](#-core-features)
+3. [🏗️ System Architecture](#%EF%B8%8F-system-architecture)
+4. [⚙️ Machine Learning Pipeline (Step-by-Step)](#%EF%B8%8F-machine-learning-pipeline-step-by-step)
+5. [📈 Multi-Model Tournament Results](#-multi-model-tournament-results)
+6. [💻 Web Application & Backend API](#-web-application--backend-api)
+7. [📡 API Endpoints](#-api-endpoints)
+8. [🚀 Running Locally](#-running-locally)
+9. [☁️ Deployment on Vercel](#%EF%B8%8F-deployment-on-vercel)
+10. [🗃️ Data Sources](#%EF%B8%8F-data-sources)
+11. [👥 Stakeholders](#-stakeholders)
 
 ---
 
-## 📊 ML Tournament Results
+## 🎯 Project Overview & Problem Statement
 
-| Model | Accuracy |
-|---|---|
-| **Logistic Regression** 🏆 | **93.99%** |
-| Support Vector Machine | 93.32% |
-| XGBoost | 92.76% |
-| Random Forest | 92.64% |
+In the modern digital landscape, the rapid spread of misinformation, viral rumors, and fabricated reports poses a significant threat to public trust. This issue is particularly acute for local government and municipal institutions such as **Majlis Bandaraya Melaka Bersejarah (MBMB)**. 
 
-> **Why Logistic Regression?** Despite its simplicity, it outperformed all tree-based and kernel-based models on this high-dimensional TF-IDF feature space. Its regularization (`L2, C=0.15`) prevents domain bias, and the exported model weighs only ~5MB — making it ideal for serverless CPU-only environments.
+### The Problem
+* **Rapid Dissemination:** Fake WhatsApp broadcast messages, clickbait articles, and fabricated social media rumors regarding municipal affairs (e.g., street closures, tax increases, policy changes) spread much faster than official press releases or corrections.
+* **Public Panic & Confusion:** Rumors about public works or zoning can cause immediate panic, disrupt daily business, and lead to reputational damage.
+* **Linguistic Complexity:** Public discourse in Malaysia is bilingual (Bahasa Malaysia and English) and often contains informal slang or region-specific names, which standard global fact-check tools fail to parse.
+* **Resource Constraints:** Municipal offices lack the dedicated data science staff or expensive GPU infrastructure required to deploy heavy deep learning models for continuous moderation.
+
+### The Solution: SiasatAI
+**SiasatAI** is a lightweight, high-performance bilingual machine learning system that allows public officers and citizens to instantly verify the credibility of any news article or social media post. 
+
+By utilizing a regularized **Logistic Regression** classifier trained on a balanced corpus of over **64,000 bilingual articles**, SiasatAI achieves **93.99% accuracy** while maintaining a lightweight footprint (~5MB). It runs entirely on **CPU-only serverless hosting (Vercel)**, offering instant predictions (<2ms) without any PyTorch or GPU hardware dependencies.
 
 ---
 
-## 🏗️ Architecture
+## ✨ Core Features
+
+### 1. Advanced Core Analysis
+* **Real-time Prediction:** Vectorizes text and outputs a classification ("Fake" vs. "Real") in under 2 milliseconds.
+* **AI Confidence Score:** An animated visual gauge showing the probability distribution of the model's prediction.
+* **Bilingual Language Detection:** Automatically detects whether the text is Bahasa Malaysia or English to customize explanation summaries.
+* **Sensationalism & Tone Meter:** Scores the writing style on a scale from 0% to 100% (Neutral to Highly Sensational) based on ALLCAPS ratio, exclamation density, and clickbait trigger keywords.
+* **Bilingual AI Summary:** Generates a human-readable explanation of why the model flagged the text, highlighting indicators like sensational phrasing or lack of structural attribution.
+* **Verification Badges & Word Cloud:** Extracts the top TF-IDF features and generates an interactive, canvas-rendered word frequency cloud.
+
+### 2. Collapsible Insights Sidebar
+* **Model Specifications:** Displays current model training parameters (regularization strength, vocabulary size, and training timestamp) for administrative transparency.
+* **Global Word Signals Chart:** Renders two animated bar charts showing the top 5 words that mathematically drive "Fake" vs. "Real" predictions, pulled live from the classifier's coefficients.
+* **FAQ Accordion:** Interactive Q&A explaining prediction mechanics, confidence intervals, and limitations.
+* **Feedback Integration (Web3Forms):** Allows users to report false alarms or missed rumors. Submitting triggers an asynchronous POST that forwards the user notes along with the analyzed text, verdict label, confidence score, and language metadata directly to a Web3Forms dashboard for review.
+
+---
+
+## 🏗️ System Architecture
+
+SiasatAI separates the heavy **offline training pipeline** from the lightweight **online prediction service**. This ensures the live web application remains secure, fast, and completely immune to training-related resource spikes or database dependencies.
 
 ```
-SiasatAI/
-├── app/
-│   ├── main.py              # FastAPI backend — prediction, sensationalism scoring, model info
-│   └── static/
-│       ├── index.html       # Single-page dashboard
-│       ├── style.css        # Design system (dark/light mode, glassmorphism)
-│       └── app.js           # Frontend logic, chart rendering, Web3Forms integration
-│
-├── api/
-│   └── index.py             # Vercel serverless function handler
-│
-├── data/
-│   ├── raw/                 # Raw scraped & downloaded datasets
-│   └── clean/               # Cleaned CSVs & Power BI dashboard exports
-│       ├── data_clean.csv
-│       ├── Misinformation_Analysis_Dashboard.csv
-│       └── Fake_News_Keyword_Importance.csv
-│
-├── models/                  # Trained model assets (~5MB total)
-│   ├── model.pkl            # Logistic Regression champion
-│   ├── vectorizer.pkl       # TF-IDF vectorizer (10k features, 1–3 n-grams)
-│   └── label_encoder.pkl    # Label encoder
-│
-├── notebooks/
-│   └── data_preprocessing_and_training.ipynb   # Self-contained end-to-end pipeline
-│
-├── static/                  # Generated charts & visualizations
-│
-├── vercel.json              # Vercel routing configuration
-├── requirements.txt
-├── run_retrain.py           # Console pipeline runner (real-time progress bars)
-└── retrain.bat              # Windows double-click helper for retraining
+┌─────────────────────────────────────────────────────────────────┐
+│                    OFFLINE TRAINING PIPELINE                    │
+│  retrain.bat / run_retrain.py → Jupyter Notebook execution     │
+│                                                                 │
+│  Data Sources → NLP Cleaning → TF-IDF → Tournament → .pkl      │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │ model.pkl + vectorizer.pkl + label_encoder.pkl
+                           │ (Pushed to GitHub / Deployed)
+                           ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                 ONLINE PREDICTION SERVICE                       │
+│                                                                 │
+│  Browser → HTTP Request → Vercel CDN                           │
+│               │                    │                           │
+│               ▼                    ▼                           │
+│         /api/predict          app/static/                      │
+│         api/index.py          index.html                       │
+│               │               style.css                        │
+│               ▼               app.js                           │
+│         app/main.py                                            │
+│         FastAPI Backend                                         │
+│         ├── load model.pkl                                      │
+│         ├── TF-IDF transform                                    │
+│         ├── predict() → label + proba                           │
+│         ├── sensationalism_score()                              │
+│         ├── build_word_frequencies()                            │
+│         ├── build_summary()                                     │
+│         └── return JSON response                                │
+└─────────────────────────────────────────────────────────────────┘
 ```
+
+---
+
+## ⚙️ Machine Learning Pipeline (Step-by-Step)
+
+The end-to-end training and feature engineering process is automated inside the Jupyter Notebook pipeline (`notebooks/data_preprocessing_and_training.ipynb`) and executed via the console.
+
+```mermaid
+graph TD
+    A[Ingest Raw Datasets] --> B[NLP Preprocessing & Cleaning]
+    B --> C[TF-IDF Feature Extraction]
+    C --> D[Stratified Train-Test Split]
+    D --> E[Multi-Model Tournament]
+    E --> F[Select Champion Model]
+    F --> G[Export Pickle Files]
+    F --> H[Export Power BI CSVs & Charts]
+```
+
+### Step 1: Data Ingestion & Merging
+The pipeline loads and concatenates three distinct text sources:
+1. **Academic Malay Dataset:** ~22,000 news articles (Bernama, Astro Awani, Sinar Harian).
+2. **Global English Dataset:** ~40,000 news articles (Hugging Face / Kaggle).
+3. **Live Scraped Portal:** ~2,000+ local fake news listings scraped directly from *Sebenarnya.my* to capture recent Malaysian rumors.
+4. **Local Presets:** Oversampled local municipal articles (related to MBMB Melaka) to prime the model on specific administrative language.
+
+### Step 2: NLP Preprocessing & Cleaning
+To ensure the model learns actual **linguistic structures** rather than shortcut associations, the text is run through a rigorous cleaning sequence:
+* **HTML & Link Removal:** Strips all tags and HTTP/WWW URLs.
+* **Regex Normalization:** Removes non-alphabetical characters, keeping clean words.
+* **De-Biasing Filter:** Strips publisher-specific headers and source labels (e.g., *"Reuters"*, *"Bernama"*, *"Sinar Harian"*, *"Associated Press"*) and municipal cities (e.g., *"Kuala Lumpur"*, *"Putrajaya"*).
+* **Bilingual Stopwords:** Applies a combined set of English and Bahasa Malaysia stopwords to eliminate noise.
+
+### Step 3: TF-IDF Feature Engineering
+Cleaned tokens are vectorized using a **TF-IDF (Term Frequency-Inverse Document Frequency)** Vectorizer:
+* **N-grams:** Set to `ngram_range=(1, 3)` to capture unigrams, bigrams, and trigrams (e.g., *"tidak"* vs. *"tidak benar"* vs. *"dikitar semula"*).
+* **Vocabulary Limit:** Capped at `max_features=10,000` to prevent sparse feature explosion and optimize memory.
+
+### Step 4: Multi-Model Tournament
+The vectorized features are passed through a head-to-head tournament evaluating four classification algorithms:
+1. **Logistic Regression** (L2 Regularization)
+2. **Linear Support Vector Machine** (SVM)
+3. **XGBoost Classifier**
+4. **Random Forest Classifier**
+
+### Step 5: Serialization & Export
+The tournament champion, the trained vectorizer, and the label encoder are serialized into Python pickles (`models/*.pkl`) totaling ~5MB. The pipeline also exports:
+* `data/clean/data_clean.csv`: Preprocessed dataset.
+* `data/clean/Fake_News_Keyword_Importance.csv`: Coefficient signals for Power BI.
+* `static/model_results.png` & `static/feature_importance.png`: Accuracy visualizations.
+
+---
+
+## 📈 Multi-Model Tournament Results
+
+The models are trained using a stratified 80/20 train-test split. The evaluation results are as follows:
+
+| Rank | Model | Validation Accuracy | Deployment Suitability |
+|:---:|---|:---:|---|
+| 🏆 **1st** | **Logistic Regression (L2, C=0.15)** | **93.99%** | **Excellent (Champion)** - Under 5MB, fast inference, native coefficients. |
+| 2nd | Support Vector Machine (LinearSVC) | 93.32% | Good, but lacks direct probability calibration. |
+| 3rd | XGBoost Classifier | 92.76% | Poor - Heavy memory footprint, slower CPU inference. |
+| 4th | Random Forest Classifier | 92.64% | Poor - Large file size (~200MB+), overfits on sparse matrices. |
+
+### Why Logistic Regression is the Champion
+For high-dimensional, sparse text vectors like TF-IDF, linear models are mathematically superior. Each term (word/phrase) is assigned a positive or negative weight (coefficient):
+* **Fake Signals:** Sensationalist terms like `sumber`, `via`, `oktober`, `sebarkan`, `alert` receive negative coefficients.
+* **Real Signals:** Formal attribution verbs like `berkata`, `katanya`, `encik`, `mengumumkan` receive positive coefficients.
+
+Regularization strength ($C=0.15$) penalizes large coefficients, forcing the model to learn generalized sentence structures instead of memorizing specific vocabulary.
+
+---
+
+## 💻 Web Application & Backend API
+
+### Sensationalism Score Calculation
+The tone meter does not use the machine learning model; instead, it uses a deterministic lexical analyzer on the backend:
+$$\text{Score} = (0.35 \times \text{Capitalization Ratio}) + (0.25 \times \text{Exclamation Density}) + (0.40 \times \text{Trigger Word Hits})$$
+* **Capitalization Ratio:** Percentage of uppercase words (excluding abbreviations).
+* **Exclamation Density:** Number of exclamation marks (capped at 3).
+* **Trigger Word Hits:** Count of matches with bilingual clickbait terms (e.g., *"viral"*, *"tersebar"*, *"urgent"*, *"hoax"*).
+
+---
+
+## 📡 API Endpoints
+
+### 1. POST `/api/predict`
+Analyzes input text and returns prediction labels, confidence metrics, and tone details.
+
+**Request Body:**
+```json
+{
+  "text": "AMARAN! Semua akaun bank penduduk Melaka akan dibekukan oleh MBMB bermula esok sekiranya tidak membayar denda parkir dengan segera! Sebarkan mesej penting ini!"
+}
+```
+
+**Response Payload:**
+```json
+{
+  "text": "AMARAN! Semua akaun bank...",
+  "clean_text": "amaran akaun bank penduduk melaka dibekukan denda parkir segera sebarkan",
+  "language": "Bahasa Malaysia",
+  "prediction": "Fake",
+  "confidence": 0.746,
+  "sensationalism_score": 0.925,
+  "word_count": 23,
+  "keywords_detected": ["amaran", "parkir", "segera", "sebarkan"],
+  "word_frequencies": [{"word": "amaran", "count": 1}, {"word": "bank", "count": 1}],
+  "summary": "Model mengesan corak bahasa yang mencurigakan dengan keyakinan 74.6%...",
+  "fact_check_sources": [...]
+}
+```
+
+### 2. GET `/api/model_info`
+Returns the top 5 positive (Real) and negative (Fake) features with their coefficients to drive the dynamic frontend charts.
 
 ---
 
 ## 🚀 Running Locally
 
-### 1. Set Up Environment
+### 1. Install Dependencies
+Ensure you have Python 3.10+ installed.
 
 ```bash
+# Clone the repository
+git clone https://github.com/yourusername/SiasatAI.git
+cd SiasatAI
+
+# Set up virtual environment
 python -m venv .venv
 
 # Windows
@@ -110,72 +225,45 @@ python -m venv .venv
 # macOS / Linux
 source .venv/bin/activate
 
+# Install requirements
 pip install -r requirements.txt
 ```
 
-### 2. Launch the Web Application
-
+### 2. Run the Dashboard
+Start the local FastAPI server:
 ```bash
 python app/main.py
 ```
+Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your web browser.
 
-Visit `http://127.0.0.1:8000` to access the dashboard.
+### 3. Run the Retraining Pipeline
+To scrape the latest articles from *Sebenarnya.my*, run preprocessing, train the tournament, and update local pickle files:
 
-### 3. Retrain the Model
-
-To scrape fresh articles from *Sebenarnya.my* and retrain the model with the latest data:
-
-```bash
-# Windows (double-click or terminal)
-retrain.bat
-
-# macOS / Linux / any terminal
-python run_retrain.py
-```
-
-This executes the self-contained Jupyter Notebook pipeline in your console with real-time `tqdm` progress bars, and automatically:
-- Scrapes and merges new fake news articles
-- Re-runs bilingual NLP cleaning and TF-IDF vectorization
-- Re-runs the multi-model tournament and selects the new champion
-- Exports updated `model.pkl`, `vectorizer.pkl`, and `label_encoder.pkl`
-- Regenerates Power BI CSVs and evaluation charts
+* **Windows:** Double-click `retrain.bat` or run `.\retrain.bat` in terminal.
+* **macOS / Linux:** Run `python run_retrain.py` in your terminal.
 
 ---
 
 ## ☁️ Deployment on Vercel
 
-The application is pre-configured for zero-setup deployment on **Vercel**:
-
-- `vercel.json` routes `/api/*` to the Python serverless function at `api/index.py`
-- All other routes serve static files from `app/static/` via Vercel's global CDN
-- No environment variables required — the model files are committed directly
-
-**Deploy steps:**
-1. Push this repository to GitHub
-2. Import the project at [vercel.com](https://vercel.com)
-3. Click **Deploy** — Vercel handles the rest
-
----
-
-## 📡 API Endpoints
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `POST` | `/api/predict` | Analyze text — returns prediction, confidence, sensationalism score, word cloud, keywords, summary, and fact-check sources |
-| `GET` | `/api/model_info` | Returns top 5 "Fake" and "Real" word features with Logistic Regression coefficient weights |
+SiasatAI is fully configured for deployment on **Vercel** serverless hosting:
+* [vercel.json](file:///c:/Users/syaki/Desktop/DataScience/vercel.json) redirects all static path requests to `/app/static/*` and API routes to the Python serverless entrypoint [index.py](file:///c:/Users/syaki/Desktop/DataScience/api/index.py).
+* The models (`models/*.pkl`) are lightweight and committed directly to the git index, making them available to the serverless runtime instantly without expensive S3 bucket connections or database setups.
 
 ---
 
 ## 🗃️ Data Sources
 
-| Source | Language | Articles |
-|---|---|---|
-| Academic Malay NLP Dataset (Bernama, Awani, Sinar Harian, MalCov) | Bahasa Malaysia | ~22,000 |
-| Global English Fake News Dataset (Hugging Face / Kaggle) | English | ~40,000 |
-| Live-scraped articles from [Sebenarnya.my](https://sebenarnya.my) | Bahasa Malaysia | ~2,000+ |
+| Dataset Name | Primary Language | Size (Articles) | Type |
+|---|---|---|---|
+| **Academic Malay NLP Dataset** | Bahasa Malaysia | ~22,000 | Academic corpus |
+| **Global English Fake News Dataset** | English | ~40,000 | Academic corpus |
+| **Sebenarnya.my Scraped Corpus** | Bahasa Malaysia | ~2,000+ | Live-scraped government facts |
+| **MBMB Municipal Presets** | Bahasa Malaysia | ~2,000 (Oversampled) | Custom local news context |
 
 ---
 
 ## 👥 Stakeholders
-
-Developed as a **Final Year Data Science Project** with use-case context provided for **Majlis Bandaraya Melaka Bersejarah (MBMB)**.
+* **Developer:** Final Year Data Science Project.
+* **Institutional Use Case:** **Majlis Bandaraya Melaka Bersejarah (MBMB)**.
+* **Deployment Platform:** Vercel Serverless CPU Runtime.
