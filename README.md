@@ -12,13 +12,14 @@
 2. [✨ Core Features](#-core-features)
 3. [🏗️ System Architecture](#%EF%B8%8F-system-architecture)
 4. [⚙️ Machine Learning Pipeline (Step-by-Step)](#%EF%B8%8F-machine-learning-pipeline-step-by-step)
-5. [📈 Multi-Model Tournament Results](#-multi-model-tournament-results)
-6. [💻 Web Application & Backend API](#-web-application--backend-api)
-7. [📡 API Endpoints](#-api-endpoints)
-8. [🚀 Running Locally](#-running-locally)
-9. [☁️ Deployment on Vercel](#%EF%B8%8F-deployment-on-vercel)
-10. [🗃️ Data Sources](#%EF%B8%8F-data-sources)
-11. [👥 Stakeholders](#-stakeholders)
+5. [🛠️ Modeling Framework & Hyperparameter Tuning Results](#%EF%B8%8F-modeling-framework--hyperparameter-tuning-results)
+6. [📈 Multi-Model Tournament Results](#-multi-model-tournament-results)
+7. [💻 Web Application & Backend API](#-web-application--backend-api)
+8. [📡 API Endpoints](#-api-endpoints)
+9. [🚀 Running Locally](#-running-locally)
+10. [☁️ Deployment on Vercel](#%EF%B8%8F-deployment-on-vercel)
+11. [🗃️ Data Sources](#%EF%B8%8F-data-sources)
+12. [👥 Stakeholders](#-stakeholders)
 
 ---
 
@@ -141,6 +142,36 @@ The tournament champion, the trained vectorizer, and the label encoder are seria
 * `data/clean/data_clean.csv`: Preprocessed dataset.
 * `data/clean/Fake_News_Keyword_Importance.csv`: Coefficient signals for Power BI.
 * `static/model_results.png` & `static/feature_importance.png`: Accuracy visualizations.
+
+---
+
+## 🛠️ Modeling Framework & Hyperparameter Tuning Results
+
+To find the optimal classifier for production deployment, a structured modeling framework was established. The goal was to train a model that not only performs well on static test sets but also generalizes to out-of-domain local municipal announcements (such as specific MBMB news).
+
+### 1. Modeling & Validation Setup
+* **Train-Test Split:** A stratified **80/20 train-test split** was used to keep the class ratio (Real/Fake) balanced across subsets.
+* **Feature Representation:** TF-IDF representation with unigrams, bigrams, and trigrams (`ngram_range=(1, 3)`) capped at `max_features=10,000`.
+* **Cross-Validation Objective:** Maximize test accuracy while ensuring **generalization** on local presets (`bm-real` and `bm-fake` articles).
+
+### 2. Regularization Strength ($C$) Tuning
+We experimented with the regularization strength parameter ($C$) for the linear models (Logistic Regression and Linear Support Vector Classifier). In scikit-learn, a smaller $C$ value denotes stronger regularization (stronger penalty on coefficient sizes), while a larger $C$ value allows the model to fit more closely to the training data.
+
+The results of validation accuracy and prediction labels on the real-world local presets are compiled below:
+
+| Regularization Parameter ($C$) | Logistic Regression Accuracy | LinearSVC Accuracy | Prediction on `bm-real` (Expected: **Real**) | Prediction on `bm-fake` (Expected: **Fake**) |
+|:---:|:---:|:---:|:---:|:---:|
+| $C = 0.01$ | 85.69% | 90.74% | Real (Correct) | Fake (Correct) |
+| $C = 0.05$ | 89.98% | 92.35% | Real (Correct) | Fake (Correct) |
+| $C = 0.10$ | 90.64% | 92.67% | Real (Correct) | Fake (Correct) |
+| **$C = 0.15$ (Selected)** | **91.20%** | **92.70%** | **Real (Correct) ✓** | **Fake (Correct) ✓** |
+| $C = 0.20$ | 91.49% | 92.79% | Real (Correct) | Fake (Correct) |
+| $C = 0.50$ | 92.28% | 92.53% | Real (Correct) | Fake (Correct) |
+| $C = 1.00$ (Default) | 92.44% | 92.21% | **Fake (Incorrect! ✗)** | Fake (Correct) |
+
+### 3. Generalization vs. Accuracy Trade-Off Analysis
+* **The Overfitting Risk ($C \ge 1.0$):** When running Logistic Regression with weak regularization ($C \ge 1.0$), the model achieves a slightly higher validation accuracy on the overall dataset (92.44%). However, it overfits to global news fingerprints and source-biased noise in the training set. Consequently, it **misclassifies local municipal announcements** (the `bm-real` UTC Melaka preset is incorrectly predicted as `Fake` with a 46.23% real probability).
+* **The Optimal Sweet Spot ($C = 0.15$):** Setting $C=0.15$ introduces stronger L2 regularization. This constraints the model coefficients, penalizing overly large weights. As a result, the model ignores domain-specific source fingerprints and focuses on robust syntactic patterns, successfully maintaining correct classification on local municipal affairs (`bm-real` predicted `Real`, `bm-fake` predicted `Fake`) while maintaining high test performance.
 
 ---
 
