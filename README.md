@@ -64,7 +64,7 @@ SiasatAI separates the heavy **offline training pipeline** from the lightweight 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                    OFFLINE TRAINING PIPELINE                    │
-│  retrain.bat / run_retrain.py → Jupyter Notebook execution     │
+│    Jupyter Notebook: data_preprocessing_and_training.ipynb      │
 │                                                                 │
 │  Data Sources → NLP Cleaning → TF-IDF → Tournament → .pkl      │
 └──────────────────────────┬──────────────────────────────────────┘
@@ -242,8 +242,7 @@ Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your web browser.
 ### 3. Run the Retraining Pipeline
 To scrape the latest articles from *Sebenarnya.my*, run preprocessing, train the tournament, and update local pickle files:
 
-* **Windows:** Double-click `retrain.bat` or run `.\retrain.bat` in terminal.
-* **macOS / Linux:** Run `python run_retrain.py` in your terminal.
+* Open and execute the Jupyter Notebook: [data_preprocessing_and_training.ipynb](file:///c:/Users/syaki/Desktop/DataScience/notebooks/data_preprocessing_and_training.ipynb) in your preferred Jupyter environment (e.g. VS Code or Jupyter Lab).
 
 ---
 
