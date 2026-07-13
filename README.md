@@ -2,7 +2,10 @@
 
 > An end-to-end Data Science and Machine Learning project for real-time fake news detection in **Bahasa Malaysia** and **English**, developed with use-case context for **Majlis Bandaraya Melaka Bersejarah (MBMB)** as a Final Year Project.
 
+🔗 **Live Production Site:** [https://misinformation-detection-system.vercel.app/](https://misinformation-detection-system.vercel.app/)
+
 ---
+
 
 ## 🔍 Table of Contents
 1. [Project Overview & Problem Statement](#-project-overview--problem-statement)
@@ -246,11 +249,15 @@ To scrape the latest articles from *Sebenarnya.my*, run preprocessing, train the
 
 ## ☁️ Deployment on Vercel
 
-SiasatAI is fully configured for deployment on **Vercel** serverless hosting:
-* [vercel.json](file:///c:/Users/syaki/Desktop/DataScience/vercel.json) redirects all static path requests to `/app/static/*` and API routes to the Python serverless entrypoint [index.py](file:///c:/Users/syaki/Desktop/DataScience/api/index.py).
-* The models (`models/*.pkl`) are lightweight and committed directly to the git index, making them available to the serverless runtime instantly without expensive S3 bucket connections or database setups.
+SiasatAI is officially deployed and live at:
+🔗 **[https://misinformation-detection-system.vercel.app/](https://misinformation-detection-system.vercel.app/)**
+
+### Configuration
+* **Routing:** [vercel.json](file:///c:/Users/syaki/Desktop/DataScience/vercel.json) redirects all static path requests to `/app/static/*` and API routes to the Python serverless entrypoint [index.py](file:///c:/Users/syaki/Desktop/DataScience/api/index.py).
+* **Model Assets:** The models (`models/*.pkl`) are lightweight and committed directly to the git index, making them available to the serverless runtime instantly without external database or cloud storage dependencies.
 
 ---
+
 
 ## 🗃️ Data Sources
 
