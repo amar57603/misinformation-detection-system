@@ -221,7 +221,7 @@ document.addEventListener("DOMContentLoaded", () => {
     btnCopyResult.addEventListener("click", () => {
         if (!lastResult) return;
         const isFake = lastResult.prediction === "Fake";
-        const text = `[SiasatAI by DSG]\nVerdict: ${isFake ? "⚠ SUSPECTED FAKE" : "✓ CONFIRMED REAL"}\nConfidence: ${(lastResult.confidence * 100).toFixed(1)}%\nLanguage: ${lastResult.language}\n\nText: "${lastResult.text.substring(0, 200)}..."`;
+        const text = `[SiasatAI by Me]\nVerdict: ${isFake ? "⚠ SUSPECTED FAKE" : "✓ CONFIRMED REAL"}\nConfidence: ${(lastResult.confidence * 100).toFixed(1)}%\nLanguage: ${lastResult.language}\n\nText: "${lastResult.text.substring(0, 200)}..."`;
         navigator.clipboard.writeText(text).then(() => {
             showToast("Result copied!", "fa-copy");
         }).catch(() => {
