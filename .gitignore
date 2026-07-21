@@ -22,7 +22,8 @@ run_retrain.py
 scraper.py
 
 # Orphaned static folder (images used in old reports)
-static/
+/static/
+
 
 # Local Reports
 *.html
