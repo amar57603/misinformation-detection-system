@@ -224,17 +224,6 @@
             </div>
             <div class="aux-content">
                 
-                <!-- Model Status Card -->
-                <div class="aux-card status-card">
-                    <h3><i class="fa-solid fa-server text-success"></i> Model Specifications</h3>
-                    <div class="status-grid-mini">
-                        <div class="status-item"><span class="lbl">Algorithm</span><span class="val">Logistic Regression</span></div>
-                        <div class="status-item"><span class="lbl">Regularization</span><span class="val">L2 (C=0.15)</span></div>
-                        <div class="status-item"><span class="lbl">Vocabulary Size</span><span class="val">10,000 bi-grams</span></div>
-                        <div class="status-item"><span class="lbl">Last Update</span><span class="val">June 19, 2026</span></div>
-                    </div>
-                </div>
-
                 <!-- About & Contact Card -->
                 <div class="aux-card about-card">
                     <h3><i class="fa-solid fa-user-graduate text-primary"></i> About the Project</h3>
@@ -252,27 +241,6 @@
                             <a href="https://mail.google.com/mail/?view=cm&fs=1&to=syakir0767@gmail.com" target="_blank" class="btn-about-link" style="font-size: 0.8rem; padding: 4px 8px; border: 1px solid var(--border); border-radius: 4px; display: inline-flex; align-items: center; gap: 4px; text-decoration: none; color: var(--text); background: rgba(0,0,0,0.02);">
                                 <i class="fa-solid fa-envelope"></i> Contact
                             </a>
-                        </div>
-                    </div>
-                </div>
-
-
-                <!-- Global Word Signals Card -->
-                <div class="aux-card signals-card">
-                    <h3><i class="fa-solid fa-chart-bar text-primary"></i> Global Word Signals</h3>
-                    <p class="card-desc">Top word associations trained on our bilingual corpus.</p>
-                    
-                    <div class="signals-group" style="margin-top: 0.25rem;">
-                        <div class="signals-header"><i class="fa-solid fa-circle-xmark text-danger"></i> Top "Fake" Indicators</div>
-                        <div class="signals-chart" id="fake-signals-chart">
-                            <div class="signals-loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading chart...</div>
-                        </div>
-                    </div>
-                    
-                    <div class="signals-group" style="margin-top: 0.75rem;">
-                        <div class="signals-header"><i class="fa-solid fa-circle-check text-success"></i> Top "Real" Indicators</div>
-                        <div class="signals-chart" id="real-signals-chart">
-                            <div class="signals-loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading chart...</div>
                         </div>
                     </div>
                 </div>
@@ -310,6 +278,38 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Model Status Card -->
+                <div class="aux-card status-card">
+                    <h3><i class="fa-solid fa-server text-success"></i> Model Specifications</h3>
+                    <div class="status-grid-mini">
+                        <div class="status-item"><span class="lbl">Algorithm</span><span class="val">Logistic Regression</span></div>
+                        <div class="status-item"><span class="lbl">Regularization</span><span class="val">L2 (C=0.15)</span></div>
+                        <div class="status-item"><span class="lbl">Vocabulary Size</span><span class="val">10,000 bi-grams</span></div>
+                        <div class="status-item"><span class="lbl">Last Update</span><span class="val">June 19, 2026</span></div>
+                    </div>
+                </div>
+
+                <!-- Global Word Signals Card -->
+                <div class="aux-card signals-card">
+                    <h3><i class="fa-solid fa-chart-bar text-primary"></i> Global Word Signals</h3>
+                    <p class="card-desc">Top word associations trained on our bilingual corpus.</p>
+                    
+                    <div class="signals-group" style="margin-top: 0.25rem;">
+                        <div class="signals-header"><i class="fa-solid fa-circle-xmark text-danger"></i> Top "Fake" Indicators</div>
+                        <div class="signals-chart" id="fake-signals-chart">
+                            <div class="signals-loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading chart...</div>
+                        </div>
+                    </div>
+                    
+                    <div class="signals-group" style="margin-top: 0.75rem;">
+                        <div class="signals-header"><i class="fa-solid fa-circle-check text-success"></i> Top "Real" Indicators</div>
+                        <div class="signals-chart" id="real-signals-chart">
+                            <div class="signals-loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading chart...</div>
+                        </div>
+                    </div>
+                </div>
+
 
                 <!-- Feedback Form -->
                 <div class="aux-card feedback-card">
