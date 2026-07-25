@@ -32,3 +32,5 @@ scraper.py
 # OS Files
 .DS_Store
 Thumbs.db
+.env
+
