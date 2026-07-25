@@ -1070,7 +1070,8 @@ textarea::placeholder { color: var(--text-muted); }
 
 /* ── Toast ─────────────────────────────────────────── */
 .toast {
-    position: fixed; bottom: 1.5rem; right: 1.5rem;
+    position: fixed; top: 2.5rem; left: 50%;
+    transform: translate(-50%, 0);
     background: rgba(20,22,36,0.95);
     border: 1px solid var(--border-color);
     color: var(--text-primary);
@@ -1082,8 +1083,8 @@ textarea::placeholder { color: var(--text-muted); }
     display: flex; align-items: center; gap: 0.5rem;
     box-shadow: 0 8px 32px rgba(0,0,0,0.4);
 }
-@keyframes toastIn  { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
-@keyframes toastOut { from { opacity:1; } to { opacity:0; } }
+@keyframes toastIn  { from { opacity:0; transform: translate(-50%, -15px); } to { opacity:1; transform: translate(-50%, 0); } }
+@keyframes toastOut { from { opacity:1; transform: translate(-50%, 0); } to { opacity:0; transform: translate(-50%, -15px); } }
 
 /* ── Auxiliary Panel ────────────────────────────────── */
 .aux-panel {
