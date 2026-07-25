@@ -8,6 +8,7 @@ __pycache__/
 # IDEs and Editors
 .vscode/
 .idea/
+AGENTS.md
 .ipynb_checkpoints/
 
 # Data Files (large datasets)

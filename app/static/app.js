@@ -263,6 +263,11 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             if (!response.ok) {
+                if (response.status === 429) {
+                    const err = await response.json();
+                    showToast(err.detail || "Too many requests. Please try again later.", "fa-triangle-exclamation");
+                    throw new Error("rate_limit_exceeded");
+                }
                 const err = await response.json();
                 throw new Error(err.detail || "API request failed.");
             }
@@ -273,7 +278,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         } catch (error) {
             showState("idle");
-            showToast(`Error: ${error.message}`, "fa-circle-xmark");
+            if (error.message !== "rate_limit_exceeded") {
+                showToast(`Error: ${error.message}`, "fa-circle-xmark");
+            }
         } finally {
             btnPredict.disabled = false;
         }
