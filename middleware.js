@@ -37,7 +37,7 @@ export default async function middleware(request) {
       }
 
       const results = await res.json();
-      const count = results[0][1];
+      const count = results[0].result;
 
       // Limit: 10 requests per minute
       if (count > 10) {
