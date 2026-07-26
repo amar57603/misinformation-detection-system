@@ -4,6 +4,15 @@ env/
 venv/
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+
+# Node.js
+node_modules/
+package-lock.json
+
+# Vercel
+.vercel/
 
 # IDEs and Editors
 .vscode/
@@ -25,12 +34,14 @@ scraper.py
 # Orphaned static folder (images used in old reports)
 /static/
 
-
-# Local Reports
-*.html
+# Local Reports & Logs
+/*.html
+*.log
 
 # OS Files
 .DS_Store
 Thumbs.db
 .env
+.env.local
+.env.*.local
 
