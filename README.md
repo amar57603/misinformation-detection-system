@@ -262,8 +262,8 @@ $$\text{Score} = (0.35 \times \text{Capitalization Ratio}) + (0.25 \times \text{
  
  ```bash
  # Clone the repository
- git clone https://github.com/yourusername/SiasatAI.git
- cd SiasatAI
+ git clone https://github.com/amar57603/misinformation-detection-system.git
+ cd misinformation-detection-system
  
  # Set up virtual environment
  python -m venv .venv
