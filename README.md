@@ -18,8 +18,9 @@
 8. [📡 API Endpoints](#-api-endpoints)
 9. [🚀 Running Locally](#-running-locally)
 10. [☁️ Deployment on Vercel](#%EF%B8%8F-deployment-on-vercel)
-11. [🗃️ Data Sources](#%EF%B8%8F-data-sources)
-12. [👥 Stakeholders](#-stakeholders)
+11. [🔒 Rate Limiting & Edge Security](#-rate-limiting--edge-security)
+12. [🗃️ Data Sources](#%EF%B8%8F-data-sources)
+13. [👥 Stakeholders & Context](#-stakeholders--context)
 
 ---
 
@@ -41,20 +42,26 @@ By utilizing a regularized **Logistic Regression** classifier trained on a balan
 ---
 
 ## ✨ Core Features
-
-### 1. Advanced Core Analysis
-* **Real-time Prediction:** Vectorizes text and outputs a classification ("Fake" vs. "Real") in under 2 milliseconds.
-* **AI Confidence Score:** An animated visual gauge showing the probability distribution of the model's prediction.
-* **Bilingual Language Detection:** Automatically detects whether the text is Bahasa Malaysia or English to customize explanation summaries.
-* **Sensationalism & Tone Meter:** Scores the writing style on a scale from 0% to 100% (Neutral to Highly Sensational) based on ALLCAPS ratio, exclamation density, and clickbait trigger keywords.
-* **Bilingual AI Summary:** Generates a human-readable explanation of why the model flagged the text, highlighting indicators like sensational phrasing or lack of structural attribution.
-* **Verification Badges & Word Cloud:** Extracts the top TF-IDF features and generates an interactive, canvas-rendered word frequency cloud.
-
-### 2. Collapsible Insights Sidebar
-* **Model Specifications:** Displays current model training parameters (regularization strength, vocabulary size, and training timestamp) for administrative transparency.
-* **Global Word Signals Chart:** Renders two animated bar charts showing the top 5 words that mathematically drive "Fake" vs. "Real" predictions, pulled live from the classifier's coefficients.
-* **FAQ Accordion:** Interactive Q&A explaining prediction mechanics, confidence intervals, and limitations.
-* **Feedback Integration (Web3Forms):** Allows users to report false alarms or missed rumors. Submitting triggers an asynchronous POST that forwards the user notes along with the analyzed text, verdict label, confidence score, and language metadata directly to a Web3Forms dashboard for review.
+ 
+ ### 1. Advanced Core Analysis
+ * **Real-time Prediction:** Vectorizes text and outputs a classification ("Fake" vs. "Real") in under 2 milliseconds.
+ * **AI Confidence Score:** An animated visual gauge showing the probability distribution of the model's prediction.
+ * **Bilingual Language Detection:** Automatically detects whether the text is Bahasa Malaysia or English to customize explanation summaries.
+ * **Sensationalism & Tone Meter:** Scores the writing style on a scale from 0% to 100% (Neutral to Highly Sensational) based on ALLCAPS ratio, exclamation density, and clickbait trigger keywords.
+ * **Bilingual AI Summary:** Generates a human-readable explanation of why the model flagged the text, highlighting indicators like sensational phrasing or lack of structural attribution.
+ * **Verification Badges & Word Cloud:** Extracts the top TF-IDF features and generates an interactive, canvas-rendered word frequency cloud.
+ 
+ ### 2. Collapsible Insights Sidebar & Layout
+ * **Rearranged Sidebar Layout:** Puts developer profile and stakeholder info first, followed by Q&A (FAQ), technical model statistics, and coefficient bar charts.
+ * **Model Specifications:** Displays current model training parameters (regularization strength, vocabulary size, and training timestamp) for administrative transparency.
+ * **Global Word Signals Chart:** Renders two animated bar charts showing the top 5 words that mathematically drive "Fake" vs. "Real" predictions, pulled live from the classifier's coefficients.
+ * **FAQ Accordion:** Interactive Q&A explaining prediction mechanics, confidence intervals, and limitations.
+ * **Feedback Integration (Web3Forms):** Allows users to report false alarms or missed rumors. Submitting triggers an asynchronous POST that forwards the user notes along with the analyzed text, verdict label, confidence score, and language metadata directly to a Web3Forms dashboard for review.
+ 
+ ### 3. Edge Infrastructure & Security
+ * **Vercel Edge Middleware Rate Limiter:** Intercepts incoming API traffic at the CDN level (edge) and blocks abuse using Upstash Redis.
+ * **Repositioned AI Disclaimer:** Permanent notice block at the bottom of the left Input Panel to manage user expectations before verification.
+ * **Centered Toast System:** Repositioned all toast feedback messages (copy confirmation, errors, pastes, and rate limit blocks) to animate smoothly in the top-center of the screen.
 
 ---
 
@@ -207,84 +214,117 @@ $$\text{Score} = (0.35 \times \text{Capitalization Ratio}) + (0.25 \times \text{
 ---
 
 ## 📡 API Endpoints
-
-### 1. POST `/api/predict`
-Analyzes input text and returns prediction labels, confidence metrics, and tone details.
-
-**Request Body:**
-```json
-{
-  "text": "AMARAN! Semua akaun bank penduduk Melaka akan dibekukan oleh MBMB bermula esok sekiranya tidak membayar denda parkir dengan segera! Sebarkan mesej penting ini!"
-}
-```
-
-**Response Payload:**
-```json
-{
-  "text": "AMARAN! Semua akaun bank...",
-  "clean_text": "amaran akaun bank penduduk melaka dibekukan denda parkir segera sebarkan",
-  "language": "Bahasa Malaysia",
-  "prediction": "Fake",
-  "confidence": 0.746,
-  "sensationalism_score": 0.925,
-  "word_count": 23,
-  "keywords_detected": ["amaran", "parkir", "segera", "sebarkan"],
-  "word_frequencies": [{"word": "amaran", "count": 1}, {"word": "bank", "count": 1}],
-  "summary": "Model mengesan corak bahasa yang mencurigakan dengan keyakinan 74.6%...",
-  "fact_check_sources": [...]
-}
-```
-
-### 2. GET `/api/model_info`
-Returns the top 5 positive (Real) and negative (Fake) features with their coefficients to drive the dynamic frontend charts.
+ 
+ ### 1. POST `/api/predict`
+ Analyzes input text and returns prediction labels, confidence metrics, and tone details.
+ 
+ **Request Body:**
+ ```json
+ {
+   "text": "AMARAN! Semua akaun bank penduduk Melaka akan dibekukan oleh MBMB bermula esok sekiranya tidak membayar denda parkir dengan segera! Sebarkan mesej penting ini!"
+ }
+ ```
+ 
+ **Response Payload (200 OK):**
+ ```json
+ {
+   "text": "AMARAN! Semua akaun bank...",
+   "clean_text": "amaran akaun bank penduduk melaka dibekukan denda parkir segera sebarkan",
+   "language": "Bahasa Malaysia",
+   "prediction": "Fake",
+   "confidence": 0.746,
+   "sensationalism_score": 0.925,
+   "word_count": 23,
+   "keywords_detected": ["amaran", "parkir", "segera", "sebarkan"],
+   "word_frequencies": [{"word": "amaran", "count": 1}, {"word": "bank", "count": 1}],
+   "summary": "Model mengesan corak bahasa yang mencurigakan dengan keyakinan 74.6%...",
+   "fact_check_sources": [...]
+ }
+ ```
+ 
+ **Response Payload (429 Too Many Requests):**
+ Returned if a client IP sends more than 10 requests per minute.
+ ```json
+ {
+   "detail": "Too many requests. You are allowed 10 requests per minute. Please try again later."
+ }
+ ```
+ 
+ ### 2. GET `/api/model_info`
+ Returns the top 5 positive (Real) and negative (Fake) features with their coefficients to drive the dynamic frontend charts.
 
 ---
 
 ## 🚀 Running Locally
-
-### 1. Install Dependencies
-Ensure you have Python 3.10+ installed.
-
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/SiasatAI.git
-cd SiasatAI
-
-# Set up virtual environment
-python -m venv .venv
-
-# Windows
-.\.venv\Scripts\activate
-
-# macOS / Linux
-source .venv/bin/activate
-
-# Install requirements
-pip install -r requirements.txt
-```
-
-### 2. Run the Dashboard
-Start the local FastAPI server:
-```bash
-python app/main.py
-```
-Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your web browser.
-
-### 3. Run the Retraining Pipeline
-To scrape the latest articles from *Sebenarnya.my*, run preprocessing, train the tournament, and update local pickle files:
-
-* Open and execute the Jupyter Notebook: [data_preprocessing_and_training.ipynb](file:///c:/Users/syaki/Desktop/DataScience/notebooks/data_preprocessing_and_training.ipynb) in your preferred Jupyter environment (e.g. VS Code or Jupyter Lab).
+ 
+ ### 1. Install Dependencies
+ Ensure you have Python 3.10+ installed.
+ 
+ ```bash
+ # Clone the repository
+ git clone https://github.com/yourusername/SiasatAI.git
+ cd SiasatAI
+ 
+ # Set up virtual environment
+ python -m venv .venv
+ 
+ # Windows
+ .\.venv\Scripts\activate
+ 
+ # macOS / Linux
+ source .venv/bin/activate
+ 
+ # Install requirements
+ pip install -r requirements.txt
+ ```
+ 
+ ### 2. Configure Local Keys
+ Create a `.env` file in the project root to configure the Upstash Redis environment variables for local testing (this file is ignored by Git):
+ ```bash
+ UPSTASH_REDIS_REST_URL="your-upstash-redis-rest-url"
+ UPSTASH_REDIS_REST_TOKEN="your-upstash-redis-rest-token"
+ ```
+ 
+ ### 3. Run the Dashboard
+ Start the local FastAPI server:
+ ```bash
+ python app/main.py
+ ```
+ Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your web browser.
+ 
+ ### 4. Run the Retraining Pipeline
+ To scrape the latest articles from *Sebenarnya.my*, run preprocessing, train the tournament, and update local pickle files:
+ 
+ * Open and execute the Jupyter Notebook: [data_preprocessing_and_training.ipynb](file:///c:/Users/syaki/Desktop/DataScience/notebooks/data_preprocessing_and_training.ipynb) in your preferred Jupyter environment (e.g. VS Code or Jupyter Lab).
 
 ---
 
 ## ☁️ Deployment on Vercel
-
-SiasatAI is officially deployed and live at:
-🔗 **[https://misinformation-detection-system.vercel.app/](https://misinformation-detection-system.vercel.app/)**
-
-### Configuration
-* **Routing:** [vercel.json](file:///c:/Users/syaki/Desktop/DataScience/vercel.json) redirects all static path requests to `/app/static/*` and API routes to the Python serverless entrypoint [index.py](file:///c:/Users/syaki/Desktop/DataScience/api/index.py).
-* **Model Assets:** The models (`models/*.pkl`) are lightweight and committed directly to the git index, making them available to the serverless runtime instantly without external database or cloud storage dependencies.
+ 
+ SiasatAI is officially deployed and live at:
+ 🔗 **[https://misinformation-detection-system.vercel.app/](https://misinformation-detection-system.vercel.app/)**
+ 
+ ### Configuration & Architecture
+ * **Routing:** [vercel.json](file:///c:/Users/syaki/Desktop/DataScience/vercel.json) redirects all static path requests to `/app/static/*` and API routes to the Python serverless entrypoint [index.py](file:///c:/Users/syaki/Desktop/DataScience/api/index.py).
+ * **Model Assets:** The models (`models/*.pkl`) are lightweight and committed directly to the git index, making them available to the serverless runtime instantly without external database or cloud storage dependencies.
+ * **Edge Routing Middleware:** A [middleware.js](file:///c:/Users/syaki/Desktop/DataScience/middleware.js) file is placed at the root level to run in Vercel's edge network, intercepting requests to `/api/predict`.
+ 
+ ---
+ 
+ ## 🔒 Rate Limiting & Edge Security
+ 
+ To protect your serverless functions from request spamming and unnecessary CPU cost billing, the project integrates a serverless rate limiter using **Vercel Edge Middleware** and **Upstash Redis**.
+ 
+ ### Upstash Redis Configuration (Vercel Dashboard)
+ To configure rate limiting in production:
+ 1. Create a free Redis database at [Upstash](https://upstash.com).
+ 2. Open your Vercel Dashboard, select your project, and navigate to **Settings > Environments**.
+ 3. Under the **Environment Variables** section, add the following two variables (scoped to both Production and Preview):
+    * `UPSTASH_REDIS_REST_URL`: (Paste your REST URL from Upstash)
+    * `UPSTASH_REDIS_REST_TOKEN`: (Paste your REST Token from Upstash)
+ 4. Redeploy your latest deployment to apply the environment variables.
+ 
+ *(Note: If these variables are not configured, the middleware logs a warning and automatically falls back to letting all requests pass through, preventing any site outages).*
 
 ---
 
@@ -300,7 +340,8 @@ SiasatAI is officially deployed and live at:
 
 ---
 
-## 👥 Stakeholders
-* **Developer:** Final Year Data Science Project.
-* **Institutional Use Case:** **Majlis Bandaraya Melaka Bersejarah (MBMB)**.
-* **Deployment Platform:** Vercel Serverless CPU Runtime.
+## 👥 Stakeholders & Context
+ * **Developer:** Amar Syakir Mazlan
+ * **Academic Context:** Developed as a project for a Data Science subject course.
+ * **Institutional Stakeholder:** **Majlis Bandaraya Melaka Bersejarah (MBMB)**.
+ * **Deployment Platform:** Vercel Serverless CPU Runtime & Vercel Edge Network.
