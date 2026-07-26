@@ -479,6 +479,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Prepare Web3Forms payload
             const payload = {
+                // Public Web3Forms form token (safe to expose client-side)
                 access_key: "5e5fae3d-9e5a-41e6-bcfa-b5e9f6378030",
                 subject: `SiasatAI Feedback: [${category.toUpperCase()}]`,
                 from_name: "SiasatAI App",

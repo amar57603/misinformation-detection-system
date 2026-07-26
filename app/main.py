@@ -7,6 +7,12 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+logger = logging.getLogger(__name__)
+
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 app = FastAPI(
@@ -36,9 +42,9 @@ try:
         vectorizer = pickle.load(f)
     with open(LABEL_ENCODER_PATH, "rb") as f:
         label_encoder = pickle.load(f)
-    print("Model, vectorizer, and label encoder loaded successfully.")
+    logger.info("Model, vectorizer, and label encoder loaded successfully.")
 except Exception as e:
-    print(f"Error loading model files: {e}")
+    logger.error(f"Error loading model files: {e}")
     model, vectorizer, label_encoder = None, None, None
 
 
