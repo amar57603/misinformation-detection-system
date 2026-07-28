@@ -1,6 +1,6 @@
 # Rules & Agents
 rules/*
-!gitignore
+.gitignore
 
 # Virtual Environment
 .venv/
