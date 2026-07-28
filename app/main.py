@@ -5,7 +5,7 @@ import sys
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 import logging
 
@@ -21,13 +21,26 @@ app = FastAPI(
     version="1.0.0"
 )
 
+allowed_origins_env = os.getenv("ALLOWED_ORIGINS", "*")
+allowed_origins = [origin.strip() for origin in allowed_origins_env.split(",") if origin.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
+    allow_origins=allowed_origins,
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
 )
+
+
+@app.middleware("http")
+async def add_security_headers(request, call_next):
+    response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    return response
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MODELS_DIR = os.path.join(BASE_DIR, "models")
@@ -242,18 +255,23 @@ def calculate_sensationalism(text: str) -> float:
 
 
 class NewsInput(BaseModel):
-    text: str
+    text: str = Field(
+        ...,
+        min_length=10,
+        max_length=15000,
+        description="Text content to be analyzed for misinformation."
+    )
 
 
 @app.post("/api/predict")
-async def predict(news_input: NewsInput):
+def predict(news_input: NewsInput):
     if not news_input.text.strip():
         raise HTTPException(status_code=400, detail="Text cannot be empty.")
 
     lang = detect_language(news_input.text)
 
     if model is None or vectorizer is None or label_encoder is None:
-        raise HTTPException(status_code=500, detail="Model assets are not loaded on backend.")
+        raise HTTPException(status_code=503, detail="Service currently unavailable. Please try again later.")
 
     cleaned = clean_text(news_input.text)
 
@@ -305,9 +323,9 @@ async def predict(news_input: NewsInput):
 
 
 @app.get("/api/model_info")
-async def model_info():
+def model_info():
     if model is None or vectorizer is None or label_encoder is None:
-        raise HTTPException(status_code=500, detail="Model assets not loaded.")
+        raise HTTPException(status_code=503, detail="Service currently unavailable. Please try again later.")
     
     feature_names = vectorizer.get_feature_names_out()
     coefs = model.coef_[0]

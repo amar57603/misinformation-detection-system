@@ -1,3 +1,7 @@
+# Rules & Agents
+rules/*
+!gitignore
+
 # Virtual Environment
 .venv/
 env/
@@ -17,8 +21,6 @@ package-lock.json
 # IDEs and Editors
 .vscode/
 .idea/
-AGENTS.md
-backend_rules.md
 .ipynb_checkpoints/
 
 # Data Files (large datasets)
@@ -45,4 +47,5 @@ Thumbs.db
 .env
 .env.local
 .env.*.local
+
 
