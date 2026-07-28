@@ -18,6 +18,7 @@ package-lock.json
 .vscode/
 .idea/
 AGENTS.md
+backend_rules.md
 .ipynb_checkpoints/
 
 # Data Files (large datasets)
