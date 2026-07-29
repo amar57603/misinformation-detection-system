@@ -131,13 +131,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     </span>
                     <span class="history-confidence">${(item.confidence * 100).toFixed(1)}%</span>
                 </div>
-                <div class="history-preview">${item.text.substring(0, 100)}${item.text.length > 100 ? "…" : ""}</div>
+                <div class="history-preview"></div>
                 <div class="history-meta">
                     <span><i class="fa-solid fa-language"></i> ${item.language}</span>
                     <span><i class="fa-solid fa-font"></i> ${item.word_count} words</span>
                     <span><i class="fa-regular fa-clock"></i> ${formatTime(item.timestamp)}</span>
                 </div>
             `;
+            el.querySelector(".history-preview").textContent = item.text.substring(0, 100) + (item.text.length > 100 ? "…" : "");
             el.addEventListener("click", () => {
                 textInput.value = item.text;
                 updateCounters();
