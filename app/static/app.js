@@ -95,8 +95,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ── Helpers ───────────────────────────────────────────────
     function updateCounters() {
+        // Get the current text from the textarea
         const text = textInput.value;
+        // Update character count
         charCountEl.textContent = text.length;
+        // Calculate word count by splitting the text by spaces
         const words = text.trim() === "" ? 0 : text.trim().split(/\s+/).length;
         wordCountEl.textContent = words;
     }
@@ -178,11 +181,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function addToHistory(data) {
+        // Create a new history entry with the current timestamp
         const entry = { ...data, timestamp: new Date().toISOString() };
+        // Add to the beginning/end of the history array
         history.push(entry);
+        // Keep only the latest 50 items to prevent the array from getting too large
         if (history.length > 50) history = history.slice(-50); // keep last 50
-        saveHistory();
-        renderHistory();
+        
+        saveHistory();     // Save to localStorage
+        renderHistory();   // Update the UI
     }
 
     function toggleHistory(force) {
@@ -285,12 +292,14 @@ document.addEventListener("DOMContentLoaded", () => {
         btnPredict.disabled = true;
 
         try {
+            // Send the text to our backend API using a POST request
             const response = await fetch("/api/predict", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ text })
             });
 
+            // Check if the server returned an error (e.g., 400 or 503)
             if (!response.ok) {
                 if (response.status === 429) {
                     const err = await response.json();

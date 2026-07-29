@@ -48,6 +48,9 @@ MODEL_PATH = os.path.join(MODELS_DIR, "model.pkl")
 VECTORIZER_PATH = os.path.join(MODELS_DIR, "vectorizer.pkl")
 LABEL_ENCODER_PATH = os.path.join(MODELS_DIR, "label_encoder.pkl")
 
+# ── Model Loading ──────────────────────────────────────────────
+# We load the machine learning model, vectorizer, and label encoder
+# using pickle. If they fail to load, we log an error.
 try:
     with open(MODEL_PATH, "rb") as f:
         model = pickle.load(f)
@@ -60,8 +63,7 @@ except Exception as e:
     logger.error(f"Error loading model files: {e}")
     model, vectorizer, label_encoder = None, None, None
 
-
-# ── Stopwords ────────────────────────────────────────────────
+# ── Stopwords (Common words to ignore) ───────────────────────
 malay_stopwords = {
     'yang', 'di', 'dan', 'itu', 'dengan', 'untuk', 'tidak', 'ini', 'dari',
     'pada', 'dalam', 'ke', 'akan', 'oleh', 'juga', 'telah', 'ada', 'adalah',
@@ -151,6 +153,13 @@ FACT_CHECK_SOURCES = [
 
 
 def clean_text(text: str) -> str:
+    """
+    Cleans the input text by:
+    1. Removing URLs and HTML tags.
+    2. Removing non-alphabetic characters (numbers, punctuation).
+    3. Converting to lowercase.
+    4. Removing common stopwords and bias words to focus on important keywords.
+    """
     if not isinstance(text, str):
         return ''
     text = re.sub(r'http\S+|www\S+', '', text)
@@ -163,6 +172,10 @@ def clean_text(text: str) -> str:
 
 
 def detect_language(text: str) -> str:
+    """
+    Simple language detection based on counting Malay vs English stopwords.
+    Whichever language has more matching stopwords in the text is chosen.
+    """
     words = set(re.sub(r'[^a-zA-Z\s]', '', text).lower().split())
     malay_count = len(words.intersection(malay_stopwords))
     english_count = len(words.intersection(english_stopwords))
@@ -229,6 +242,12 @@ def build_summary(label: str, confidence: float, language: str,
  
  
 def calculate_sensationalism(text: str) -> float:
+    """
+    Calculates a 'Sensationalism Score' (0.0 to 1.0) based on:
+    - High usage of UPPERCASE words (shouting).
+    - High usage of exclamation marks (!).
+    - Presence of sensational keywords (e.g., 'viral', 'shocking').
+    """
     if not text:
         return 0.0
     
@@ -265,14 +284,21 @@ class NewsInput(BaseModel):
 
 @app.post("/api/predict")
 def predict(news_input: NewsInput):
+    """
+    Main API endpoint to analyze text and predict if it's Fake or Real.
+    """
+    # 1. Validate input
     if not news_input.text.strip():
         raise HTTPException(status_code=400, detail="Text cannot be empty.")
 
+    # 2. Detect language
     lang = detect_language(news_input.text)
 
+    # 3. Ensure models are loaded
     if model is None or vectorizer is None or label_encoder is None:
         raise HTTPException(status_code=503, detail="Service currently unavailable. Please try again later.")
 
+    # 4. Clean text
     cleaned = clean_text(news_input.text)
 
     if not cleaned.strip() or len(cleaned.split()) < 3:
@@ -281,9 +307,11 @@ def predict(news_input: NewsInput):
             detail="Input text is too short or contains only stop words. Please enter a longer article."
         )
 
+    # 5. Vectorize and Predict using the loaded ML model
     vec = vectorizer.transform([cleaned])
     pred_val = model.predict(vec)[0]
 
+    # Convert prediction to readable label (Fake or Real)
     if isinstance(pred_val, str):
         label = pred_val
     elif hasattr(label_encoder, 'classes_'):
@@ -291,6 +319,7 @@ def predict(news_input: NewsInput):
     else:
         label = str(pred_val)
 
+    # Calculate model confidence score
     if hasattr(model, "predict_proba"):
         proba = model.predict_proba(vec)[0]
         classes = list(label_encoder.classes_) if hasattr(label_encoder, 'classes_') else ['Fake', 'Real']
@@ -299,14 +328,17 @@ def predict(news_input: NewsInput):
     else:
         confidence = 0.95
 
+    # 6. Extract features (keywords) that influenced the model
     feature_names = vectorizer.get_feature_names_out()
     vec_array = vec.toarray()[0]
     active_features = [feature_names[i] for i, val in enumerate(vec_array) if val > 0]
-
     keywords = active_features[:15]
+    
+    # 7. Generate auxiliary data (word frequencies, summary, sensationalism)
     word_frequencies = build_word_frequencies(news_input.text)
     summary = build_summary(label, confidence, lang, keywords, news_input.text)
 
+    # 8. Return comprehensive JSON response to the frontend
     return {
         "text": news_input.text,
         "clean_text": cleaned,
