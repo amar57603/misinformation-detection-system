@@ -310,7 +310,6 @@
 
 /* Textarea */
 [data-theme="default"][data-mode="light"] textarea {
-    background: #f5f6fc;
     color: #111827;
     border-color: rgba(0,0,0,0.12);
 }
@@ -561,7 +560,6 @@
 [data-theme="default"][data-mode="light"] .form-group label { color: #374151; }
 [data-theme="default"][data-mode="light"] .form-group select,
 [data-theme="default"][data-mode="light"] .form-group textarea {
-    background: #f9fafb;
     border-color: rgba(0,0,0,0.12);
     color: #111827;
 }
@@ -693,7 +691,7 @@ body {
 }
 
 .theme-selector option {
-    background: var(--panel-bg);
+    background: var(--card-bg);
     color: var(--text-primary);
 }
 
@@ -758,9 +756,8 @@ body {
 }
 
 textarea {
-    flex: 1;
     width: 100%;
-    background: rgba(10, 12, 24, 0.8);
+    background: var(--card-bg);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-sm);
     padding: 1rem;
@@ -1434,7 +1431,7 @@ textarea::placeholder { color: var(--text-muted); }
 }
 .form-group select,
 .form-group textarea {
-    background: rgba(10,12,24,0.6);
+    background: var(--card-bg);
     border: 1px solid var(--border-color);
     border-radius: 6px;
     padding: 0.55rem 0.75rem;
