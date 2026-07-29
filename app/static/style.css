@@ -1645,8 +1645,10 @@ textarea::placeholder { color: var(--text-muted); }
 }
 
 /* ── Responsive ────────────────────────────────────── */
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
     body { height: auto; overflow-y: auto; overflow-x: hidden; }
+    .app-layout { grid-template-columns: 1fr; }
+    .app-layout.aux-active { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 600px) {
