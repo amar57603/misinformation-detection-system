@@ -1647,8 +1647,12 @@ textarea::placeholder { color: var(--text-muted); }
 }
 
 @media (max-width: 600px) {
-    .header-container { flex-wrap: wrap; gap: 0.6rem; }
-    .badge span { display: none; }
+    .header-container { flex-wrap: wrap; justify-content: center; gap: 0.8rem; padding: 0.8rem 1rem; }
+    .logo { width: 100%; justify-content: center; }
+    .header-right { flex-wrap: wrap; justify-content: center; width: 100%; gap: 0.5rem; }
+    .hide-mobile { display: none; }
+    .badge { padding: 0.3rem 0.5rem; }
+    
     .app-layout { padding: 1rem; gap: 1rem; }
     .action-buttons { flex-wrap: wrap; }
     .btn-primary { flex: 1 1 100%; }
