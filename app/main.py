@@ -21,8 +21,12 @@ app = FastAPI(
     version="1.0.0"
 )
 
-allowed_origins_env = os.getenv("ALLOWED_ORIGINS", "*")
+allowed_origins_env = os.getenv("ALLOWED_ORIGINS", "")
 allowed_origins = [origin.strip() for origin in allowed_origins_env.split(",") if origin.strip()]
+if not allowed_origins:
+    # Default to restrictive local origins if env var is missing. 
+    # Production works safely via same-origin requests.
+    allowed_origins = ["http://localhost:8000", "http://127.0.0.1:8000"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -39,6 +43,18 @@ async def add_security_headers(request, call_next):
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["X-Frame-Options"] = "DENY"
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+    
+    # CSP: Allow self, external fonts/icons, and inline scripts/styles (for simple frontend)
+    csp = (
+        "default-src 'self'; "
+        "script-src 'self' 'unsafe-inline'; "
+        "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; "
+        "font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com; "
+        "img-src 'self' data:; "
+        "connect-src 'self'"
+    )
+    response.headers["Content-Security-Policy"] = csp
     return response
 
 

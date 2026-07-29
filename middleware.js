@@ -1,8 +1,8 @@
 export default async function middleware(request) {
   const url = new URL(request.url);
 
-  // Only apply rate limiting to the prediction API
-  if (url.pathname === '/api/predict') {
+  // Apply rate limiting to all API routes
+  if (url.pathname.startsWith('/api/')) {
     const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
     const clientIp = ip.split(',')[0].trim();
 
