@@ -480,14 +480,14 @@
     color: #059669;
 }
 
-/* Footer */
-[data-theme="default"][data-mode="light"] .app-footer {
+/* Footer (All Light Themes) */
+[data-mode="light"] .app-footer {
     background: rgba(255,255,255,0.75);
     backdrop-filter: blur(10px);
-    color: #6b7280;
+    color: var(--text-muted);
     border-top-color: rgba(0,0,0,0.08);
 }
-[data-theme="default"][data-mode="light"] .app-footer strong { color: #4f46e5; }
+[data-mode="light"] .app-footer strong { color: var(--primary); }
 
 /* Scrollbar */
 [data-theme="default"][data-mode="light"] ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); }
