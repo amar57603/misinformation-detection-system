@@ -514,6 +514,12 @@
     color: #111827;
     border-bottom-color: rgba(0,0,0,0.08);
 }
+[data-theme="default"][data-mode="light"] .btn-about-icon {
+    background: rgba(0,0,0,0.05);
+}
+[data-theme="default"][data-mode="light"] .btn-about-icon:hover {
+    background: rgba(0,0,0,0.09);
+}
 
 /* Status Grid */
 [data-theme="default"][data-mode="light"] .status-item .lbl { color: #6b7280; }
@@ -1416,6 +1422,27 @@ textarea::placeholder { color: var(--text-muted); }
     padding-bottom: 0.5rem; margin-bottom: 0.25rem;
 }
 .aux-card h3 i { font-size: 0.95rem; }
+
+.btn-about-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    background: rgba(0,0,0,0.15);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+.btn-about-icon:hover {
+    color: var(--primary);
+    background: rgba(0,0,0,0.3);
+    border-color: var(--primary);
+    transform: translateY(-2px);
+}
 
 /* Status Mini Grid */
 .status-grid-mini {
