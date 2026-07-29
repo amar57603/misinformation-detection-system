@@ -173,9 +173,9 @@
     --panel-bg: rgba(255, 255, 255, 0.95);
     --border-color: transparent;
     --border-hover: rgba(0, 0, 0, 0.05);
-    --text-primary: #334155;
-    --text-secondary: #64748b;
-    --text-muted: #94a3b8;
+    --text-primary: #0f172a;
+    --text-secondary: #334155;
+    --text-muted: #64748b;
     --primary: #6366f1;
     --primary-dark: #4f46e5;
     --primary-glow: rgba(99, 102, 241, 0.15);
@@ -199,8 +199,8 @@
     --border-color: transparent;
     --border-hover: rgba(255, 255, 255, 0.05);
     --text-primary: #f8fafc;
-    --text-secondary: #cbd5e1;
-    --text-muted: #64748b;
+    --text-secondary: #e2e8f0;
+    --text-muted: #94a3b8;
     --primary: #818cf8;
     --primary-dark: #6366f1;
     --primary-glow: rgba(129, 140, 248, 0.15);
@@ -225,9 +225,9 @@
     --panel-bg: #ffe4c4;
     --border-color: #d2691e;
     --border-hover: #a0522d;
-    --text-primary: #5c4033;
-    --text-secondary: #8b4513;
-    --text-muted: #cd853f;
+    --text-primary: #3d2b1f;
+    --text-secondary: #5c4033;
+    --text-muted: #8b4513;
     --primary: #ff8c00;
     --primary-dark: #ff7f50;
     --primary-glow: rgba(255, 140, 0, 0.3);
@@ -582,6 +582,7 @@ body {
     background-color: var(--bg-dark);
     color: var(--text-primary);
     font-family: var(--font);
+    font-weight: 500;
     min-height: 100dvh;
     height: 100dvh;
     display: flex;
