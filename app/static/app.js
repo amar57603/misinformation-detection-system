@@ -111,11 +111,17 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => t.remove(), 2600);
     }
 
+    const resultPanel = document.querySelector(".result-panel");
+
     function showState(state) {
         // state: "idle" | "loading" | "result"
         idlePlaceholder.classList.toggle("hidden", state !== "idle");
         loaderSection.classList.toggle("hidden", state !== "loading");
         resultSection.classList.toggle("hidden", state !== "result");
+        
+        if (resultPanel) {
+            resultPanel.classList.toggle("hidden", state === "idle");
+        }
 
         // hide idle placeholder properly
         if (state === "idle") {

@@ -1640,8 +1640,6 @@ textarea::placeholder { color: var(--text-muted); }
 /* ── Responsive ────────────────────────────────────── */
 @media (max-width: 900px) {
     body { height: auto; overflow-y: auto; overflow-x: hidden; }
-    .panel { min-height: 480px; }
-    .result-panel { min-height: 420px; }
 }
 
 @media (max-width: 600px) {
@@ -1658,9 +1656,6 @@ textarea::placeholder { color: var(--text-muted); }
     body {
         height: auto;
         overflow-y: auto;
-    }
-    .panel {
-        min-height: 520px;
     }
 }
 
