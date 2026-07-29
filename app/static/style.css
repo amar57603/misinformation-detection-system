@@ -755,6 +755,7 @@ body {
     width: 100%;
     position: relative;
     z-index: 1;
+    min-height: 0;
 }
 
 .app-layout.aux-active {
@@ -1027,6 +1028,7 @@ textarea::placeholder { color: var(--text-muted); }
 .result-card {
     flex: 1; display: flex; flex-direction: column;
     gap: 0; overflow-y: auto; overflow-x: hidden; padding: 1.5rem;
+    min-height: 0;
 }
 .result-card.hidden { display: none; }
 .result-card > * { flex-shrink: 0; }
