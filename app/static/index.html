@@ -1,33 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SiasatAI – Bilingual Fake News Detector by Amar Syakir Mazlan</title>
-    <meta name="description" content="SiasatAI by Amar Syakir Mazlan – AI-powered fake news and misinformation detector for Bahasa Malaysia and English.">
-    
+    <meta name="description"
+        content="SiasatAI by Amar Syakir Mazlan – AI-powered fake news and misinformation detector for Bahasa Malaysia and English.">
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://misinformation-detection-system.vercel.app/">
     <meta property="og:title" content="SiasatAI – Bilingual Fake News Detector by Amar Syakir Mazlan">
-    <meta property="og:description" content="Instantly verify news articles and social media posts for misinformation in Bahasa Malaysia and English. Powered by regularized ML models.">
+    <meta property="og:description"
+        content="Instantly verify news articles and social media posts for misinformation in Bahasa Malaysia and English. Powered by regularized ML models.">
     <meta property="og:image" content="https://misinformation-detection-system.vercel.app/og-image.png">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://misinformation-detection-system.vercel.app/">
     <meta property="twitter:title" content="SiasatAI – Bilingual Fake News Detector by Amar Syakir Mazlan">
-    <meta property="twitter:description" content="Instantly verify news articles and social media posts for misinformation in Bahasa Malaysia and English. Powered by regularized ML models.">
+    <meta property="twitter:description"
+        content="Instantly verify news articles and social media posts for misinformation in Bahasa Malaysia and English. Powered by regularized ML models.">
     <meta property="twitter:image" content="https://misinformation-detection-system.vercel.app/og-image.png">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:wght@400;700&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
     <link rel="stylesheet" href="style.css">
     <script>
-        (function() {
+        (function () {
             var theme = localStorage.getItem('siasatai_theme_name') || 'default';
             var mode = localStorage.getItem('siasatai_theme_mode') || 'dark';
             document.documentElement.setAttribute('data-theme', theme);
@@ -35,6 +43,7 @@
         })();
     </script>
 </head>
+
 <body>
     <!-- Welcome Loader -->
     <div id="welcome-loader" class="welcome-loader">
@@ -67,7 +76,8 @@
                         <option value="retro">Retro</option>
                     </select>
                 </div>
-                <button id="btn-theme-toggle" class="btn btn-ghost btn-icon-only" title="Toggle light/dark mode" aria-label="Toggle light/dark mode">
+                <button id="btn-theme-toggle" class="btn btn-ghost btn-icon-only" title="Toggle light/dark mode"
+                    aria-label="Toggle light/dark mode">
                     <i class="fa-solid fa-sun" id="theme-icon"></i>
                 </button>
                 <button id="btn-toggle-history" class="btn btn-ghost" title="View History" aria-label="View History">
@@ -86,287 +96,323 @@
     <!-- Main Layout -->
     <main class="app-layout">
         <!-- Left: Input Panel -->
-            <section class="panel input-panel">
-                <div class="panel-header">
-                    <h2><i class="fa-solid fa-pen-nib"></i> Analyze Article</h2>
-                    <p>Paste any news article, social media post, or WhatsApp rumor to check its credibility.</p>
-                </div>
+        <section class="panel input-panel">
+            <div class="panel-header">
+                <h2><i class="fa-solid fa-pen-nib"></i> Analyze Article</h2>
+                <p>Paste any news article, social media post, or WhatsApp rumor to check its credibility.</p>
+            </div>
 
-                <div class="textarea-wrapper">
-                    <label for="news-text-input" class="sr-only">News Article Text</label>
-                    <textarea id="news-text-input" placeholder="Type or paste your news text here (minimum 3 words)..."></textarea>
-                    <div class="word-counter"><span id="char-count">0</span> chars &nbsp;|&nbsp; <span id="word-count">0</span> words</div>
-                </div>
+            <div class="textarea-wrapper">
+                <label for="news-text-input" class="sr-only">News Article Text</label>
+                <textarea id="news-text-input"
+                    placeholder="Type or paste your news text here (minimum 3 words)..."></textarea>
+                <div class="word-counter"><span id="char-count">0</span> chars &nbsp;|&nbsp; <span
+                        id="word-count">0</span> words</div>
+            </div>
 
-                <div class="action-buttons">
-                    <button id="btn-predict" class="btn btn-primary"><i class="fa-solid fa-wand-magic-sparkles"></i> Verify</button>
-                    <button id="btn-paste" class="btn btn-ghost-neon" title="Paste from clipboard"><i class="fa-solid fa-clipboard"></i> Paste</button>
-                    <button id="btn-clear" class="btn btn-secondary"><i class="fa-solid fa-trash-can"></i> Clear</button>
-                </div>
+            <div class="action-buttons">
+                <button id="btn-predict" class="btn btn-primary"><i class="fa-solid fa-wand-magic-sparkles"></i>
+                    Verify</button>
+                <button id="btn-paste" class="btn btn-ghost-neon" title="Paste from clipboard"><i
+                        class="fa-solid fa-clipboard"></i> Paste</button>
+                <button id="btn-clear" class="btn btn-secondary"><i class="fa-solid fa-trash-can"></i> Clear</button>
+            </div>
 
-                <div class="presets-container">
-                    <h3><i class="fa-solid fa-list-check"></i> Quick Examples</h3>
-                    <div class="preset-groups">
-                        <div class="preset-group">
-                            <span class="group-label">Bahasa Malaysia (MBMB)</span>
-                            <button class="preset-btn" data-preset="bm-fake"><i class="fa-solid fa-circle-xmark text-danger"></i> Tular: MBMB Bakal Roboh Jonker Street</button>
-                            <button class="preset-btn" data-preset="bm-real"><i class="fa-solid fa-circle-check text-success"></i> Rasmi: MBMB Lancar Aplikasi Mudah Alih</button>
-                        </div>
-                        <div class="preset-group">
-                            <span class="group-label">English</span>
-                            <button class="preset-btn" data-preset="en-fake"><i class="fa-solid fa-circle-xmark text-danger"></i> Hoax: 5G Towers Spreading Pathogen</button>
-                            <button class="preset-btn" data-preset="en-real"><i class="fa-solid fa-circle-check text-success"></i> Official: Malaysia CPI Inflation Report</button>
-                        </div>
+            <div class="presets-container">
+                <h3><i class="fa-solid fa-list-check"></i> Quick Examples</h3>
+                <div class="preset-groups">
+                    <div class="preset-group">
+                        <span class="group-label">Bahasa Malaysia (MBMB)</span>
+                        <button class="preset-btn" data-preset="bm-fake"><i
+                                class="fa-solid fa-circle-xmark text-danger"></i> Tular: MBMB Bakal Roboh Jonker
+                            Street</button>
+                        <button class="preset-btn" data-preset="bm-real"><i
+                                class="fa-solid fa-circle-check text-success"></i> Rasmi: MBMB Lancar Aplikasi Mudah
+                            Alih</button>
+                    </div>
+                    <div class="preset-group">
+                        <span class="group-label">English</span>
+                        <button class="preset-btn" data-preset="en-fake"><i
+                                class="fa-solid fa-circle-xmark text-danger"></i> Hoax: 5G Towers Spreading
+                            Pathogen</button>
+                        <button class="preset-btn" data-preset="en-real"><i
+                                class="fa-solid fa-circle-check text-success"></i> Official: Malaysia CPI Inflation
+                            Report</button>
                     </div>
                 </div>
+            </div>
 
-                <div class="ai-disclaimer">
-                    <i class="fa-solid fa-circle-info"></i>
-                    <p><strong>Note:</strong> AI can still make mistakes. This result is based on pattern recognition and should not be used as the sole source of truth. Always verify news with official sources before sharing.</p>
+            <div class="ai-disclaimer">
+                <i class="fa-solid fa-circle-info"></i>
+                <p><strong>Note:</strong> AI can still make mistakes. This result is based on pattern recognition and
+                    should not be used as the sole source of truth. Always verify news with official sources before
+                    sharing.</p>
+            </div>
+
+        </section>
+
+        <!-- Right: Result Panel -->
+        <section class="panel result-panel">
+
+            <!-- Placeholder (idle state) -->
+            <div class="idle-placeholder" id="idle-placeholder">
+                <div class="idle-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+                <h3>Ready to Analyze</h3>
+                <p>Enter or paste a news article above, then click <strong>Verify</strong>.</p>
+            </div>
+
+            <!-- Loading -->
+            <div class="loader-box hidden" id="loader-section">
+                <div class="spinner"></div>
+                <p>Analyzing with AI model...</p>
+            </div>
+
+            <!-- Result Card -->
+            <div class="result-card hidden" id="result-section">
+                <div class="verdict-display" id="verdict-display">
+                    <div class="verdict-icon-container">
+                        <i class="fa-solid fa-triangle-exclamation" id="verdict-icon"></i>
+                    </div>
+                    <div class="verdict-details">
+                        <span class="verdict-subtitle">VERDICT</span>
+                        <h3 id="verdict-label">SUSPECTED FAKE</h3>
+                    </div>
+                    <button class="btn-icon" id="btn-copy-result" title="Copy result"><i
+                            class="fa-solid fa-share-nodes"></i></button>
                 </div>
 
-            </section>
-
-            <!-- Right: Result Panel -->
-            <section class="panel result-panel">
-
-                <!-- Placeholder (idle state) -->
-                <div class="idle-placeholder" id="idle-placeholder">
-                    <div class="idle-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
-                    <h3>Ready to Analyze</h3>
-                    <p>Enter or paste a news article above, then click <strong>Verify</strong>.</p>
-                </div>
-
-                <!-- Loading -->
-                <div class="loader-box hidden" id="loader-section">
-                    <div class="spinner"></div>
-                    <p>Analyzing with AI model...</p>
-                </div>
-
-                <!-- Result Card -->
-                <div class="result-card hidden" id="result-section">
-                    <div class="verdict-display" id="verdict-display">
-                        <div class="verdict-icon-container">
-                            <i class="fa-solid fa-triangle-exclamation" id="verdict-icon"></i>
-                        </div>
-                        <div class="verdict-details">
-                            <span class="verdict-subtitle">VERDICT</span>
-                            <h3 id="verdict-label">SUSPECTED FAKE</h3>
-                        </div>
-                        <button class="btn-icon" id="btn-copy-result" title="Copy result"><i class="fa-solid fa-share-nodes"></i></button>
+                <div class="gauge-section">
+                    <div class="gauge-header">
+                        <span>AI Confidence Score</span>
+                        <span id="confidence-percentage">0%</span>
                     </div>
-
-                    <div class="gauge-section">
-                        <div class="gauge-header">
-                            <span>AI Confidence Score</span>
-                            <span id="confidence-percentage">0%</span>
-                        </div>
-                        <div class="gauge-bar-container">
-                            <div class="gauge-bar-fill" id="confidence-fill"></div>
-                        </div>
-                    </div>
-
-                    <div class="gauge-section">
-                        <div class="gauge-header">
-                            <span>Sensationalism &amp; Tone Meter</span>
-                            <span id="tone-percentage">0%</span>
-                        </div>
-                        <div class="gauge-bar-container">
-                            <div class="gauge-bar-fill tone-bar-fill" id="tone-fill"></div>
-                        </div>
-                        <div class="gauge-footer">
-                            <span id="tone-label">Analyzing tone...</span>
-                        </div>
-                    </div>
-
-                    <div class="stats-grid">
-                        <div class="stat-box">
-                            <div class="stat-icon"><i class="fa-solid fa-language"></i></div>
-                            <div class="stat-info">
-                                <span class="stat-label">Language</span>
-                                <span class="stat-value" id="stat-lang">–</span>
-                            </div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-icon"><i class="fa-solid fa-font"></i></div>
-                            <div class="stat-info">
-                                <span class="stat-label">Word Count</span>
-                                <span class="stat-value" id="stat-words">–</span>
-                            </div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-icon"><i class="fa-solid fa-brain"></i></div>
-                            <div class="stat-info">
-                                <span class="stat-label">Model</span>
-                                <span class="stat-value" id="stat-model">LogReg</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="keywords-section">
-                        <h3><i class="fa-solid fa-tags"></i> Keywords Detected</h3>
-                        <div class="keywords-list" id="keywords-list"></div>
-                    </div>
-
-                    <!-- Word Cloud -->
-                    <div class="wordcloud-section">
-                        <h3><i class="fa-solid fa-cloud"></i> Word Cloud</h3>
-                        <canvas id="wordcloud-canvas" width="400" height="180"></canvas>
-                    </div>
-
-                    <!-- AI Summary -->
-                    <div class="summary-section">
-                        <h3><i class="fa-solid fa-microscope"></i> Why This Verdict?</h3>
-                        <p id="summary-text"></p>
-                    </div>
-
-                    <!-- Fact-Check Sources (only for Fake) -->
-                    <div class="sources-section hidden" id="sources-section">
-                        <h3><i class="fa-solid fa-magnifying-glass-chart"></i> Verify With These Sources</h3>
-                        <div class="sources-list" id="sources-list"></div>
+                    <div class="gauge-bar-container">
+                        <div class="gauge-bar-fill" id="confidence-fill"></div>
                     </div>
                 </div>
+
+                <div class="gauge-section">
+                    <div class="gauge-header">
+                        <span>Sensationalism &amp; Tone Meter</span>
+                        <span id="tone-percentage">0%</span>
+                    </div>
+                    <div class="gauge-bar-container">
+                        <div class="gauge-bar-fill tone-bar-fill" id="tone-fill"></div>
+                    </div>
+                    <div class="gauge-footer">
+                        <span id="tone-label">Analyzing tone...</span>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-icon"><i class="fa-solid fa-language"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Language</span>
+                            <span class="stat-value" id="stat-lang">–</span>
+                        </div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon"><i class="fa-solid fa-font"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Word Count</span>
+                            <span class="stat-value" id="stat-words">–</span>
+                        </div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon"><i class="fa-solid fa-brain"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Model</span>
+                            <span class="stat-value" id="stat-model">LogReg</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="keywords-section">
+                    <h3><i class="fa-solid fa-tags"></i> Keywords Detected</h3>
+                    <div class="keywords-list" id="keywords-list"></div>
+                </div>
+
+                <!-- Word Cloud -->
+                <div class="wordcloud-section">
+                    <h3><i class="fa-solid fa-cloud"></i> Word Cloud</h3>
+                    <canvas id="wordcloud-canvas" width="400" height="180"></canvas>
+                </div>
+
+                <!-- AI Summary -->
+                <div class="summary-section">
+                    <h3><i class="fa-solid fa-microscope"></i> Why This Verdict?</h3>
+                    <p id="summary-text"></p>
+                </div>
+
+                <!-- Fact-Check Sources (only for Fake) -->
+                <div class="sources-section hidden" id="sources-section">
+                    <h3><i class="fa-solid fa-magnifying-glass-chart"></i> Verify With These Sources</h3>
+                    <div class="sources-list" id="sources-list"></div>
+                </div>
+            </div>
             <!-- History Panel (inside right panel, toggled) -->
             <div class="history-panel hidden" id="history-panel">
                 <div class="history-header">
                     <h3><i class="fa-solid fa-clock-rotate-left"></i> Analysis History</h3>
-                    <button class="btn-icon" id="btn-clear-history" title="Clear history"><i class="fa-solid fa-trash-can"></i></button>
+                    <button class="btn-icon" id="btn-clear-history" title="Clear history"><i
+                            class="fa-solid fa-trash-can"></i></button>
                 </div>
                 <div class="history-list" id="history-list">
                     <div class="history-empty">No history yet. Verify an article to begin.</div>
-            </div>
+                </div>
         </section>
 
         <!-- Auxiliary Panel -->
-        <section class="panel aux-panel hidden" id="aux-panel">
-            <div class="panel-header">
-                    <h2><i class="fa-solid fa-chart-line"></i> Insights &amp; Support</h2>
-                    <p>Model diagnostics, Q&amp;A guidelines, and feedback submission.</p>
+        <section class="Insights" id="aux-panel">
+            <!-- About & Contact Card -->
+            <div class="aux-card about-card">
+                <h3><i class="fa-solid fa-user-graduate text-primary"></i> About the Project</h3>
+                <p class="card-desc" style="margin-bottom: 0.5rem;">Developed by <strong>Amar Syakir Mazlan</strong> as
+                    a project for a Data Science course.</p>
+                <div class="about-details" style="font-size: 0.85rem; line-height: 1.5; color: var(--text-secondary);">
+                    <p style="margin-bottom: 0.4rem;"><i class="fa-solid fa-building-columns"
+                            style="width: 16px; margin-right: 4px; color: var(--primary);"></i>
+                        <strong>Stakeholder:</strong> Majlis Bandaraya Melaka Bersejarah (MBMB)</p>
+                    <p style="margin-bottom: 0.4rem;"><i class="fa-solid fa-lightbulb"
+                            style="width: 16px; margin-right: 4px; color: var(--primary);"></i>
+                        <strong>Objective:</strong> To research and build a bilingual machine learning system for
+                        real-time verification of local municipal rumors and misinformation.</p>
+                    <div class="about-links"
+                        style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+                        <a href="https://github.com/amar57603" target="_blank" class="btn-about-icon" title="GitHub">
+                            <i class="fa-brands fa-github"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/amar-syakir-aaa77519b/" target="_blank"
+                            class="btn-about-icon" title="LinkedIn">
+                            <i class="fa-brands fa-linkedin"></i>
+                        </a>
+                        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=syakir0767@gmail.com" target="_blank"
+                            class="btn-about-icon" title="Contact">
+                            <i class="fa-solid fa-envelope"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="aux-content">
-                
-                <!-- About & Contact Card -->
-                <div class="aux-card about-card">
-                    <h3><i class="fa-solid fa-user-graduate text-primary"></i> About the Project</h3>
-                    <p class="card-desc" style="margin-bottom: 0.5rem;">Developed by <strong>Amar Syakir Mazlan</strong> as a project for a Data Science course.</p>
-                    <div class="about-details" style="font-size: 0.85rem; line-height: 1.5; color: var(--text-secondary);">
-                        <p style="margin-bottom: 0.4rem;"><i class="fa-solid fa-building-columns" style="width: 16px; margin-right: 4px; color: var(--primary);"></i> <strong>Stakeholder:</strong> Majlis Bandaraya Melaka Bersejarah (MBMB)</p>
-                        <p style="margin-bottom: 0.4rem;"><i class="fa-solid fa-lightbulb" style="width: 16px; margin-right: 4px; color: var(--primary);"></i> <strong>Objective:</strong> To research and build a bilingual machine learning system for real-time verification of local municipal rumors and misinformation.</p>
-                        <div class="about-links" style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 1rem;">
-                            <a href="https://github.com/amar57603" target="_blank" class="btn-about-icon" title="GitHub">
-                                <i class="fa-brands fa-github"></i>
-                            </a>
-                            <a href="https://www.linkedin.com/in/amar-syakir-aaa77519b/" target="_blank" class="btn-about-icon" title="LinkedIn">
-                                <i class="fa-brands fa-linkedin"></i>
-                            </a>
-                            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=syakir0767@gmail.com" target="_blank" class="btn-about-icon" title="Contact">
-                                <i class="fa-solid fa-envelope"></i>
-                            </a>
+            </div>
+
+            <!-- Q&A Accordion -->
+            <div class="aux-card qa-card">
+                <h3><i class="fa-solid fa-circle-question text-primary"></i> Frequently Asked Qs</h3>
+                <div class="accordion">
+                    <div class="accordion-item">
+                        <button class="accordion-header">
+                            <span>How does SiasatAI work?</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-body">
+                            <p>It uses TF-IDF word vectorization to extract structural language patterns (like
+                                exclamation frequencies, urgent keywords, and formal news phrasings) and matches them
+                                against a regularized Logistic Regression classifier trained on a 60,000+ article
+                                bilingual corpus.</p>
                         </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-header">
+                            <span>What does the score mean?</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-body">
+                            <p>The AI Confidence Score represents the probability calculated by the model. Higher
+                                percentages indicate stronger structural alignment with historically verified real
+                                announcements or known misinformation patterns.</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-header">
+                            <span>Can the model make mistakes?</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-body">
+                            <p>Yes, machine learning models recognize linguistic patterns but do not possess real-time
+                                factual lookup. Always double-check critical municipal or national news using the
+                                official fact-checking links in the source section.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Model Status Card -->
+            <div class="aux-card status-card">
+                <h3><i class="fa-solid fa-server text-success"></i> Model Specifications</h3>
+                <div class="status-grid-mini">
+                    <div class="status-item"><span class="lbl">Algorithm</span><span class="val">Logistic
+                            Regression</span></div>
+                    <div class="status-item"><span class="lbl">Regularization</span><span class="val">L2 (C=0.15)</span>
+                    </div>
+                    <div class="status-item"><span class="lbl">Vocabulary Size</span><span class="val">10,000
+                            bi-grams</span></div>
+                    <div class="status-item"><span class="lbl">Last Update</span><span class="val">June 19, 2026</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Global Word Signals Card -->
+            <div class="aux-card signals-card">
+                <h3><i class="fa-solid fa-chart-bar text-primary"></i> Global Word Signals</h3>
+                <p class="card-desc">Top word associations trained on our bilingual corpus.</p>
+
+                <div class="signals-group" style="margin-top: 0.25rem;">
+                    <div class="signals-header"><i class="fa-solid fa-circle-xmark text-danger"></i> Top "Fake"
+                        Indicators</div>
+                    <div class="signals-chart" id="fake-signals-chart">
+                        <div class="signals-loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading chart...</div>
                     </div>
                 </div>
 
-                <!-- Q&A Accordion -->
-                <div class="aux-card qa-card">
-                    <h3><i class="fa-solid fa-circle-question text-primary"></i> Frequently Asked Qs</h3>
-                    <div class="accordion">
-                        <div class="accordion-item">
-                            <button class="accordion-header">
-                                <span>How does SiasatAI work?</span>
-                                <i class="fa-solid fa-chevron-down"></i>
-                            </button>
-                            <div class="accordion-body">
-                                <p>It uses TF-IDF word vectorization to extract structural language patterns (like exclamation frequencies, urgent keywords, and formal news phrasings) and matches them against a regularized Logistic Regression classifier trained on a 60,000+ article bilingual corpus.</p>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <button class="accordion-header">
-                                <span>What does the score mean?</span>
-                                <i class="fa-solid fa-chevron-down"></i>
-                            </button>
-                            <div class="accordion-body">
-                                <p>The AI Confidence Score represents the probability calculated by the model. Higher percentages indicate stronger structural alignment with historically verified real announcements or known misinformation patterns.</p>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <button class="accordion-header">
-                                <span>Can the model make mistakes?</span>
-                                <i class="fa-solid fa-chevron-down"></i>
-                            </button>
-                            <div class="accordion-body">
-                                <p>Yes, machine learning models recognize linguistic patterns but do not possess real-time factual lookup. Always double-check critical municipal or national news using the official fact-checking links in the source section.</p>
-                            </div>
-                        </div>
+                <div class="signals-group" style="margin-top: 0.75rem;">
+                    <div class="signals-header"><i class="fa-solid fa-circle-check text-success"></i> Top "Real"
+                        Indicators</div>
+                    <div class="signals-chart" id="real-signals-chart">
+                        <div class="signals-loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading chart...</div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Model Status Card -->
-                <div class="aux-card status-card">
-                    <h3><i class="fa-solid fa-server text-success"></i> Model Specifications</h3>
-                    <div class="status-grid-mini">
-                        <div class="status-item"><span class="lbl">Algorithm</span><span class="val">Logistic Regression</span></div>
-                        <div class="status-item"><span class="lbl">Regularization</span><span class="val">L2 (C=0.15)</span></div>
-                        <div class="status-item"><span class="lbl">Vocabulary Size</span><span class="val">10,000 bi-grams</span></div>
-                        <div class="status-item"><span class="lbl">Last Update</span><span class="val">June 19, 2026</span></div>
+
+            <!-- Feedback Form -->
+            <div class="aux-card feedback-card">
+                <h3><i class="fa-solid fa-envelope-open-text text-primary"></i> Submit Feedback</h3>
+                <form id="aux-feedback-form" class="feedback-form">
+                    <div class="form-group">
+                        <label for="feedback-category">Category</label>
+                        <select id="feedback-category" required>
+                            <option value="" disabled selected>Select category...</option>
+                            <option value="false_alarm">False Alarm (Real news flagged as Fake)</option>
+                            <option value="missed_fake">Missed Rumor (Fake news flagged as Real)</option>
+                            <option value="suggestion">General Suggestion / Feature Request</option>
+                        </select>
                     </div>
+                    <div class="form-group">
+                        <label for="feedback-notes">Detailed Notes</label>
+                        <textarea id="feedback-notes"
+                            placeholder="Paste article link or describe the prediction error..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-submit-feedback"><i
+                            class="fa-solid fa-paper-plane"></i> Send Feedback</button>
+                </form>
+                <div id="feedback-success-state" class="feedback-success-state hidden">
+                    <i class="fa-solid fa-circle-check text-success"></i>
+                    <h4>Feedback Submitted!</h4>
+                    <p>Thank you. Your report has been logged to help calibrate the model.</p>
+                    <button id="btn-reset-feedback" class="btn btn-ghost">Submit Another</button>
                 </div>
-
-                <!-- Global Word Signals Card -->
-                <div class="aux-card signals-card">
-                    <h3><i class="fa-solid fa-chart-bar text-primary"></i> Global Word Signals</h3>
-                    <p class="card-desc">Top word associations trained on our bilingual corpus.</p>
-                    
-                    <div class="signals-group" style="margin-top: 0.25rem;">
-                        <div class="signals-header"><i class="fa-solid fa-circle-xmark text-danger"></i> Top "Fake" Indicators</div>
-                        <div class="signals-chart" id="fake-signals-chart">
-                            <div class="signals-loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading chart...</div>
-                        </div>
-                    </div>
-                    
-                    <div class="signals-group" style="margin-top: 0.75rem;">
-                        <div class="signals-header"><i class="fa-solid fa-circle-check text-success"></i> Top "Real" Indicators</div>
-                        <div class="signals-chart" id="real-signals-chart">
-                            <div class="signals-loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading chart...</div>
-                        </div>
-                    </div>
-                </div>
-
-
-                <!-- Feedback Form -->
-                <div class="aux-card feedback-card">
-                    <h3><i class="fa-solid fa-envelope-open-text text-primary"></i> Submit Feedback</h3>
-                    <form id="aux-feedback-form" class="feedback-form">
-                        <div class="form-group">
-                            <label for="feedback-category">Category</label>
-                            <select id="feedback-category" required>
-                                <option value="" disabled selected>Select category...</option>
-                                <option value="false_alarm">False Alarm (Real news flagged as Fake)</option>
-                                <option value="missed_fake">Missed Rumor (Fake news flagged as Real)</option>
-                                <option value="suggestion">General Suggestion / Feature Request</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="feedback-notes">Detailed Notes</label>
-                            <textarea id="feedback-notes" placeholder="Paste article link or describe the prediction error..." required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-submit-feedback"><i class="fa-solid fa-paper-plane"></i> Send Feedback</button>
-                    </form>
-                    <div id="feedback-success-state" class="feedback-success-state hidden">
-                        <i class="fa-solid fa-circle-check text-success"></i>
-                        <h4>Feedback Submitted!</h4>
-                        <p>Thank you. Your report has been logged to help calibrate the model.</p>
-                        <button id="btn-reset-feedback" class="btn btn-ghost">Submit Another</button>
-                    </div>
-                </div>
+            </div>
 
             </div>
         </section>
     </main>
 
     <footer class="app-footer">
-        <p>&copy; 2026 <strong>SiasatAI</strong> &mdash; Built by <strong>Amar Syakir Mazlan</strong> &middot; Bilingual AI Misinformation Detector</p>
+        <p>&copy; 2026 <strong>SiasatAI</strong> &mdash; Built by <strong>Amar Syakir Mazlan</strong> &middot; Bilingual
+            AI Misinformation Detector</p>
     </footer>
 
     <script src="app.js"></script>
 </body>
+
 </html>
