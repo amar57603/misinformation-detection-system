@@ -280,10 +280,6 @@
 }
 
 /* Header */
-[data-theme="default"][data-mode="light"] .app-header {
-    background: rgba(238, 240, 248, 0.95);
-    border-bottom-color: rgba(0,0,0,0.1);
-}
 [data-theme="default"][data-mode="light"] .logo h1 { color: #111827; }
 [data-theme="default"][data-mode="light"] .dsg-tag {
     background: rgba(0,0,0,0.05);
@@ -614,7 +610,7 @@ body {
 /* ── Header ────────────────────────────────────────── */
 .app-header {
     border-bottom: 1px solid var(--border-color);
-    background: rgba(8,10,18,0.9);
+    background: var(--panel-bg);
     backdrop-filter: blur(16px);
     position: relative; z-index: 50;
     flex-shrink: 0;
@@ -756,6 +752,7 @@ body {
 }
 
 textarea {
+    flex: 1;
     width: 100%;
     background: var(--card-bg);
     border: 1px solid var(--border-color);
