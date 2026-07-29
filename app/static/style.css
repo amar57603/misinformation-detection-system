@@ -749,38 +749,21 @@ body {
 /* ── Main Layout ───────────────────────────────────── */
 .app-layout {
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
     padding: 2rem;
-    overflow-y: auto;
-    overflow-x: hidden;
+    max-width: 1600px;
+    margin: 0 auto;
+    width: 100%;
     position: relative;
     z-index: 1;
 }
-/* Removed aux-active grid-template shift */
 
-/* ── Top Focus Area ────────────────────────────────── */
-.focus-area {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-    max-width: 850px;
-    width: 100%;
-    margin: 0 auto;
-    transition: all var(--speed) ease;
+.app-layout.aux-active {
+    grid-template-columns: 1fr 1fr 340px;
 }
 
-/* ── Dashboard Grid ────────────────────────────────── */
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-    gap: 1.25rem;
-    max-width: 1200px;
-    width: 100%;
-    margin: 0 auto;
-}
 
 /* ── Panels ────────────────────────────────────────── */
 .panel {
@@ -1287,14 +1270,14 @@ textarea::placeholder { color: var(--text-muted); }
 
 /* ── History Panel ─────────────────────────────────── */
 .history-panel {
+    position: absolute;
+    inset: 0;
     background: var(--panel-bg);
     border: 1px solid var(--border-color);
     border-radius: var(--radius);
     backdrop-filter: blur(20px);
     display: flex; flex-direction: column;
     z-index: 10;
-    min-height: 400px;
-    max-height: 600px;
 }
 .history-panel.hidden { display: none; }
 

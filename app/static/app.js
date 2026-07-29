@@ -118,10 +118,6 @@ document.addEventListener("DOMContentLoaded", () => {
         idlePlaceholder.classList.toggle("hidden", state !== "idle");
         loaderSection.classList.toggle("hidden", state !== "loading");
         resultSection.classList.toggle("hidden", state !== "result");
-        
-        if (resultPanel) {
-            resultPanel.classList.toggle("hidden", state === "idle");
-        }
 
         // hide idle placeholder properly
         if (state === "idle") {
