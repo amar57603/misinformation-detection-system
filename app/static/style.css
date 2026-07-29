@@ -482,7 +482,8 @@
 
 /* Footer */
 [data-theme="default"][data-mode="light"] .app-footer {
-    background: rgba(225,228,242,0.8);
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(10px);
     color: #6b7280;
     border-top-color: rgba(0,0,0,0.08);
 }
