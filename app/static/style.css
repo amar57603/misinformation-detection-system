@@ -585,6 +585,61 @@ body {
     overflow-y: hidden;
 }
 
+/* ── Welcome Loader ────────────────────────────────── */
+.welcome-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background-color: var(--bg-dark);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+.welcome-loader.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.loader-content {
+    text-align: center;
+    animation: fadeInUp 1s ease forwards;
+}
+
+.loader-icon {
+    font-size: 3rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+    animation: pulseGlow 2s infinite ease-in-out;
+}
+
+.loader-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.loader-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseGlow {
+    0% { transform: scale(1); filter: drop-shadow(0 0 10px var(--primary-glow)); }
+    50% { transform: scale(1.1); filter: drop-shadow(0 0 25px var(--primary)); }
+    100% { transform: scale(1); filter: drop-shadow(0 0 10px var(--primary-glow)); }
+}
+
 /* ── Background Glows ──────────────────────────────── */
 .background-glow {
     position: fixed;
@@ -694,19 +749,37 @@ body {
 /* ── Main Layout ───────────────────────────────────── */
 .app-layout {
     flex: 1;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
     width: 100%;
-    padding: 1.25rem;
-    overflow: hidden;
-    min-height: 0;
+    padding: 2rem;
+    overflow-y: auto;
+    overflow-x: hidden;
     position: relative;
     z-index: 1;
-    transition: grid-template-columns var(--speed) ease;
 }
-.app-layout.aux-active {
-    grid-template-columns: 1fr 1fr 340px;
+/* Removed aux-active grid-template shift */
+
+/* ── Top Focus Area ────────────────────────────────── */
+.focus-area {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    max-width: 850px;
+    width: 100%;
+    margin: 0 auto;
+    transition: all var(--speed) ease;
+}
+
+/* ── Dashboard Grid ────────────────────────────────── */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 1.25rem;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
 }
 
 /* ── Panels ────────────────────────────────────────── */
@@ -1214,12 +1287,14 @@ textarea::placeholder { color: var(--text-muted); }
 
 /* ── History Panel ─────────────────────────────────── */
 .history-panel {
-    position: absolute; inset: 0;
     background: var(--panel-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
     backdrop-filter: blur(20px);
     display: flex; flex-direction: column;
     z-index: 10;
-    border-radius: var(--radius);
+    min-height: 400px;
+    max-height: 600px;
 }
 .history-panel.hidden { display: none; }
 
@@ -1327,8 +1402,9 @@ textarea::placeholder { color: var(--text-muted); }
 
 /* ── Auxiliary Panel ────────────────────────────────── */
 .aux-panel {
-    width: 340px;
-    flex-shrink: 0;
+    width: 100%;
+    min-height: 400px;
+    max-height: 600px;
     transition: all var(--speed) ease-in-out;
 }
 .aux-panel.hidden {
@@ -1564,17 +1640,8 @@ textarea::placeholder { color: var(--text-muted); }
 /* ── Responsive ────────────────────────────────────── */
 @media (max-width: 900px) {
     body { height: auto; overflow-y: auto; overflow-x: hidden; }
-    .app-layout {
-        grid-template-columns: 1fr;
-        overflow: visible;
-        height: auto;
-    }
-    .app-layout.aux-active {
-        grid-template-columns: 1fr;
-    }
     .panel { min-height: 480px; }
     .result-panel { min-height: 420px; }
-    .aux-panel { width: 100%; min-height: 400px; }
 }
 
 @media (max-width: 600px) {
@@ -1592,12 +1659,8 @@ textarea::placeholder { color: var(--text-muted); }
         height: auto;
         overflow-y: auto;
     }
-    .app-layout {
-        height: auto;
-        overflow: visible;
-    }
     .panel {
-        height: 620px;
+        min-height: 520px;
     }
 }
 

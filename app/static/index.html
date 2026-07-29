@@ -36,6 +36,15 @@
     </script>
 </head>
 <body>
+    <!-- Welcome Loader -->
+    <div id="welcome-loader" class="welcome-loader">
+        <div class="loader-content">
+            <i class="fa-solid fa-magnifying-glass loader-icon"></i>
+            <h1 class="loader-title">SiasatAI</h1>
+            <p class="loader-subtitle">Bilingual Misinformation Detector</p>
+        </div>
+    </div>
+
     <div class="background-glow"></div>
     <div class="background-glow glow-2"></div>
 
@@ -77,150 +86,156 @@
     <!-- Main Layout -->
     <main class="app-layout">
 
-        <!-- Left: Input Panel -->
-        <section class="panel input-panel">
-            <div class="panel-header">
-                <h2><i class="fa-solid fa-pen-nib"></i> Analyze Article</h2>
-                <p>Paste any news article, social media post, or WhatsApp rumor to check its credibility.</p>
-            </div>
-
-            <div class="textarea-wrapper">
-                <label for="news-text-input" class="sr-only">News Article Text</label>
-                <textarea id="news-text-input" placeholder="Type or paste your news text here (minimum 3 words)..."></textarea>
-                <div class="word-counter"><span id="char-count">0</span> chars &nbsp;|&nbsp; <span id="word-count">0</span> words</div>
-            </div>
-
-            <div class="action-buttons">
-                <button id="btn-predict" class="btn btn-primary"><i class="fa-solid fa-wand-magic-sparkles"></i> Verify</button>
-                <button id="btn-paste" class="btn btn-ghost-neon" title="Paste from clipboard"><i class="fa-solid fa-clipboard"></i> Paste</button>
-                <button id="btn-clear" class="btn btn-secondary"><i class="fa-solid fa-trash-can"></i> Clear</button>
-            </div>
-
-            <div class="presets-container">
-                <h3><i class="fa-solid fa-list-check"></i> Quick Examples</h3>
-                <div class="preset-groups">
-                    <div class="preset-group">
-                        <span class="group-label">Bahasa Malaysia (MBMB)</span>
-                        <button class="preset-btn" data-preset="bm-fake"><i class="fa-solid fa-circle-xmark text-danger"></i> Tular: MBMB Bakal Roboh Jonker Street</button>
-                        <button class="preset-btn" data-preset="bm-real"><i class="fa-solid fa-circle-check text-success"></i> Rasmi: MBMB Lancar Aplikasi Mudah Alih</button>
-                    </div>
-                    <div class="preset-group">
-                        <span class="group-label">English</span>
-                        <button class="preset-btn" data-preset="en-fake"><i class="fa-solid fa-circle-xmark text-danger"></i> Hoax: 5G Towers Spreading Pathogen</button>
-                        <button class="preset-btn" data-preset="en-real"><i class="fa-solid fa-circle-check text-success"></i> Official: Malaysia CPI Inflation Report</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="ai-disclaimer">
-                <i class="fa-solid fa-circle-info"></i>
-                <p><strong>Note:</strong> AI can still make mistakes. This result is based on pattern recognition and should not be used as the sole source of truth. Always verify news with official sources before sharing.</p>
-            </div>
-
-        </section>
-
-        <!-- Right: Result + History Panel -->
-        <section class="panel result-panel">
-
-            <!-- Placeholder (idle state) -->
-            <div class="idle-placeholder" id="idle-placeholder">
-                <div class="idle-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
-                <h3>Ready to Analyze</h3>
-                <p>Enter or paste a news article on the left, then click <strong>Verify</strong>.</p>
-            </div>
-
-            <!-- Loading -->
-            <div class="loader-box hidden" id="loader-section">
-                <div class="spinner"></div>
-                <p>Analyzing with AI model...</p>
-            </div>
-
-            <!-- Result Card -->
-            <div class="result-card hidden" id="result-section">
-                <div class="verdict-display" id="verdict-display">
-                    <div class="verdict-icon-container">
-                        <i class="fa-solid fa-triangle-exclamation" id="verdict-icon"></i>
-                    </div>
-                    <div class="verdict-details">
-                        <span class="verdict-subtitle">VERDICT</span>
-                        <h3 id="verdict-label">SUSPECTED FAKE</h3>
-                    </div>
-                    <button class="btn-icon" id="btn-copy-result" title="Copy result"><i class="fa-solid fa-share-nodes"></i></button>
+        <!-- Top Focus Area -->
+        <div class="focus-area">
+            <!-- Left: Input Panel -->
+            <section class="panel input-panel">
+                <div class="panel-header">
+                    <h2><i class="fa-solid fa-pen-nib"></i> Analyze Article</h2>
+                    <p>Paste any news article, social media post, or WhatsApp rumor to check its credibility.</p>
                 </div>
 
-                <div class="gauge-section">
-                    <div class="gauge-header">
-                        <span>AI Confidence Score</span>
-                        <span id="confidence-percentage">0%</span>
-                    </div>
-                    <div class="gauge-bar-container">
-                        <div class="gauge-bar-fill" id="confidence-fill"></div>
-                    </div>
+                <div class="textarea-wrapper">
+                    <label for="news-text-input" class="sr-only">News Article Text</label>
+                    <textarea id="news-text-input" placeholder="Type or paste your news text here (minimum 3 words)..."></textarea>
+                    <div class="word-counter"><span id="char-count">0</span> chars &nbsp;|&nbsp; <span id="word-count">0</span> words</div>
                 </div>
 
-                <div class="gauge-section">
-                    <div class="gauge-header">
-                        <span>Sensationalism &amp; Tone Meter</span>
-                        <span id="tone-percentage">0%</span>
-                    </div>
-                    <div class="gauge-bar-container">
-                        <div class="gauge-bar-fill tone-bar-fill" id="tone-fill"></div>
-                    </div>
-                    <div class="gauge-footer">
-                        <span id="tone-label">Analyzing tone...</span>
-                    </div>
+                <div class="action-buttons">
+                    <button id="btn-predict" class="btn btn-primary"><i class="fa-solid fa-wand-magic-sparkles"></i> Verify</button>
+                    <button id="btn-paste" class="btn btn-ghost-neon" title="Paste from clipboard"><i class="fa-solid fa-clipboard"></i> Paste</button>
+                    <button id="btn-clear" class="btn btn-secondary"><i class="fa-solid fa-trash-can"></i> Clear</button>
                 </div>
 
-                <div class="stats-grid">
-                    <div class="stat-box">
-                        <div class="stat-icon"><i class="fa-solid fa-language"></i></div>
-                        <div class="stat-info">
-                            <span class="stat-label">Language</span>
-                            <span class="stat-value" id="stat-lang">–</span>
+                <div class="presets-container">
+                    <h3><i class="fa-solid fa-list-check"></i> Quick Examples</h3>
+                    <div class="preset-groups">
+                        <div class="preset-group">
+                            <span class="group-label">Bahasa Malaysia (MBMB)</span>
+                            <button class="preset-btn" data-preset="bm-fake"><i class="fa-solid fa-circle-xmark text-danger"></i> Tular: MBMB Bakal Roboh Jonker Street</button>
+                            <button class="preset-btn" data-preset="bm-real"><i class="fa-solid fa-circle-check text-success"></i> Rasmi: MBMB Lancar Aplikasi Mudah Alih</button>
                         </div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-icon"><i class="fa-solid fa-font"></i></div>
-                        <div class="stat-info">
-                            <span class="stat-label">Word Count</span>
-                            <span class="stat-value" id="stat-words">–</span>
-                        </div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-icon"><i class="fa-solid fa-brain"></i></div>
-                        <div class="stat-info">
-                            <span class="stat-label">Model</span>
-                            <span class="stat-value" id="stat-model">LogReg</span>
+                        <div class="preset-group">
+                            <span class="group-label">English</span>
+                            <button class="preset-btn" data-preset="en-fake"><i class="fa-solid fa-circle-xmark text-danger"></i> Hoax: 5G Towers Spreading Pathogen</button>
+                            <button class="preset-btn" data-preset="en-real"><i class="fa-solid fa-circle-check text-success"></i> Official: Malaysia CPI Inflation Report</button>
                         </div>
                     </div>
                 </div>
 
-                <div class="keywords-section">
-                    <h3><i class="fa-solid fa-tags"></i> Keywords Detected</h3>
-                    <div class="keywords-list" id="keywords-list"></div>
+                <div class="ai-disclaimer">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <p><strong>Note:</strong> AI can still make mistakes. This result is based on pattern recognition and should not be used as the sole source of truth. Always verify news with official sources before sharing.</p>
                 </div>
 
-                <!-- Word Cloud -->
-                <div class="wordcloud-section">
-                    <h3><i class="fa-solid fa-cloud"></i> Word Cloud</h3>
-                    <canvas id="wordcloud-canvas" width="400" height="180"></canvas>
+            </section>
+
+            <!-- Right: Result Panel -->
+            <section class="panel result-panel">
+
+                <!-- Placeholder (idle state) -->
+                <div class="idle-placeholder" id="idle-placeholder">
+                    <div class="idle-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+                    <h3>Ready to Analyze</h3>
+                    <p>Enter or paste a news article above, then click <strong>Verify</strong>.</p>
                 </div>
 
-                <!-- AI Summary -->
-                <div class="summary-section">
-                    <h3><i class="fa-solid fa-microscope"></i> Why This Verdict?</h3>
-                    <p id="summary-text"></p>
+                <!-- Loading -->
+                <div class="loader-box hidden" id="loader-section">
+                    <div class="spinner"></div>
+                    <p>Analyzing with AI model...</p>
                 </div>
 
-                <!-- Fact-Check Sources (only for Fake) -->
-                <div class="sources-section hidden" id="sources-section">
-                    <h3><i class="fa-solid fa-magnifying-glass-chart"></i> Verify With These Sources</h3>
-                    <div class="sources-list" id="sources-list"></div>
-                </div>
-            </div>
+                <!-- Result Card -->
+                <div class="result-card hidden" id="result-section">
+                    <div class="verdict-display" id="verdict-display">
+                        <div class="verdict-icon-container">
+                            <i class="fa-solid fa-triangle-exclamation" id="verdict-icon"></i>
+                        </div>
+                        <div class="verdict-details">
+                            <span class="verdict-subtitle">VERDICT</span>
+                            <h3 id="verdict-label">SUSPECTED FAKE</h3>
+                        </div>
+                        <button class="btn-icon" id="btn-copy-result" title="Copy result"><i class="fa-solid fa-share-nodes"></i></button>
+                    </div>
 
+                    <div class="gauge-section">
+                        <div class="gauge-header">
+                            <span>AI Confidence Score</span>
+                            <span id="confidence-percentage">0%</span>
+                        </div>
+                        <div class="gauge-bar-container">
+                            <div class="gauge-bar-fill" id="confidence-fill"></div>
+                        </div>
+                    </div>
+
+                    <div class="gauge-section">
+                        <div class="gauge-header">
+                            <span>Sensationalism &amp; Tone Meter</span>
+                            <span id="tone-percentage">0%</span>
+                        </div>
+                        <div class="gauge-bar-container">
+                            <div class="gauge-bar-fill tone-bar-fill" id="tone-fill"></div>
+                        </div>
+                        <div class="gauge-footer">
+                            <span id="tone-label">Analyzing tone...</span>
+                        </div>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <div class="stat-icon"><i class="fa-solid fa-language"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-label">Language</span>
+                                <span class="stat-value" id="stat-lang">–</span>
+                            </div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-icon"><i class="fa-solid fa-font"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-label">Word Count</span>
+                                <span class="stat-value" id="stat-words">–</span>
+                            </div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-icon"><i class="fa-solid fa-brain"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-label">Model</span>
+                                <span class="stat-value" id="stat-model">LogReg</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="keywords-section">
+                        <h3><i class="fa-solid fa-tags"></i> Keywords Detected</h3>
+                        <div class="keywords-list" id="keywords-list"></div>
+                    </div>
+
+                    <!-- Word Cloud -->
+                    <div class="wordcloud-section">
+                        <h3><i class="fa-solid fa-cloud"></i> Word Cloud</h3>
+                        <canvas id="wordcloud-canvas" width="400" height="180"></canvas>
+                    </div>
+
+                    <!-- AI Summary -->
+                    <div class="summary-section">
+                        <h3><i class="fa-solid fa-microscope"></i> Why This Verdict?</h3>
+                        <p id="summary-text"></p>
+                    </div>
+
+                    <!-- Fact-Check Sources (only for Fake) -->
+                    <div class="sources-section hidden" id="sources-section">
+                        <h3><i class="fa-solid fa-magnifying-glass-chart"></i> Verify With These Sources</h3>
+                        <div class="sources-list" id="sources-list"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
             <!-- History Panel (inside right panel, toggled) -->
-            <div class="history-panel hidden" id="history-panel">
+            <div class="panel history-panel hidden" id="history-panel">
                 <div class="history-header">
                     <h3><i class="fa-solid fa-clock-rotate-left"></i> Analysis History</h3>
                     <button class="btn-icon" id="btn-clear-history" title="Clear history"><i class="fa-solid fa-trash-can"></i></button>
@@ -230,15 +245,13 @@
                 </div>
             </div>
 
-        </section>
-
-        <!-- Auxiliary Panel -->
-        <section class="panel aux-panel hidden" id="aux-panel">
-            <div class="panel-header">
-                <h2><i class="fa-solid fa-chart-line"></i> Insights &amp; Support</h2>
-                <p>Model diagnostics, Q&amp;A guidelines, and feedback submission.</p>
-            </div>
-            <div class="aux-content">
+            <!-- Auxiliary Panel -->
+            <section class="panel aux-panel hidden" id="aux-panel">
+                <div class="panel-header">
+                    <h2><i class="fa-solid fa-chart-line"></i> Insights &amp; Support</h2>
+                    <p>Model diagnostics, Q&amp;A guidelines, and feedback submission.</p>
+                </div>
+                <div class="aux-content">
                 
                 <!-- About & Contact Card -->
                 <div class="aux-card about-card">
@@ -247,14 +260,14 @@
                     <div class="about-details" style="font-size: 0.85rem; line-height: 1.5; color: var(--text-secondary);">
                         <p style="margin-bottom: 0.4rem;"><i class="fa-solid fa-building-columns" style="width: 16px; margin-right: 4px; color: var(--primary);"></i> <strong>Stakeholder:</strong> Majlis Bandaraya Melaka Bersejarah (MBMB)</p>
                         <p style="margin-bottom: 0.4rem;"><i class="fa-solid fa-lightbulb" style="width: 16px; margin-right: 4px; color: var(--primary);"></i> <strong>Objective:</strong> To research and build a bilingual machine learning system for real-time verification of local municipal rumors and misinformation.</p>
-                        <div class="about-links" style="display: flex; gap: 10px; margin-top: 0.75rem; border-top: 1px solid var(--border); padding-top: 0.75rem;">
-                            <a href="https://github.com/amar57603" target="_blank" class="btn-about-link" style="font-size: 0.8rem; padding: 4px 8px; border: 1px solid var(--border); border-radius: 4px; display: inline-flex; align-items: center; gap: 4px; text-decoration: none; color: var(--text); background: rgba(0,0,0,0.02);">
+                        <div class="about-links" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 0.75rem; border-top: 1px solid var(--border-color); padding-top: 0.75rem;">
+                            <a href="https://github.com/amar57603" target="_blank" class="btn-about-link" style="font-size: 0.8rem; padding: 4px 8px; border: 1px solid var(--border-color); border-radius: 4px; display: inline-flex; align-items: center; gap: 4px; text-decoration: none; color: var(--text-primary); background: rgba(0,0,0,0.02);">
                                 <i class="fa-brands fa-github"></i> GitHub
                             </a>
-                            <a href="https://www.linkedin.com/in/amar-syakir-aaa77519b/" target="_blank" class="btn-about-link" style="font-size: 0.8rem; padding: 4px 8px; border: 1px solid var(--border); border-radius: 4px; display: inline-flex; align-items: center; gap: 4px; text-decoration: none; color: var(--text); background: rgba(0,0,0,0.02);">
+                            <a href="https://www.linkedin.com/in/amar-syakir-aaa77519b/" target="_blank" class="btn-about-link" style="font-size: 0.8rem; padding: 4px 8px; border: 1px solid var(--border-color); border-radius: 4px; display: inline-flex; align-items: center; gap: 4px; text-decoration: none; color: var(--text-primary); background: rgba(0,0,0,0.02);">
                                 <i class="fa-brands fa-linkedin"></i> LinkedIn
                             </a>
-                            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=syakir0767@gmail.com" target="_blank" class="btn-about-link" style="font-size: 0.8rem; padding: 4px 8px; border: 1px solid var(--border); border-radius: 4px; display: inline-flex; align-items: center; gap: 4px; text-decoration: none; color: var(--text); background: rgba(0,0,0,0.02);">
+                            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=syakir0767@gmail.com" target="_blank" class="btn-about-link" style="font-size: 0.8rem; padding: 4px 8px; border: 1px solid var(--border-color); border-radius: 4px; display: inline-flex; align-items: center; gap: 4px; text-decoration: none; color: var(--text-primary); background: rgba(0,0,0,0.02);">
                                 <i class="fa-solid fa-envelope"></i> Contact
                             </a>
                         </div>
@@ -356,6 +369,9 @@
 
             </div>
         </section>
+        
+        </div> <!-- Close Dashboard Grid -->
+
     </main>
 
     <footer class="app-footer">

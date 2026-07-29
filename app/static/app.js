@@ -1,5 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+    // ── Welcome Loader ───────────────────────────────────────────────
+    const welcomeLoader = document.getElementById('welcome-loader');
+    if (welcomeLoader) {
+        setTimeout(() => {
+            welcomeLoader.classList.add('hidden');
+            setTimeout(() => welcomeLoader.remove(), 800); // Remove from DOM after transition
+        }, 2500); // Show loader for 2.5 seconds
+    }
+
     // ── UI Elements ──────────────────────────────────────────
     const textInput        = document.getElementById("news-text-input");
     const charCountEl      = document.getElementById("char-count");
