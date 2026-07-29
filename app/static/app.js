@@ -12,28 +12,45 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnCopyResult    = document.getElementById("btn-copy-result");
     const btnThemeToggle   = document.getElementById("btn-theme-toggle");
     const themeIcon        = document.getElementById("theme-icon");
+    const themeSelector    = document.getElementById("theme-selector");
     const btnToggleAux     = document.getElementById("btn-toggle-aux");
     const auxPanel         = document.getElementById("aux-panel");
     const appLayout        = document.querySelector(".app-layout");
 
-    // ── Theme Toggle ──────────────────────────────────────────
-    const savedTheme = localStorage.getItem("siasatai_theme") || "dark";
-    applyTheme(savedTheme);
+    // ── Theme & Mode Toggle ──────────────────────────────────────────
+    const savedTheme = localStorage.getItem("siasatai_theme_name") || "default";
+    const savedMode = localStorage.getItem("siasatai_theme_mode") || "dark";
+    
+    if (themeSelector) {
+        themeSelector.value = savedTheme;
+    }
+    applyTheme(savedTheme, savedMode);
 
-    function applyTheme(theme) {
-        if (theme === "light") {
-            document.documentElement.setAttribute("data-theme", "light");
+    function applyTheme(themeName, themeMode) {
+        document.documentElement.setAttribute("data-theme", themeName);
+        document.documentElement.setAttribute("data-mode", themeMode);
+        
+        if (themeMode === "light") {
             themeIcon.className = "fa-solid fa-moon";
         } else {
-            document.documentElement.removeAttribute("data-theme");
             themeIcon.className = "fa-solid fa-sun";
         }
-        localStorage.setItem("siasatai_theme", theme);
+        
+        localStorage.setItem("siasatai_theme_name", themeName);
+        localStorage.setItem("siasatai_theme_mode", themeMode);
+    }
+
+    if (themeSelector) {
+        themeSelector.addEventListener("change", (e) => {
+            const currentMode = localStorage.getItem("siasatai_theme_mode") || "dark";
+            applyTheme(e.target.value, currentMode);
+        });
     }
 
     btnThemeToggle.addEventListener("click", () => {
-        const current = localStorage.getItem("siasatai_theme") || "dark";
-        applyTheme(current === "dark" ? "light" : "dark");
+        const currentTheme = localStorage.getItem("siasatai_theme_name") || "default";
+        const currentMode = localStorage.getItem("siasatai_theme_mode") || "dark";
+        applyTheme(currentTheme, currentMode === "dark" ? "light" : "dark");
     });
 
     const idlePlaceholder  = document.getElementById("idle-placeholder");
