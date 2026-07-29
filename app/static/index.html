@@ -23,7 +23,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
     <link rel="stylesheet" href="style.css">
@@ -42,10 +42,19 @@
             </div>
             <div class="header-right">
                 <div class="badge"><i class="fa-solid fa-globe"></i> Malay &amp; English</div>
-                <button id="btn-theme-toggle" class="btn btn-ghost btn-icon-only" title="Toggle light/dark mode">
+                <div class="theme-selector-wrapper">
+                    <select id="theme-selector" class="theme-selector" aria-label="Select Theme">
+                        <option value="default">Default</option>
+                        <option value="cyber">Cyber</option>
+                        <option value="editorial">Editorial</option>
+                        <option value="minimalist">Minimalist</option>
+                        <option value="retro">Retro</option>
+                    </select>
+                </div>
+                <button id="btn-theme-toggle" class="btn btn-ghost btn-icon-only" title="Toggle light/dark mode" aria-label="Toggle light/dark mode">
                     <i class="fa-solid fa-sun" id="theme-icon"></i>
                 </button>
-                <button id="btn-toggle-history" class="btn btn-ghost" title="View History">
+                <button id="btn-toggle-history" class="btn btn-ghost" title="View History" aria-label="View History">
                     <i class="fa-solid fa-clock-rotate-left"></i>
                     <span>History</span>
                     <span class="history-count" id="history-count">0</span>
