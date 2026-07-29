@@ -47,10 +47,20 @@
 <body>
     <!-- Welcome Loader -->
     <div id="welcome-loader" class="welcome-loader">
+        <div class="loader-bg-glow"></div>
         <div class="loader-content">
-            <div class="loader-icon"><i class="fa-solid fa-shield-halved"></i></div>
-            <h1 class="loader-title">Siasat<span>AI</span></h1>
-            <p class="loader-subtitle">Loading Detection Engine...</p>
+            <div class="loader-orbit-wrapper">
+                <div class="loader-orbit"></div>
+                <div class="loader-orbit loader-orbit-2"></div>
+                <div class="loader-icon"><i class="fa-solid fa-shield-halved"></i></div>
+            </div>
+            <h1 class="loader-title">Siasat<span class="loader-text-glow">AI</span></h1>
+            <p class="loader-subtitle">
+                <span class="scanning-text" data-text="Initializing Detection Engine...">Initializing Detection Engine...</span>
+            </p>
+            <div class="loader-progress-bar">
+                <div class="loader-progress-fill"></div>
+            </div>
         </div>
     </div>
 
