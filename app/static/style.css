@@ -1646,6 +1646,14 @@ textarea::placeholder { color: var(--text-muted); }
     .action-buttons { flex-wrap: wrap; }
     .btn-primary { flex: 1 1 100%; }
     .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    
+    /* Welcome Loader Mobile Adjustments */
+    .loader-bg-glow { width: 120vw; height: 120vw; }
+    .loader-title { font-size: 2rem; }
+    .loader-subtitle { font-size: 0.95rem; }
+    .loader-orbit-wrapper { width: 100px; height: 100px; margin-bottom: 1rem; }
+    .loader-icon { font-size: 2rem; }
+    .loader-progress-bar { width: 200px; }
 }
 
 /* Height-restricted Desktop & Tablet Landscape screens */
