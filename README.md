@@ -60,8 +60,13 @@ By utilizing a regularized **Logistic Regression** classifier trained on a balan
  
  ### 3. Edge Infrastructure & Security
  * **Vercel Edge Middleware Rate Limiter:** Intercepts incoming API traffic at the CDN level (edge) and blocks abuse using Upstash Redis.
+ * **XSS-Safe Rendering:** The frontend completely strictly avoids `innerHTML` usage, using secure DOM creation APIs (`textContent`, `createElement`) to prevent Cross-Site Scripting (XSS) injection attacks.
  * **Repositioned AI Disclaimer:** Permanent notice block at the bottom of the left Input Panel to manage user expectations before verification.
  * **Centered Toast System:** Repositioned all toast feedback messages (copy confirmation, errors, pastes, and rate limit blocks) to animate smoothly in the top-center of the screen.
+
+ ### 4. CI/CD & Automated Retraining
+ * **GitHub Actions Cron:** A serverless automated workflow (`.github/workflows/retrain.yml`) triggers every Sunday at midnight to scrape new articles, process the data, retrain the models, and deploy the updated `.pkl` models directly back to the repository without manual intervention.
+ * **Dynamic Model Timestamps:** The frontend automatically queries the backend for the exact file-modification timestamp of the `.pkl` models, guaranteeing the UI strictly reflects the truth of the last retraining event.
 
 ---
 
@@ -72,7 +77,7 @@ SiasatAI separates the heavy **offline training pipeline** from the lightweight 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                    OFFLINE TRAINING PIPELINE                    │
-│    Jupyter Notebook: data_preprocessing_and_training.ipynb      │
+│    GitHub Actions Schedule (cron) → train.py                    │
 │                                                                 │
 │  Data Sources → NLP Cleaning → TF-IDF → Tournament → .pkl      │
 └──────────────────────────┬──────────────────────────────────────┘
@@ -105,7 +110,7 @@ SiasatAI separates the heavy **offline training pipeline** from the lightweight 
 
 ## ⚙️ Machine Learning Pipeline (Step-by-Step)
 
-The end-to-end training and feature engineering process is automated inside the Jupyter Notebook pipeline (`notebooks/data_preprocessing_and_training.ipynb`) and executed via the console.
+The end-to-end training and feature engineering process is automated via a headless script (`train.py`) which is executed weekly by GitHub Actions. A legacy exploration version is available in `notebooks/data_preprocessing_and_training.ipynb`.
 
 ```mermaid
 graph TD
@@ -295,7 +300,11 @@ $$\text{Score} = (0.35 \times \text{Capitalization Ratio}) + (0.25 \times \text{
  ### 4. Run the Retraining Pipeline
  To scrape the latest articles from *Sebenarnya.my*, run preprocessing, train the tournament, and update local pickle files:
  
- * Open and execute the Jupyter Notebook: [data_preprocessing_and_training.ipynb](file:///c:/Users/syaki/Desktop/DataScience/notebooks/data_preprocessing_and_training.ipynb) in your preferred Jupyter environment (e.g. VS Code or Jupyter Lab).
+ ```bash
+ python train.py
+ ```
+ 
+ This headless script performs the full data pipeline and will output the updated model files into the `models/` folder.
 
 ---
 
