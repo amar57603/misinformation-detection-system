@@ -2,6 +2,7 @@ import os
 import re
 import pickle
 import sys
+import datetime
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -385,11 +386,18 @@ def model_info():
     top_real = [{"word": word, "weight": float(coef)} for word, coef in sorted_by_coef[-5:]]
     top_real.reverse()
     
+    try:
+        mtime = os.path.getmtime(MODEL_PATH)
+        last_update = datetime.datetime.fromtimestamp(mtime).strftime("%B %d, %Y")
+    except Exception:
+        last_update = "Unknown"
+        
     return {
         "algorithm": "Logistic Regression",
         "vocabulary_size": len(feature_names),
         "top_fake_features": top_fake,
-        "top_real_features": top_real
+        "top_real_features": top_real,
+        "last_update": last_update
     }
 
 

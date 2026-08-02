@@ -109,7 +109,10 @@ document.addEventListener("DOMContentLoaded", () => {
         if (existing) existing.remove();
         const t = document.createElement("div");
         t.className = "toast";
-        t.innerHTML = `<i class="fa-solid ${icon}"></i> ${msg}`;
+        const iconEl = document.createElement("i");
+        iconEl.className = `fa-solid ${icon}`;
+        t.appendChild(iconEl);
+        t.appendChild(document.createTextNode(" " + msg));
         document.body.appendChild(t);
         setTimeout(() => t.remove(), 2600);
     }
@@ -147,29 +150,65 @@ document.addEventListener("DOMContentLoaded", () => {
     function renderHistory() {
         historyCountEl.textContent = history.length;
         if (history.length === 0) {
-            historyList.innerHTML = '<div class="history-empty">No history yet. Verify an article to begin.</div>';
+            historyList.textContent = "";
+            const emptyDiv = document.createElement("div");
+            emptyDiv.className = "history-empty";
+            emptyDiv.textContent = "No history yet. Verify an article to begin.";
+            historyList.appendChild(emptyDiv);
             return;
         }
-        historyList.innerHTML = "";
+        historyList.textContent = "";
         [...history].reverse().forEach((item, idx) => {
             const el = document.createElement("div");
             el.className = "history-item";
             const isFake = item.prediction === "Fake";
-            el.innerHTML = `
-                <div class="history-item-top">
-                    <span class="history-verdict ${isFake ? "fake" : "real"}">
-                        ${isFake ? "⚠ Fake" : "✓ Real"}
-                    </span>
-                    <span class="history-confidence">${(item.confidence * 100).toFixed(1)}%</span>
-                </div>
-                <div class="history-preview"></div>
-                <div class="history-meta">
-                    <span><i class="fa-solid fa-language"></i> ${item.language}</span>
-                    <span><i class="fa-solid fa-font"></i> ${item.word_count} words</span>
-                    <span><i class="fa-regular fa-clock"></i> ${formatTime(item.timestamp)}</span>
-                </div>
-            `;
-            el.querySelector(".history-preview").textContent = item.text.substring(0, 100) + (item.text.length > 100 ? "…" : "");
+            
+            const topDiv = document.createElement("div");
+            topDiv.className = "history-item-top";
+            
+            const verdictSpan = document.createElement("span");
+            verdictSpan.className = `history-verdict ${isFake ? "fake" : "real"}`;
+            verdictSpan.textContent = isFake ? "⚠ Fake" : "✓ Real";
+            
+            const confSpan = document.createElement("span");
+            confSpan.className = "history-confidence";
+            confSpan.textContent = `${(item.confidence * 100).toFixed(1)}%`;
+            
+            topDiv.appendChild(verdictSpan);
+            topDiv.appendChild(confSpan);
+            
+            const previewDiv = document.createElement("div");
+            previewDiv.className = "history-preview";
+            previewDiv.textContent = item.text.substring(0, 100) + (item.text.length > 100 ? "…" : "");
+            
+            const metaDiv = document.createElement("div");
+            metaDiv.className = "history-meta";
+            
+            const langSpan = document.createElement("span");
+            const langIcon = document.createElement("i");
+            langIcon.className = "fa-solid fa-language";
+            langSpan.appendChild(langIcon);
+            langSpan.appendChild(document.createTextNode(` ${item.language}`));
+            
+            const wordsSpan = document.createElement("span");
+            const wordsIcon = document.createElement("i");
+            wordsIcon.className = "fa-solid fa-font";
+            wordsSpan.appendChild(wordsIcon);
+            wordsSpan.appendChild(document.createTextNode(` ${item.word_count} words`));
+            
+            const timeSpan = document.createElement("span");
+            const timeIcon = document.createElement("i");
+            timeIcon.className = "fa-regular fa-clock";
+            timeSpan.appendChild(timeIcon);
+            timeSpan.appendChild(document.createTextNode(` ${formatTime(item.timestamp)}`));
+            
+            metaDiv.appendChild(langSpan);
+            metaDiv.appendChild(wordsSpan);
+            metaDiv.appendChild(timeSpan);
+            
+            el.appendChild(topDiv);
+            el.appendChild(previewDiv);
+            el.appendChild(metaDiv);
             el.addEventListener("click", () => {
                 textInput.value = item.text;
                 updateCounters();
@@ -373,7 +412,7 @@ document.addEventListener("DOMContentLoaded", () => {
         statModel.textContent = "LogReg (93.99%)";
 
         // Keywords
-        keywordsList.innerHTML = "";
+        keywordsList.textContent = "";
         if (data.keywords_detected && data.keywords_detected.length > 0) {
             data.keywords_detected.forEach(word => {
                 const badge = document.createElement("span");
@@ -398,7 +437,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Fact-check Sources
         const sourcesSection = document.getElementById("sources-section");
         const sourcesList    = document.getElementById("sources-list");
-        sourcesList.innerHTML = "";
+        sourcesList.textContent = "";
         if (data.fact_check_sources && data.fact_check_sources.length > 0) {
             sourcesSection.classList.remove("hidden");
             data.fact_check_sources.forEach(src => {
@@ -407,12 +446,31 @@ document.addEventListener("DOMContentLoaded", () => {
                 card.href = src.url;
                 card.target = "_blank";
                 card.rel = "noopener noreferrer";
-                card.innerHTML = `
-                    <span class="source-flag">${src.flag}</span>
-                    <div class="source-info">
-                        <div class="source-name">${src.name} <i class="fa-solid fa-arrow-up-right-from-square"></i></div>
-                        <div class="source-desc">${src.description}</div>
-                    </div>`;
+                
+                const flagSpan = document.createElement("span");
+                flagSpan.className = "source-flag";
+                flagSpan.textContent = src.flag;
+                
+                const infoDiv = document.createElement("div");
+                infoDiv.className = "source-info";
+                
+                const nameDiv = document.createElement("div");
+                nameDiv.className = "source-name";
+                nameDiv.textContent = src.name + " ";
+                const iconI = document.createElement("i");
+                iconI.className = "fa-solid fa-arrow-up-right-from-square";
+                nameDiv.appendChild(iconI);
+                
+                const descDiv = document.createElement("div");
+                descDiv.className = "source-desc";
+                descDiv.textContent = src.description;
+                
+                infoDiv.appendChild(nameDiv);
+                infoDiv.appendChild(descDiv);
+                
+                card.appendChild(flagSpan);
+                card.appendChild(infoDiv);
+                
                 sourcesList.appendChild(card);
             });
         } else {
@@ -544,7 +602,11 @@ document.addEventListener("DOMContentLoaded", () => {
             // Disable button and show spinner
             if (submitBtn) {
                 submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+                submitBtn.textContent = "";
+                const spinIcon = document.createElement("i");
+                spinIcon.className = "fa-solid fa-spinner fa-spin";
+                submitBtn.appendChild(spinIcon);
+                submitBtn.appendChild(document.createTextNode(" Sending..."));
             }
 
             try {
@@ -571,7 +633,11 @@ document.addEventListener("DOMContentLoaded", () => {
             } finally {
                 if (submitBtn) {
                     submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send Feedback';
+                    submitBtn.textContent = "";
+                    const planeIcon = document.createElement("i");
+                    planeIcon.className = "fa-solid fa-paper-plane";
+                    submitBtn.appendChild(planeIcon);
+                    submitBtn.appendChild(document.createTextNode(" Send Feedback"));
                 }
             }
         });
@@ -595,10 +661,15 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!response.ok) throw new Error("Could not load model diagnostics.");
 
             const data = await response.json();
+            
+            const lastUpdateEl = document.getElementById("stat-last-update");
+            if (lastUpdateEl && data.last_update) {
+                lastUpdateEl.textContent = data.last_update;
+            }
 
             // Populate fake signals chart
             if (fakeChart && data.top_fake_features) {
-                fakeChart.innerHTML = "";
+                fakeChart.textContent = "";
                 const maxWeight = Math.max(...data.top_fake_features.map(f => Math.abs(f.weight)), 0.1);
 
                 data.top_fake_features.forEach(feat => {
@@ -606,13 +677,27 @@ document.addEventListener("DOMContentLoaded", () => {
                     const percent = (absWeight / maxWeight) * 100;
                     const row = document.createElement("div");
                     row.className = "signal-bar-row";
-                    row.innerHTML = `
-                        <div class="signal-word" title="${feat.word}">${feat.word}</div>
-                        <div class="signal-bar-wrapper">
-                            <div class="signal-bar-fill fake" style="width: 0%;"></div>
-                        </div>
-                        <div class="signal-weight-label">${feat.weight.toFixed(2)}</div>
-                    `;
+                    
+                    const wordDiv = document.createElement("div");
+                    wordDiv.className = "signal-word";
+                    wordDiv.title = feat.word;
+                    wordDiv.textContent = feat.word;
+                    
+                    const barWrap = document.createElement("div");
+                    barWrap.className = "signal-bar-wrapper";
+                    const barFill = document.createElement("div");
+                    barFill.className = "signal-bar-fill fake";
+                    barFill.style.width = "0%";
+                    barWrap.appendChild(barFill);
+                    
+                    const weightDiv = document.createElement("div");
+                    weightDiv.className = "signal-weight-label";
+                    weightDiv.textContent = feat.weight.toFixed(2);
+                    
+                    row.appendChild(wordDiv);
+                    row.appendChild(barWrap);
+                    row.appendChild(weightDiv);
+                    
                     fakeChart.appendChild(row);
                     setTimeout(() => {
                         row.querySelector(".signal-bar-fill").style.width = `${percent}%`;
@@ -622,20 +707,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Populate real signals chart
             if (realChart && data.top_real_features) {
-                realChart.innerHTML = "";
+                realChart.textContent = "";
                 const maxWeight = Math.max(...data.top_real_features.map(f => f.weight), 0.1);
 
                 data.top_real_features.forEach(feat => {
                     const percent = (feat.weight / maxWeight) * 100;
                     const row = document.createElement("div");
                     row.className = "signal-bar-row";
-                    row.innerHTML = `
-                        <div class="signal-word" title="${feat.word}">${feat.word}</div>
-                        <div class="signal-bar-wrapper">
-                            <div class="signal-bar-fill real" style="width: 0%;"></div>
-                        </div>
-                        <div class="signal-weight-label">+${feat.weight.toFixed(2)}</div>
-                    `;
+                    
+                    const wordDiv = document.createElement("div");
+                    wordDiv.className = "signal-word";
+                    wordDiv.title = feat.word;
+                    wordDiv.textContent = feat.word;
+                    
+                    const barWrap = document.createElement("div");
+                    barWrap.className = "signal-bar-wrapper";
+                    const barFill = document.createElement("div");
+                    barFill.className = "signal-bar-fill real";
+                    barFill.style.width = "0%";
+                    barWrap.appendChild(barFill);
+                    
+                    const weightDiv = document.createElement("div");
+                    weightDiv.className = "signal-weight-label";
+                    weightDiv.textContent = "+" + feat.weight.toFixed(2);
+                    
+                    row.appendChild(wordDiv);
+                    row.appendChild(barWrap);
+                    row.appendChild(weightDiv);
+                    
                     realChart.appendChild(row);
                     setTimeout(() => {
                         row.querySelector(".signal-bar-fill").style.width = `${percent}%`;
@@ -645,8 +744,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
         } catch (error) {
             console.error("Error loading model diagnostics:", error);
-            if (fakeChart) fakeChart.innerHTML = '<div class="signals-loading" style="color: var(--danger);"><i class="fa-solid fa-circle-exclamation"></i> Load failed.</div>';
-            if (realChart) realChart.innerHTML = '<div class="signals-loading" style="color: var(--danger);"><i class="fa-solid fa-circle-exclamation"></i> Load failed.</div>';
+            
+            function createFailNode() {
+                const f = document.createElement("div");
+                f.className = "signals-loading";
+                f.style.color = "var(--danger)";
+                const i = document.createElement("i");
+                i.className = "fa-solid fa-circle-exclamation";
+                f.appendChild(i);
+                f.appendChild(document.createTextNode(" Load failed."));
+                return f;
+            }
+            
+            if (fakeChart) {
+                fakeChart.textContent = "";
+                fakeChart.appendChild(createFailNode());
+            }
+            if (realChart) {
+                realChart.textContent = "";
+                realChart.appendChild(createFailNode());
+            }
         }
     }
 
