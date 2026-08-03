@@ -212,6 +212,16 @@ Regularization strength ($C=0.15$) penalizes large coefficients, forcing the mod
 
 ## 💻 Web Application & Backend API
 
+### Dynamic Theme Engine
+The application features a robust CSS-variable-based dynamic theme engine. Themes do more than change colors; they completely alter the typography, border architecture, box shadows, and UI geometry.
+
+The 5 built-in aesthetics are:
+- **Default (Apple Glassmorphism):** Uses `Inter` font, soft `20px` rounded corners, and a beautiful translucent `blur(24px)` glassmorphism effect.
+- **Cyber (Neon Hack):** Uses `Space Mono`, sharp `0px` corners, thick cyan/magenta borders, and intense glowing neon box shadows.
+- **Editorial (Digital Newspaper):** Uses `Lora` serif font, flat high-contrast white/charcoal design with stark `1px` black borders.
+- **Minimalist (Clean Flat):** Uses `Space Grotesk`, utilitarian and hyper-clean with zero borders.
+- **Retro (Neo-Brutalism):** Uses `Courier Prime`, thick `3px` solid black borders with offset solid black drop-shadows and vibrant pastel colors.
+
 ### Sensationalism Score Calculation
 The tone meter does not use the machine learning model; instead, it uses a deterministic lexical analyzer on the backend:
 $$\text{Score} = (0.35 \times \text{Capitalization Ratio}) + (0.25 \times \text{Exclamation Density}) + (0.40 \times \text{Trigger Word Hits})$$
