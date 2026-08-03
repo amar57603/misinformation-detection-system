@@ -796,7 +796,6 @@ body {
 /* ── Input Panel Content ───────────────────────────── */
 .input-panel {
     gap: 0;
-    overflow-y: auto;
 }
 
 .textarea-wrapper {
@@ -1687,4 +1686,19 @@ textarea::placeholder { color: var(--text-muted); }
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
+}
+
+/* Compact Mode for Laptops / Short Screens */
+@media (max-height: 750px) and (min-width: 901px) {
+    .app-layout { padding: 0.8rem; gap: 0.8rem; }
+    .panel-header { padding: 1rem 1rem 0.5rem; }
+    .panel-header h2 { font-size: 1.05rem; }
+    .panel-header p { font-size: 0.85rem; }
+    .textarea-wrapper { padding: 0.5rem 1rem 0; }
+    .action-buttons { padding: 0.7rem 1rem; }
+    .presets-container { padding: 0.5rem 1rem 1rem; }
+    .preset-groups { gap: 0.4rem; }
+    .preset-btn { padding: 0.35rem 0.5rem; font-size: 0.75rem; }
+    .ai-disclaimer { padding: 0.5rem 1rem; font-size: 0.7rem; }
+    .result-card { padding: 1rem; gap: 1rem; }
 }
