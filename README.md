@@ -65,7 +65,10 @@ By utilizing a regularized **Logistic Regression** classifier trained on a balan
  * **Centered Toast System:** Repositioned all toast feedback messages (copy confirmation, errors, pastes, and rate limit blocks) to animate smoothly in the top-center of the screen.
 
  ### 4. CI/CD & Automated Retraining
- * **GitHub Actions Cron:** A serverless automated workflow (`.github/workflows/retrain.yml`) triggers every Sunday at midnight to scrape new articles, process the data, retrain the models, and deploy the updated `.pkl` models directly back to the repository without manual intervention.
+ * **Quarterly GitHub Actions Cron:** A serverless automated workflow (`.github/workflows/retrain.yml`) triggers quarterly (Jan, Apr, Jul, Oct) to scrape new articles, process the data, retrain the models, and deploy the updated `.pkl` models directly back to the repository without manual intervention. Manual triggers are also available from the GitHub Actions tab.
+ * **Verdict-Based Article Labeling:** The scraper parses article titles from Sebenarnya.my to determine the correct label — articles containing "Tidak Benar" or "Palsu" are labeled Fake, while "Makluman" or "Waspada" are labeled Real. Ambiguous articles are excluded from training to prevent data contamination.
+ * **Accuracy Safety Guard:** If the retrained model scores below 90% accuracy, the pipeline rejects the new model and preserves the existing production model. This prevents bad scrapes or data corruption from degrading the live system.
+ * **GitHub Release Dataset Hosting:** The large training datasets (~430MB total) are hosted as free GitHub Release assets, keeping the repository lightweight while ensuring CI/CD has access to the full training corpus.
  * **Dynamic Model Timestamps:** The frontend automatically queries the backend for the exact file-modification timestamp of the `.pkl` models, guaranteeing the UI strictly reflects the truth of the last retraining event.
 
 ---
@@ -110,7 +113,7 @@ SiasatAI separates the heavy **offline training pipeline** from the lightweight 
 
 ## ⚙️ Machine Learning Pipeline (Step-by-Step)
 
-The end-to-end training and feature engineering process is automated via a headless script (`train.py`) which is executed weekly by GitHub Actions. A legacy exploration version is available in `notebooks/data_preprocessing_and_training.ipynb`.
+The end-to-end training and feature engineering process is automated via a headless script (`train.py`) which is executed quarterly by GitHub Actions. A legacy exploration version is available in `notebooks/data_preprocessing_and_training.ipynb`.
 
 ```mermaid
 graph TD
@@ -127,7 +130,7 @@ graph TD
 The pipeline loads and concatenates three distinct text sources:
 1. **Academic Malay Dataset:** ~22,000 news articles (Bernama, Astro Awani, Sinar Harian).
 2. **Global English Dataset:** ~40,000 news articles (Hugging Face / Kaggle).
-3. **Live Scraped Portal:** ~2,000+ local fake news listings scraped directly from *Sebenarnya.my* to capture recent Malaysian rumors.
+3. **Live Scraped Portal:** Bilingual articles scraped directly from *Sebenarnya.my* with **verdict-based labeling** — article titles are parsed to determine whether the content is a debunked fake claim (Fake) or an official government announcement/warning (Real). Ambiguous articles are excluded.
 4. **Local Presets:** Oversampled local municipal articles (related to MBMB Melaka) to prime the model on specific administrative language.
 
 ### Step 2: NLP Preprocessing & Cleaning
@@ -304,7 +307,17 @@ $$\text{Score} = (0.35 \times \text{Capitalization Ratio}) + (0.25 \times \text{
  python train.py
  ```
  
- This headless script performs the full data pipeline and will output the updated model files into the `models/` folder.
+ This headless script performs the full data pipeline and outputs the updated model files into the `models/` folder. The script includes:
+ * **Verdict-based labeling:** Sebenarnya.my articles are classified as Fake or Real based on title keywords (not blindly labeled).
+ * **Accuracy safety guard:** If the retrained model scores below 90%, the existing model is preserved.
+ 
+ > **Note:** Local retraining requires the large datasets in `data/raw/` (`academic_malay_dataset.pkl` and `data_english_global.csv`). These are excluded from Git via `.gitignore` — download them from the [v1.0-datasets GitHub Release](https://github.com/amar57603/misinformation-detection-system/releases/tag/v1.0-datasets) first.
+ 
+ ### 5. Training Dependencies
+ The training script requires additional Python packages beyond the production API. These are listed separately in `requirements-train.txt` to keep the Vercel deployment lightweight:
+ ```bash
+ pip install -r requirements-train.txt
+ ```
 
 ---
 
@@ -344,7 +357,7 @@ $$\text{Score} = (0.35 \times \text{Capitalization Ratio}) + (0.25 \times \text{
 |---|---|---|---|
 | **Academic Malay NLP Dataset** | Bahasa Malaysia | ~22,000 | Academic corpus |
 | **Global English Fake News Dataset** | English | ~40,000 | Academic corpus |
-| **Sebenarnya.my Scraped Corpus** | Bahasa Malaysia | ~2,000+ | Live-scraped government facts |
+| **Sebenarnya.my Scraped Corpus** | Bahasa Malaysia | Variable | Live-scraped, verdict-labeled (Fake + Real) |
 | **MBMB Municipal Presets** | Bahasa Malaysia | ~2,000 (Oversampled) | Custom local news context |
 
 ---

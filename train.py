@@ -19,6 +19,34 @@ import pickle
 
 warnings.filterwarnings('ignore')
 
+# ── Minimum accuracy threshold ─────────────────────────────────
+# If the retrained model scores below this, the existing model
+# is preserved and a warning is logged instead of overwriting.
+ACCURACY_FLOOR = 0.90
+
+# ── Verdict keywords for Sebenarnya.my article classification ──
+# Sebenarnya.my is a government fact-checking portal. Articles
+# are NOT all fake — they include official announcements (Real),
+# public warnings (Real), and debunked claims (Fake).
+FAKE_KEYWORDS = ['tidak benar', 'palsu', 'penipuan', 'tipu', 'scam', 'tular semula']
+REAL_KEYWORDS = ['makluman', 'waspada', 'penjelasan', 'peringatan', 'nasihat']
+
+
+def classify_verdict(title):
+    """
+    Determines the label (Fake/Real) of a Sebenarnya.my article
+    based on keywords in its title. Returns None for ambiguous titles
+    that should be excluded from training.
+    """
+    title_lower = title.lower()
+    for keyword in FAKE_KEYWORDS:
+        if keyword in title_lower:
+            return 'Fake'
+    for keyword in REAL_KEYWORDS:
+        if keyword in title_lower:
+            return 'Real'
+    return None  # Ambiguous — skip this article
+
 def scrape_sebenarnya(max_pages_per_category=2):
     categories = [
         'nasional/bencana',
@@ -69,7 +97,8 @@ def scrape_sebenarnya(max_pages_per_category=2):
                             'url': article_url,
                             'category': category.split('/')[1],
                             'date': date,
-                            'text': text
+                            'text': text,
+                            'label': classify_verdict(title)
                         })
                         time.sleep(0.5)
                     except Exception as e:
@@ -79,13 +108,22 @@ def scrape_sebenarnya(max_pages_per_category=2):
                 print(f"  Failed to fetch category page {url}: {e}")
     
     df = pd.DataFrame(data)
-    csv_path = 'data/raw/data_fake_massive.csv'
+    # Drop articles with ambiguous verdicts (label=None)
+    before_count = len(df)
+    df = df.dropna(subset=['label'])
+    skipped = before_count - len(df)
+    if skipped > 0:
+        print(f"  Skipped {skipped} ambiguous articles (no clear verdict in title)")
+    
+    csv_path = 'data/raw/data_sebenarnya_scraped.csv'
     os.makedirs(os.path.dirname(csv_path), exist_ok=True)
     df.to_csv(csv_path, index=False, encoding='utf-8')
     print(f"Scraping complete. Saved {len(df)} records to {csv_path}")
+    label_counts = df['label'].value_counts().to_dict()
+    print(f"  Label distribution: {label_counts}")
 
 def main():
-    print("Scraping fresh fake news from Sebenarnya.my...")
+    print("Scraping fresh articles from Sebenarnya.my...")
     scrape_sebenarnya(max_pages_per_category=2)
 
     print('Loading datasets...')
@@ -106,9 +144,8 @@ def main():
     progress.set_postfix_str(f'Global English: {len(df_english)} articles')
     progress.update(1)
 
-    df_scraped = pd.read_csv('data/raw/data_fake_massive.csv')
-    df_scraped = df_scraped[['text']].copy()
-    df_scraped['label'] = 'Fake'
+    df_scraped = pd.read_csv('data/raw/data_sebenarnya_scraped.csv')
+    df_scraped = df_scraped[['text', 'label']].copy()
     df_scraped['source'] = 'Sebenarnya.my'
     progress.set_postfix_str(f'Sebenarnya.my: {len(df_scraped)} articles')
     progress.update(1)
@@ -243,6 +280,15 @@ def main():
 
     print(f"\nCHAMPION MODEL: {best_name} ({best_acc*100:.2f}%)")
 
+    # ── Accuracy Safety Guard ──────────────────────────────────
+    # Reject the new model if it falls below the accuracy floor.
+    if best_acc < ACCURACY_FLOOR:
+        print(f"\n⚠ WARNING: Champion accuracy ({best_acc*100:.2f}%) is below the")
+        print(f"  safety floor ({ACCURACY_FLOOR*100:.0f}%). Existing models will NOT be overwritten.")
+        print(f"  This may indicate corrupted or imbalanced training data.")
+        print(f"  Investigate the data sources before retrying.")
+        return
+
     # Save models
     os.makedirs('models', exist_ok=True)
     with open('models/model.pkl', 'wb') as f:
@@ -266,7 +312,8 @@ def main():
     top100 = word_scores.head(100).copy()
     top100.to_csv('data/clean/Fake_News_Keyword_Importance.csv', index=False)
 
-    print("Training complete and models exported successfully!")
+    print(f"\nTraining complete and models exported successfully!")
+    print(f"  Accuracy: {best_acc*100:.2f}% (floor: {ACCURACY_FLOOR*100:.0f}%)")
 
 if __name__ == '__main__':
     main()

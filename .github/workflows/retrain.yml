@@ -1,8 +1,8 @@
-name: Weekly Model Retraining
+name: Quarterly Model Retraining
 
 on:
   schedule:
-    - cron: '0 0 * * 0' # Every Sunday at midnight
+    - cron: '0 0 1 1,4,7,10 *' # Jan 1, Apr 1, Jul 1, Oct 1 at midnight UTC
   workflow_dispatch: # Allow manual trigger from GitHub UI
 
 jobs:
@@ -11,7 +11,7 @@ jobs:
     
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -25,6 +25,18 @@ jobs:
           pip install -r requirements.txt
           pip install -r requirements-train.txt
           
+      - name: Download training datasets from GitHub Release
+        run: |
+          mkdir -p data/raw
+          echo "Downloading academic_malay_dataset.pkl..."
+          curl -L -o data/raw/academic_malay_dataset.pkl \
+            "https://github.com/${{ github.repository }}/releases/download/v1.0-datasets/academic_malay_dataset.pkl"
+          echo "Downloading data_english_global.csv..."
+          curl -L -o data/raw/data_english_global.csv \
+            "https://github.com/${{ github.repository }}/releases/download/v1.0-datasets/data_english_global.csv"
+          echo "Download complete."
+          ls -lh data/raw/
+          
       - name: Run model retraining
         run: python train.py
         
@@ -32,6 +44,6 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add models/*.pkl data/raw/*.csv data/clean/*.csv
-          git diff --quiet && git diff --staged --quiet || git commit -m "Automated model retraining via GitHub Actions"
+          git add models/*.pkl
+          git diff --quiet && git diff --staged --quiet || git commit -m "Automated quarterly model retraining via GitHub Actions"
           git push
