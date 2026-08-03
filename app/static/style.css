@@ -796,6 +796,7 @@ body {
 /* ── Input Panel Content ───────────────────────────── */
 .input-panel {
     gap: 0;
+    overflow-y: auto;
 }
 
 .textarea-wrapper {
@@ -1668,7 +1669,7 @@ textarea::placeholder { color: var(--text-muted); }
 }
 
 /* Height-restricted Desktop & Tablet Landscape screens */
-@media (max-height: 780px) and (min-width: 901px) {
+@media (max-height: 600px) and (min-width: 901px) {
     body {
         height: auto;
         overflow-y: auto;
