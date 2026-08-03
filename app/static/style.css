@@ -189,18 +189,18 @@
     --button-radius: 0px;
 }
 [data-theme="editorial"][data-mode="dark"] {
-    --bg-dark: #1a1918;
-    --card-bg: #262524;
-    --panel-bg: #2b2a29;
-    --border-color: #e0deda;
-    --border-hover: #ffffff;
-    --text-primary: #f5f2eb;
-    --text-secondary: #cccccc;
-    --text-muted: #999999;
-    --primary: #f5f2eb;
-    --primary-dark: #cccccc;
-    --primary-glow: rgba(255, 255, 255, 0.1);
-    --primary-subtle: rgba(255, 255, 255, 0.05);
+    --bg-dark: #121212;
+    --card-bg: #1c1c1c;
+    --panel-bg: #1e1e1e;
+    --border-color: #333333;
+    --border-hover: #555555;
+    --text-primary: #e5e5e5;
+    --text-secondary: #a3a3a3;
+    --text-muted: #737373;
+    --primary: #c8b598;
+    --primary-dark: #d4af37;
+    --primary-glow: rgba(200, 181, 152, 0.15);
+    --primary-subtle: rgba(200, 181, 152, 0.08);
     --success: #81c784;
     --success-glow: rgba(129, 199, 132, 0.2);
     --success-subtle: rgba(129, 199, 132, 0.1);
@@ -306,18 +306,18 @@
     --button-radius: 0px;
 }
 [data-theme="retro"][data-mode="dark"] {
-    --bg-dark: #2a1b18;
-    --card-bg: #3b2a25;
-    --panel-bg: #4a352f;
-    --border-color: #ff8c00;
-    --border-hover: #ffa500;
-    --text-primary: #ffecd2;
-    --text-secondary: #deb887;
-    --text-muted: #cd853f;
-    --primary: #ff8c00;
-    --primary-dark: #ff7f50;
+    --bg-dark: #1a0b2e;
+    --card-bg: #241142;
+    --panel-bg: #2d1656;
+    --border-color: #ff00ff;
+    --border-hover: #00ffff;
+    --text-primary: #00ffff;
+    --text-secondary: #d1c4e9;
+    --text-muted: #9575cd;
+    --primary: #00ffff;
+    --primary-dark: #ff00ff;
     --primary-glow: transparent;
-    --primary-subtle: rgba(255, 140, 0, 0.2);
+    --primary-subtle: rgba(0, 255, 255, 0.2);
     --success: #9acd32;
     --success-glow: transparent;
     --success-subtle: rgba(154, 205, 50, 0.2);
@@ -328,7 +328,7 @@
     --font-accent: 'Courier Prime', monospace;
     --radius: 0px;
     --radius-sm: 0px;
-    --shadow-main: 6px 6px 0px #ff8c00;
+    --shadow-main: 6px 6px 0px #ff00ff;
     --border-width: 3px;
     --panel-backdrop: none;
     --button-radius: 0px;
@@ -1137,7 +1137,7 @@ textarea::placeholder { color: var(--text-muted); }
     transform: translate(-50%, 0);
     background: rgba(20,22,36,0.95);
     border: var(--border-width) var(--border-style) var(--border-color);
-    color: var(--text-primary);
+    color: #e2e8f0;
     padding: 0.75rem 1.25rem;
     border-radius: var(--button-radius);
     font-size: 0.875rem; font-weight: 500;
@@ -1467,4 +1467,65 @@ textarea::placeholder { color: var(--text-muted); }
     .preset-btn { padding: 0.35rem 0.5rem; font-size: 0.75rem; }
     .ai-disclaimer { padding: 0.5rem 1rem; font-size: 0.7rem; }
     .result-card { padding: 1rem; gap: 1rem; }
+}
+
+
+/* ==========================================================================
+   ANIMATIONS (Phase 5 - Layer 3)
+   ========================================================================== */
+
+/* 1. Global Theme Transitions */
+body, .panel, .btn, input, textarea, .stat-value, .stat-label, .source-card, .toast {
+    transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+/* 2. Panel Entrance Staggering */
+.panel {
+    animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.input-panel { animation-delay: 0.1s; }
+.result-panel { animation-delay: 0.25s; }
+.aux-panel { animation-delay: 0.4s; }
+
+/* 3. Button Micro-interactions */
+.btn-primary:hover:not(:disabled) {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 4px 15px var(--primary-glow);
+}
+.btn-primary:active:not(:disabled) {
+    transform: translateY(1px) scale(0.98);
+}
+
+/* 4. Interactive Source Cards */
+.source-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+}
+.source-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    background: var(--primary-subtle);
+    border-color: var(--primary);
+}
+
+/* 5. Keyword Staggering */
+@keyframes popIn {
+    0% { opacity: 0; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1); }
+}
+.keyword-tag {
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+.keyword-tag:nth-child(1) { animation-delay: 0.1s; }
+.keyword-tag:nth-child(2) { animation-delay: 0.2s; }
+.keyword-tag:nth-child(3) { animation-delay: 0.3s; }
+.keyword-tag:nth-child(4) { animation-delay: 0.4s; }
+.keyword-tag:nth-child(5) { animation-delay: 0.5s; }
+.keyword-tag:nth-child(6) { animation-delay: 0.6s; }
+.keyword-tag:nth-child(7) { animation-delay: 0.7s; }
+.keyword-tag:nth-child(n+8) { animation-delay: 0.8s; }
+
+
+/* 6. Progress Bar Animation */
+.progress-fill {
+    transition: width 1s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }

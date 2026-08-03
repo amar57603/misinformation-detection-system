@@ -331,12 +331,18 @@ document.addEventListener("DOMContentLoaded", () => {
         btnPredict.disabled = true;
 
         try {
+            // Add a simulated minimum delay (800ms) so the loading animation is visible
+            const minDelay = new Promise(resolve => setTimeout(resolve, 800));
+            
             // Send the text to our backend API using a POST request
-            const response = await fetch("/api/predict", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ text })
-            });
+            const [response] = await Promise.all([
+                fetch("/api/predict", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ text })
+                }),
+                minDelay
+            ]);
 
             // Check if the server returned an error (e.g., 400 or 503)
             if (!response.ok) {

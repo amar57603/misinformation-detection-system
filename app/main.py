@@ -71,6 +71,8 @@ LABEL_ENCODER_PATH = os.path.join(MODELS_DIR, "label_encoder.pkl")
 try:
     with open(MODEL_PATH, "rb") as f:
         model = pickle.load(f)
+        if not hasattr(model, 'multi_class'):
+            model.multi_class = 'auto'
     with open(VECTORIZER_PATH, "rb") as f:
         vectorizer = pickle.load(f)
     with open(LABEL_ENCODER_PATH, "rb") as f:
