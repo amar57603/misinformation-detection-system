@@ -424,7 +424,30 @@
     <footer class="app-footer">
         <p>&copy; 2026 <strong>SiasatAI</strong> &mdash; Built by <strong>Amar Syakir Mazlan</strong> &middot; Bilingual
             AI Misinformation Detector</p>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem;">
+            <a href="#" id="btn-open-legal" style="color: var(--text-secondary); text-decoration: underline;">Legal & Privacy</a>
+        </p>
     </footer>
+
+    <!-- Legal & Privacy Modal -->
+    <div id="legal-modal" class="modal hidden">
+        <div class="modal-backdrop" id="legal-modal-backdrop"></div>
+        <div class="modal-content panel">
+            <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center;">
+                <h2><i class="fa-solid fa-scale-balanced"></i> Legal & Privacy</h2>
+                <button id="btn-close-legal" class="btn btn-ghost" style="padding: 0.5rem;"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body" style="padding: 1.5rem; max-height: 60vh; overflow-y: auto; color: var(--text-primary); font-size: 0.95rem; line-height: 1.6;">
+                <h3 style="margin-bottom: 0.5rem; color: var(--primary);">Privacy & Cookie Policy</h3>
+                <p style="margin-bottom: 1rem;"><strong>1. No Data Tracking:</strong> SiasatAI is a stateless application. We do not store the text you submit, nor do we track your IP address or use third-party advertising cookies. Your data is processed securely in real-time and immediately discarded by the server.</p>
+                <p style="margin-bottom: 1.5rem;"><strong>2. Local Storage:</strong> To provide a seamless experience, this app saves your "Check History" and "Theme Preferences" locally on your device using browser `localStorage`. Because this data never leaves your device and is strictly necessary for the application's core functionality, a disruptive cookie consent banner is not required under standard ePrivacy exemptions. You can clear this data at any time by clearing your browser cache.</p>
+                
+                <h3 style="margin-bottom: 0.5rem; color: var(--primary);">Terms of Service (Disclaimer)</h3>
+                <p style="margin-bottom: 1rem;"><strong>1. Informational Purposes Only:</strong> SiasatAI utilizes experimental Machine Learning models to analyze text patterns. While highly accurate, the AI is not infallible and may produce false positives or false negatives. It should never be used as the sole source of truth for critical, legal, medical, or financial decisions.</p>
+                <p><strong>2. Limitation of Liability:</strong> By using SiasatAI, you agree that the creator (Amar Syakir Mazlan) assumes no liability or responsibility for any actions taken, damages incurred, or conclusions drawn based on the AI's verdicts.</p>
+            </div>
+        </div>
+    </div>
 
     <script src="app.js"></script>
 </body>

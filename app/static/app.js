@@ -776,3 +776,21 @@ document.addEventListener("DOMContentLoaded", () => {
     // Load on start
     loadModelDiagnostics();
 });
+
+
+    // Modal Logic (Legal & Privacy)
+    const btnOpenLegal = document.getElementById('btn-open-legal');
+    const btnCloseLegal = document.getElementById('btn-close-legal');
+    const legalModal = document.getElementById('legal-modal');
+    const legalBackdrop = document.getElementById('legal-modal-backdrop');
+
+    if (btnOpenLegal && btnCloseLegal && legalModal && legalBackdrop) {
+        btnOpenLegal.addEventListener('click', (e) => {
+            e.preventDefault();
+            legalModal.classList.remove('hidden');
+        });
+
+        const closeModal = () => legalModal.classList.add('hidden');
+        btnCloseLegal.addEventListener('click', closeModal);
+        legalBackdrop.addEventListener('click', closeModal);
+    }
