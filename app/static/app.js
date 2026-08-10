@@ -234,17 +234,17 @@ document.addEventListener("DOMContentLoaded", () => {
     function toggleHistory(force) {
         historyVisible = (force !== undefined) ? force : !historyVisible;
         if (window.innerWidth <= 1024) {
-            document.getElementById('history-sidebar').classList.toggle('mobile-open', historyVisible);
+            document.getElementById('history-panel').classList.toggle('mobile-open', historyVisible);
             document.getElementById('mobile-backdrop').classList.toggle('hidden', !historyVisible);
             if (historyVisible) {
                 // Ensure aux is closed
                 auxVisible = false;
-                document.getElementById('aux-sidebar').classList.remove('mobile-open');
+                document.getElementById('aux-panel').classList.remove('mobile-open');
                 const auxIcon = btnToggleAux.querySelector("i");
                 if (auxIcon) auxIcon.className = "fa-solid fa-chart-line";
             }
         } else {
-            document.getElementById('history-sidebar').classList.toggle("hidden", !historyVisible);
+            document.getElementById('history-panel').classList.toggle("hidden", !historyVisible);
         }
         
         const icon = btnToggleHistory.querySelector("i");
@@ -254,17 +254,17 @@ document.addEventListener("DOMContentLoaded", () => {
     function toggleAux(force) {
         auxVisible = (force !== undefined) ? force : !auxVisible;
         if (window.innerWidth <= 1024) {
-            document.getElementById('aux-sidebar').classList.toggle('mobile-open', auxVisible);
+            document.getElementById('aux-panel').classList.toggle('mobile-open', auxVisible);
             document.getElementById('mobile-backdrop').classList.toggle('hidden', !auxVisible);
             if (auxVisible) {
                 // Ensure history is closed
                 historyVisible = false;
-                document.getElementById('history-sidebar').classList.remove('mobile-open');
+                document.getElementById('history-panel').classList.remove('mobile-open');
                 const histIcon = btnToggleHistory.querySelector("i");
                 if (histIcon) histIcon.className = "fa-solid fa-clock-rotate-left";
             }
         } else {
-            document.getElementById('aux-sidebar').classList.toggle("hidden", !auxVisible);
+            document.getElementById('aux-panel').classList.toggle("hidden", !auxVisible);
             appLayout.classList.toggle("aux-active", auxVisible);
         }
         
