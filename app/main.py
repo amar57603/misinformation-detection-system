@@ -312,6 +312,11 @@ def predict(news_input: NewsInput):
 
     # 2. Detect language
     lang = detect_language(news_input.text)
+    if lang == "Unknown":
+        raise HTTPException(
+            status_code=400,
+            detail="Sorry, SiasatAI currently only supports Bahasa Malaysia and English. If you believe this is an error, please let us know via the feedback box."
+        )
 
     # 3. Ensure models are loaded
     if model is None or vectorizer is None or label_encoder is None:
