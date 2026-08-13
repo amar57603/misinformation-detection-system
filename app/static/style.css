@@ -1123,6 +1123,7 @@ textarea::placeholder { color: var(--text-muted); }
     flex-shrink: 0;
     position: relative; z-index: 1;
 }
+.app-footer p { margin: 0; }
 .app-footer strong { color: var(--primary); }
 
 /* ΓöÇΓöÇ Scrollbar ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ */
