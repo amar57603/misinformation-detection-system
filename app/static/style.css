@@ -1565,7 +1565,7 @@ body, .panel, .btn, input, textarea, .stat-value, .stat-label, .source-card, .to
 @media (max-width: 1024px) {
     .history-panel {
         position: fixed;
-        background: var(--bg-panel);
+        background: var(--panel-bg);
         border-right: 1px solid var(--border-color); top: 0; left: 0; bottom: 0;
         width: 85%; max-width: 320px; z-index: 2000;
         transform: translateX(-100%); transition: transform 0.3s ease;
@@ -1575,7 +1575,7 @@ body, .panel, .btn, input, textarea, .stat-value, .stat-label, .source-card, .to
     
     .aux-panel {
         position: fixed;
-        background: var(--bg-panel);
+        background: var(--panel-bg);
         border-left: 1px solid var(--border-color); top: 0; right: 0; bottom: 0;
         width: 85%; max-width: 350px; z-index: 2000;
         transform: translateX(100%); transition: transform 0.3s ease;
