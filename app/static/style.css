@@ -1574,14 +1574,26 @@ body, .panel, .btn, input, textarea, .stat-value, .stat-label, .source-card, .to
 }
 
 @media (max-width: 1024px) {
-    /* Prevent animation / transform / backdrop-filter on ancestor panel elements from trapping fixed drawers */
+    /* Break ancestor stacking context so fixed drawers attach to root body context above backdrop */
+    .app-layout {
+        position: static !important;
+        z-index: auto !important;
+        grid-template-columns: 1fr !important;
+    }
+    .app-layout.aux-active {
+        grid-template-columns: 1fr !important;
+    }
     .panel {
+        position: static !important;
+        z-index: auto !important;
         animation: none !important;
         transform: none !important;
         backdrop-filter: none !important;
         -webkit-backdrop-filter: none !important;
     }
     .result-panel {
+        position: static !important;
+        z-index: auto !important;
         overflow: visible !important;
     }
 
@@ -1609,10 +1621,11 @@ body, .panel, .btn, input, textarea, .stat-value, .stat-label, .source-card, .to
         max-width: 360px !important;
         height: 100dvh !important;
         max-height: 100dvh !important;
-        background: var(--panel-bg) !important;
+        background: var(--bg-dark) !important;
+        background-color: var(--bg-dark) !important;
         border-right: 1px solid var(--border-color) !important;
         border-radius: 0 var(--radius) var(--radius) 0 !important;
-        box-shadow: 8px 0 32px rgba(0, 0, 0, 0.45) !important;
+        box-shadow: 8px 0 32px rgba(0, 0, 0, 0.6) !important;
         z-index: 2005 !important;
         animation: drawerSlideLeft 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
         overflow-y: auto !important;
@@ -1632,10 +1645,11 @@ body, .panel, .btn, input, textarea, .stat-value, .stat-label, .source-card, .to
         max-width: 380px !important;
         height: 100dvh !important;
         max-height: 100dvh !important;
-        background: var(--panel-bg) !important;
+        background: var(--bg-dark) !important;
+        background-color: var(--bg-dark) !important;
         border-left: 1px solid var(--border-color) !important;
         border-radius: var(--radius) 0 0 var(--radius) !important;
-        box-shadow: -8px 0 32px rgba(0, 0, 0, 0.45) !important;
+        box-shadow: -8px 0 32px rgba(0, 0, 0, 0.6) !important;
         z-index: 2005 !important;
         animation: drawerSlideRight 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
         overflow-y: auto !important;
