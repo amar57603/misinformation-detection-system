@@ -564,6 +564,16 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
             sourcesSection.classList.add("hidden");
         }
+
+        // Smooth-scroll to result panel on mobile/tablet so user sees verdict immediately
+        if (window.innerWidth <= 1024) {
+            const targetPanel = document.querySelector(".result-panel") || resultSection;
+            if (targetPanel) {
+                setTimeout(() => {
+                    targetPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+                }, 120);
+            }
+        }
     }
 
     // ── Word Cloud (Canvas) ───────────────────────────────────
