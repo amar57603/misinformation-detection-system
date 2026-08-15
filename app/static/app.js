@@ -233,18 +233,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function toggleHistory(force) {
         historyVisible = (force !== undefined) ? force : !historyVisible;
-        if (window.innerWidth <= 1024) {
-            document.getElementById('history-panel').classList.toggle('mobile-open', historyVisible);
-            document.getElementById('mobile-backdrop').classList.toggle('hidden', !historyVisible);
-            if (historyVisible) {
-                // Ensure aux is closed
-                auxVisible = false;
-                document.getElementById('aux-panel').classList.remove('mobile-open');
-                const auxIcon = btnToggleAux.querySelector("i");
-                if (auxIcon) auxIcon.className = "fa-solid fa-chart-line";
+        const histPanel = document.getElementById('history-panel');
+        const auxPanel = document.getElementById('aux-panel');
+        const backdrop = document.getElementById('mobile-backdrop');
+        const isMobile = window.innerWidth <= 1024;
+
+        if (historyVisible) {
+            // Close aux if open
+            auxVisible = false;
+            auxPanel.classList.remove('mobile-open');
+            auxPanel.classList.add('hidden');
+            appLayout.classList.remove('aux-active');
+            const auxIcon = btnToggleAux.querySelector("i");
+            if (auxIcon) auxIcon.className = "fa-solid fa-chart-line";
+
+            histPanel.classList.remove('hidden');
+            if (isMobile) {
+                histPanel.classList.add('mobile-open');
+                backdrop.classList.remove('hidden');
+            } else {
+                histPanel.classList.remove('mobile-open');
+                backdrop.classList.add('hidden');
             }
         } else {
-            document.getElementById('history-panel').classList.toggle("hidden", !historyVisible);
+            histPanel.classList.add('hidden');
+            histPanel.classList.remove('mobile-open');
+            if (!auxVisible) {
+                backdrop.classList.add('hidden');
+            }
         }
         
         const icon = btnToggleHistory.querySelector("i");
@@ -253,19 +269,40 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function toggleAux(force) {
         auxVisible = (force !== undefined) ? force : !auxVisible;
-        if (window.innerWidth <= 1024) {
-            document.getElementById('aux-panel').classList.toggle('mobile-open', auxVisible);
-            document.getElementById('mobile-backdrop').classList.toggle('hidden', !auxVisible);
-            if (auxVisible) {
-                // Ensure history is closed
-                historyVisible = false;
-                document.getElementById('history-panel').classList.remove('mobile-open');
-                const histIcon = btnToggleHistory.querySelector("i");
-                if (histIcon) histIcon.className = "fa-solid fa-clock-rotate-left";
+        const histPanel = document.getElementById('history-panel');
+        const auxPanel = document.getElementById('aux-panel');
+        const backdrop = document.getElementById('mobile-backdrop');
+        const isMobile = window.innerWidth <= 1024;
+
+        if (auxVisible) {
+            // Close history if open
+            historyVisible = false;
+            histPanel.classList.remove('mobile-open');
+            histPanel.classList.add('hidden');
+            const histIcon = btnToggleHistory.querySelector("i");
+            if (histIcon) histIcon.className = "fa-solid fa-clock-rotate-left";
+
+            auxPanel.classList.remove('hidden');
+            if (isMobile) {
+                auxPanel.classList.add('mobile-open');
+                appLayout.classList.remove('aux-active');
+                backdrop.classList.remove('hidden');
+            } else {
+                auxPanel.classList.remove('mobile-open');
+                appLayout.classList.add('aux-active');
+                backdrop.classList.add('hidden');
+            }
+            
+            if (typeof loadSignals === 'function') {
+                loadSignals();
             }
         } else {
-            document.getElementById('aux-panel').classList.toggle("hidden", !auxVisible);
-            appLayout.classList.toggle("aux-active", auxVisible);
+            auxPanel.classList.add('hidden');
+            auxPanel.classList.remove('mobile-open');
+            appLayout.classList.remove('aux-active');
+            if (!historyVisible) {
+                backdrop.classList.add('hidden');
+            }
         }
         
         const icon = btnToggleAux.querySelector("i");
@@ -309,6 +346,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Auxiliary toggle
     btnToggleAux.addEventListener("click", () => toggleAux());
+
+    // Mobile backdrop click to close
+    const mobileBackdrop = document.getElementById("mobile-backdrop");
+    if (mobileBackdrop) {
+        mobileBackdrop.addEventListener("click", () => {
+            if (historyVisible) toggleHistory(false);
+            if (auxVisible) toggleAux(false);
+        });
+    }
+
+    // Direct close buttons inside panel headers
+    const btnCloseHistory = document.getElementById("btn-close-history");
+    if (btnCloseHistory) {
+        btnCloseHistory.addEventListener("click", () => toggleHistory(false));
+    }
+    const btnCloseAux = document.getElementById("btn-close-aux");
+    if (btnCloseAux) {
+        btnCloseAux.addEventListener("click", () => toggleAux(false));
+    }
 
     // Clear history
     btnClearHistory.addEventListener("click", () => {

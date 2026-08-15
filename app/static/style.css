@@ -1558,31 +1558,97 @@ body, .panel, .btn, input, textarea, .stat-value, .stat-label, .source-card, .to
 
 /* Mobile Sliding Panels CSS */
 .mobile-backdrop {
-    position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px);
-    z-index: 1999; opacity: 1; transition: opacity 0.3s ease, visibility 0.3s;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 1999;
+    opacity: 1;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
-.mobile-backdrop.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.mobile-backdrop.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
 
 @media (max-width: 1024px) {
-    .history-panel,
-    .history-panel.hidden {
-        position: fixed;
-        background: var(--panel-bg);
-        border-right: 1px solid var(--border-color); top: 0; left: 0; bottom: 0;
-        width: 85%; max-width: 320px; z-index: 2000;
-        transform: translateX(-100%); transition: transform 0.3s ease;
-        display: flex !important; flex-direction: column;
+    /* Prevent animation / transform / backdrop-filter on ancestor panel elements from trapping fixed drawers */
+    .panel {
+        animation: none !important;
+        transform: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
     }
-    .history-panel.mobile-open { transform: translateX(0); }
+    .result-panel {
+        overflow: visible !important;
+    }
+
+    /* By default on mobile, closed panels are completely hidden and take NO space */
+    .history-panel.hidden,
+    .history-panel:not(.mobile-open) {
+        display: none !important;
+    }
     
-    .aux-panel,
-    .aux-panel.hidden {
-        position: fixed;
-        background: var(--panel-bg);
-        border-left: 1px solid var(--border-color); top: 0; right: 0; bottom: 0;
-        width: 85%; max-width: 350px; z-index: 2000;
-        transform: translateX(100%); transition: transform 0.3s ease;
-        display: flex !important; flex-direction: column;
+    .aux-panel.hidden,
+    .aux-panel:not(.mobile-open) {
+        display: none !important;
     }
-    .aux-panel.mobile-open { transform: translateX(0); }
+
+    /* Mobile Drawer: History (Left Side) */
+    .history-panel.mobile-open {
+        display: flex !important;
+        flex-direction: column !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        bottom: 0 !important;
+        right: auto !important;
+        width: 88vw !important;
+        max-width: 360px !important;
+        height: 100dvh !important;
+        max-height: 100dvh !important;
+        background: var(--panel-bg) !important;
+        border-right: 1px solid var(--border-color) !important;
+        border-radius: 0 var(--radius) var(--radius) 0 !important;
+        box-shadow: 8px 0 32px rgba(0, 0, 0, 0.45) !important;
+        z-index: 2005 !important;
+        animation: drawerSlideLeft 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+    }
+
+    /* Mobile Drawer: Insights & Support (Right Side) */
+    .aux-panel.mobile-open {
+        display: flex !important;
+        flex-direction: column !important;
+        position: fixed !important;
+        top: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        left: auto !important;
+        width: 88vw !important;
+        max-width: 380px !important;
+        height: 100dvh !important;
+        max-height: 100dvh !important;
+        background: var(--panel-bg) !important;
+        border-left: 1px solid var(--border-color) !important;
+        border-radius: var(--radius) 0 0 var(--radius) !important;
+        box-shadow: -8px 0 32px rgba(0, 0, 0, 0.45) !important;
+        z-index: 2005 !important;
+        animation: drawerSlideRight 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+    }
+}
+
+@keyframes drawerSlideLeft {
+    from { transform: translateX(-100%); }
+    to   { transform: translateX(0); }
+}
+
+@keyframes drawerSlideRight {
+    from { transform: translateX(100%); }
+    to   { transform: translateX(0); }
 }
